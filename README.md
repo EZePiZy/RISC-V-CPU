@@ -4,13 +4,13 @@
 ---
 ### <ins> **Team members:** </ins>
 * Luigi Rinaldi: 
-  * Task: 
+  * Task: The Control Unit, the Sign-extension Unit and the instruction memory. 
 * Diego Van Overberghe
-  * Task: 
+  * Task: The Register File, ALU and the related MUX.
 * Corey O'Malley: 
-  * Task: 
+  * Task: The testbench and verification of the design working via gtkWave and Vbuddy (where appropriate).
 * Ezra Reich: 
-  * Task: 
+  * Task: Program Counter and related adders.
 
 ---
 
