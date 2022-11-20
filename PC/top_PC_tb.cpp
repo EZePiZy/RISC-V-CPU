@@ -46,10 +46,14 @@ int main(int argc, char **argv, char **env) {
     top->ImmOp = vbdValue();
     top->PCsrc = vbdFlag();
 
-    vbdHex(4, (int(top->PC) >> 16) & 0xF);
-    vbdHex(3, (int(top->PC) >> 8) & 0xF);
-    vbdHex(2, (int(top->PC) >> 4) & 0xF);
-    vbdHex(1, (int(top->PC) & 0xF));
+    // Display PC value
+    // vbdHex(4, (int(top->PC) >> 16) & 0xF);
+    // vbdHex(3, (int(top->PC) >> 8) & 0xF);
+    // vbdHex(2, (int(top->PC) >> 4) & 0xF);
+    // vbdHex(1, (int(top->PC) & 0xF));
+
+    //Display sinewave loaded in ROM 
+    vbdPlot(int(top->dout), 0, 255);
 
     
     vbdCycle(simcyc);
