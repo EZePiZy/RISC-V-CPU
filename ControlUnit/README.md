@@ -86,13 +86,14 @@ Therefore the `Sign extend` modules needs an input `ImmSrc` in order to distingu
 * `ImmSrc` **[Input]** Coming from the control unit and encodes which instructions is being executed
 	* There are 5 different instruction formats therefore 3 bits are needed:
 
-		Instruction Format | Code
-	 	--- | --- 
-		Immediate | 0b000
-		Upper Imm | 0b001
-		Store | 0b010
-		Branch | 0b011
-		Jump | 0b100
+        | Instruction Format | Code
+        | --- | ---  
+        | Immediate | 0b000
+        | Upper Imm | 0b001
+        | Store | 0b010
+        | Branch | 0b011
+        | Jump | 0b100
+
 * `ImmOp` **[Output]** 32-bit sign extended immediate
 
 ---
