@@ -4,6 +4,47 @@
 
 ![control_unit](./images/control_unit.png)
 
+### The following instructions are to be implemented:
+#### `addi`
+
+Add immediate. Add the value of an immediate to the value of a register and store the result in another register.
+
+*Required control signals*
+
+* Enable `RegWrite` so value can be stored in reg
+* Set `ImmSrc` to the correct format
+* Set `ALUsrc` to `1` to select `ImmOp` as the second operand
+* Set `ALUctrl` to value that selects the *SUM* operation
+
+#### `bne`
+
+Branch not equal. If the operands from the previous instruction are not the same then change the PC to PC + the value of the immediate.
+
+**NOTE:** 
+*The implementation is based on the diagram in the lab, where the branching is based only on the value of the immediate and not of the register*
+
+*Required control signals*
+
+* Check on input `EQ` to decide whether to branch or not
+* Set `ImmSrc` to the correct format
+* If branching is happending then set `PCsrc` to `1` to change the next program counter to PC + Imm
+
+#### `lw` 
+
+Load word. Load into a register the word at the address given by another register and offset by the immediate.
+
+***Requires significant changes to the components***
+
+### Technical details
+
+Instruction | opcode | funct3 | funct7 | Type
+--- | :---: | :---: | :---: | :---: 
+*`addi`* | `0010011` | `000` | - | I 
+*`lw`* | `0000011` | `010` | - | I 
+*`bne`* | `1100011` | `001` | - | B 
+
+It can be observed that each opcode uniquely identifies each instructions so the funct are redudant for now.
+
 ---
 
 ## Sign Extension Unit
