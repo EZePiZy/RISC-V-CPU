@@ -1,5 +1,7 @@
 # Control Logic
 
+Two modules which handle the control logic for the CPU. It probably makes sense to keep these modules separate in the final top level design. It might also make sense to separated the control unit block further into two modules according to lecture 7. 
+
 ## Control Unit
 
 ![control_unit](./images/control_unit.png)
@@ -44,6 +46,44 @@ Instruction | opcode | funct3 | funct7 | Type
 *`bne`* | `1100011` | `001` | - | B 
 
 It can be observed that each opcode uniquely identifies each instructions so the funct are redudant for now.
+
+### Testing
+
+```
+Running simulation
+ADDI 
+RegWrite: 1
+ALUctrl: 00
+ALUsrc: 1
+ImmSrc: 000
+PCsrc: 0
+
+BNE false
+RegWrite: 0
+ALUctrl: 00
+ALUsrc: 0
+ImmSrc: 000
+PCsrc: 0
+
+BNE true
+RegWrite: 0
+ALUctrl: 00
+ALUsrc: 0
+ImmSrc: 011
+PCsrc: 1
+Simulation completed
+```
+
+Outputs are as intended.
+
+### Notes
+
+* A package was created to hold the type definitions common to the control logic blocks. This can be further extended to other modules in the CPU.
+	* To have proper compilation the package (`types_pkg.sv` in this case) must be placed before the other files. In turn the `--top-module` flag must be specified in order to get the correct file names and structure. For example:
+		```sh
+		verilator -Wall --cc --trace types_pkg.sv control_unit.sv --top-module control_unit --exe control_unit_tb.cpp
+		```
+* In the combinational logic block the outputs are initialized to zero so that they always hold that default value. This prevents rogue HIGH signals where not desired.
 
 ---
 
