@@ -25,7 +25,7 @@ Mux Multiplexor (
     .next_PC (next_PC)
 );
 
-rom sineRom (
+rom Rom (
     .addr(PC),
     /* verilator lint_off UNUSED */
     .dout(dout) 
