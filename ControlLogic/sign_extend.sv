@@ -1,6 +1,6 @@
 module sign_extend #(
 	parameter DATA_WIDHT = 32,
-	parameter IMM_BIT = 3 // how many bits are needed to encode all instructions formats
+	parameter IMM_WIDTH = 3 // how many bits are needed to encode all instructions formats
 )(
 	// trick to compile even with -Wall option
 	/* verilator lint_off UNUSED */ 
@@ -9,7 +9,7 @@ module sign_extend #(
 	output logic 	[DATA_WIDHT-1:0] 	ImmOp
 );
 
-typedef enum bit[IMM_BIT-1:0] {Imm, UpperImm, Store, Branch, Jump } instr_format;
+typedef enum bit[IMM_WIDTH-1:0] {Imm, UpperImm, Store, Branch, Jump } instr_format;
 
 instr_format ImmFormat = instr_format'(ImmSrc); // casting ImmSrc to instr format for readablity
 always_comb 
