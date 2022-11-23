@@ -23,10 +23,10 @@ int main(int argc, char **argv, char **env) {
   vbdHeader("top_PC");
 
   // initialize simulation inputs
-  top->PCsrc = 1;
+  top->PCsrc = 0;
   top->clk = 1;
   top->rst = 0;
-  top->ImmOp = vbdValue(); 
+  top->ImmOp = 0;
   
   // run simulation for MAX_SIM_CYC clock cycles
   for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
@@ -43,17 +43,17 @@ int main(int argc, char **argv, char **env) {
       top->rst = 0;
     };    
 
-    top->ImmOp = vbdValue();
-    top->PCsrc = vbdFlag();
+    top->ImmOp = 0;
+    top->PCsrc = 0;
 
-    // Display PC value
-    // vbdHex(4, (int(top->PC) >> 16) & 0xF);
-    // vbdHex(3, (int(top->PC) >> 8) & 0xF);
-    // vbdHex(2, (int(top->PC) >> 4) & 0xF);
-    // vbdHex(1, (int(top->PC) & 0xF));
+    // Display ROM value
+    vbdHex(4, (int(top->dout) >> 16) & 0xF);
+    vbdHex(3, (int(top->dout) >> 8) & 0xF);
+    vbdHex(2, (int(top->dout) >> 4) & 0xF);
+    vbdHex(1, (int(top->dout) & 0xF));
 
     //Display sinewave loaded in ROM 
-    vbdPlot(int(top->dout), 0, 255);
+    // vbdPlot(int(top->dout), 0, 255);
 
     
     vbdCycle(simcyc);
