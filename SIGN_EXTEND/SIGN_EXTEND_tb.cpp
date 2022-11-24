@@ -1,6 +1,6 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "Vsign_extend.h"
+#include "VSIGN_EXTEND.h"
 
 #include <iostream>
 
@@ -11,12 +11,12 @@ int main(int argc, char **argv, char **env) {
 
 	Verilated::commandArgs(argc, argv);
 	// init top verilog instance
-	Vsign_extend * top = new Vsign_extend;
+	VSIGN_EXTEND * top = new VSIGN_EXTEND;
 	// init trace dump
 	Verilated::traceEverOn(true);
 	VerilatedVcdC* tfp = new VerilatedVcdC;
 	top->trace (tfp, 99);
-	tfp->open ("sign_extend.vcd");
+	tfp->open ("SIGN_EXTEND.vcd");
 
 	
 

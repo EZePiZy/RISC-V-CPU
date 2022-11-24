@@ -9,15 +9,16 @@ import types_pkg::*;
 );
 
 // Data buses
-DATA_BUS instruction, ALU_out;
+DATA_BUS instruction, ALU_out, Imm_Op;
 
 // control logic
 logic RegWrite, PC_src, ALU_src;
 alu_ctrl ALU_ctrl;
 instr_format Imm_Src;
+DATA_BUS PC;
 
 // operands
-logic OP1, OP2, RegOP2;
+DATA_BUS OP1, OP2, RegOP2;
 
 // flags
 logic EQ_flag;

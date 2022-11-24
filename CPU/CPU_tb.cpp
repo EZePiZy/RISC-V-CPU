@@ -1,8 +1,13 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "VCPU.h"
+#include <iostream>
+#define MAX_SIM_CYC 20
+
+// #define VBUDDY
+#ifdef VBUDDY
 #include "vbuddy.cpp"     // include vbuddy code
-#define MAX_SIM_CYC 1000000
+#endif
 
 int main(int argc, char **argv, char **env) {
   int simcyc;     // simulation clock count
@@ -18,8 +23,11 @@ int main(int argc, char **argv, char **env) {
   tfp->open ("CPU.vcd");
  
   // init Vbuddy
+
+  #ifdef VBUDDY
   if (vbdOpen()!=1) return(-1);
   vbdHeader("CPU");
+  #endif
 
   // initialize simulation inputs
 
@@ -36,32 +44,34 @@ int main(int argc, char **argv, char **env) {
       top->eval ();
     }
 
-    if (simcyc < 2){
-      top->rst = 1;
-    } else {
-      top->rst = 0;
-    };    
+    // if (simcyc < 2){
+    //   top->rst = 1;
+    // } else {
+    //   top->rst = 0;
+    // };    
 
+    top->rst = 0;
 
-    // Display ROM value
-    vbdHex(4, (int(top->a0) >> 16) & 0xF);
-    vbdHex(3, (int(top->a0) >> 8) & 0xF);
-    vbdHex(2, (int(top->a0) >> 4) & 0xF);
-    vbdHex(1, (int(top->a0) & 0xF));
+    std::cout << top->a0 << std::endl;
+
 
     
-
-    
+    #ifdef VBUDDY 
     vbdCycle(simcyc);
-    
-    if (Verilated::gotFinish() || (vbdGetkey()=='q')) {
+    if (Verilated::gotFinish() || (vbdGetkey()=='q'))
       vbdClose();
+    #else 
+    if (Verilated::gotFinish())
+    #endif
+    {
       tfp->close();
       exit(0);
     } 
   }
 
+  #ifdef VBUDDY 
   vbdClose();     // ++++
+  #endif
   tfp->close(); 
   exit(0);
 }

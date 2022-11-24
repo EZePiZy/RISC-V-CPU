@@ -1,4 +1,4 @@
-module sign_extend 
+module SIGN_EXTEND 
 
 import types_pkg::*;
 

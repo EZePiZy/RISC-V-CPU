@@ -1,13 +1,8 @@
 module ROM 
-import types_pkg::*; 
-#(
-    parameter ADDRESS_WIDTH = 5
-)
-
-
+import types_pkg::*;
 (
     /* verilator lint_off UNUSED */
-    input logic     [ADDRESS_WIDTH-1:0] addr,
+    input  DATA_BUS addr,
     output DATA_BUS dout
 );
 
@@ -18,10 +13,7 @@ initial begin
     $readmemh("rom.mem", rom_array);
 end;
 
-always_comb begin
-    dout = rom_array [ addr[31:2] ];
-end
-    
+assign dout = rom_array[{addr[31:2]}];
 
 endmodule
 

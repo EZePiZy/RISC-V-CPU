@@ -3,12 +3,12 @@ module PC_ROM
 import types_pkg::*; 
 
 (
-    input DATA_BUS ImmOp,
-    input logic clk,
-    input logic rst,
-    input logic PCsrc,
-    output DATA_BUS PC,
-    output logic [29:0] dout // Divided by 4
+    input   DATA_BUS  ImmOp,
+    input   logic     clk,
+    input   logic     rst,
+    input   logic     PCsrc,
+    output  DATA_BUS  PC,
+    output  DATA_BUS  dout 
 );
 
 logic [31:0] next_PC;

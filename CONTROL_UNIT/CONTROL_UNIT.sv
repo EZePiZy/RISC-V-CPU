@@ -18,7 +18,7 @@ opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
 always_comb begin
 	// set default values 
 	RegWrite = 0;
-	ALUctrl = Sum; 	// 2'b0
+	ALUctrl = SUM_OP; 	// 2'b0
 	ALUsrc = 0;
 	ImmSrc = Imm;	// 3'b0
 	PCsrc = 0;

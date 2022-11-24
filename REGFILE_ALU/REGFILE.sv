@@ -1,4 +1,8 @@
-module REGFILE (
+module REGFILE 
+
+import types_pkg::*;
+
+(
     input  logic    clk,
     input  ADDR_BUS AD1,
     input  ADDR_BUS AD2,
