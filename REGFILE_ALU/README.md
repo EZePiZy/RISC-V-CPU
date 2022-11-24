@@ -1,6 +1,6 @@
 # `REGILE_ALU` Component
 
-<div style="margin: auto"><img src="logbook_images/schematic.png"></div>
+![schem](./images/schematic.png)
 <p style="text-align: center">Figure 1: Screenshot of schematic showing above components</p>
 
 
@@ -40,7 +40,7 @@ top->ImmOp = i == 0 ? 1 : i == 1 ? 2 : 0;
 For instance, the above tests storing data into the RAM. This uses both components because we just add 0 to an immediate to enter a value into RAM, because, as per the schematic, the data in is the output of the ALU.
 Once data is loaded, the adding functionality is tested by summing the values of both the registers.
 
-<img src="logbook_images/waveform1.png">
+![wave1](./images/waveform1.png)
 <p style="text-align: center">Figure 2: Waveform showing above testing</p>
 
 However, there are some issues with the above graph, notably that that ImmOp changes only on the negative edge of the clock. Furthermore, the process of entering the values is very difficult, so a better approach was required.
@@ -97,7 +97,7 @@ switch (i) {
 }
 ```
 Giving the following waveform:
-![wave2](./logbook_images/waveform2.png)
+![wave2](./images/waveform2.png)
 <p style="text-align: center">Figure 3: Waveform showing above testing</p>
 
 ## Problems Encountered
