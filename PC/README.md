@@ -10,7 +10,7 @@
 ### What I did: 
 * Creation of a programme counter incorporating branches (ImmOp) / normal (+4) increments. 
 
-![schematic](./images/PC_image.png)
+![schematic](./images/PC_IMAGE.png)
 
 * **TWO** modules are used: 
   *  <ins>*PC*</ins>: 
@@ -36,30 +36,30 @@
 
 - Asserting *rst* works as expected: 
 
-![schematic](./images/assert_rst%20PC.png)
+![schematic](./images/ASSERT_RST_PC.png)
 
 
 When `rst = 0` &rarr; `PC = 0`
 
 - Asserting *inc_PC* works as expected: 
 
-![schematic](./images/pc_inc%20assert.png)
+![schematic](./images/PC_INC_ASSERT.png)
 When `PCsrc = 0` then `next_PC = PC + 4` 
 
 - Asserting *branch_PC* works as expected: 
   
-![schematic](./images/branch_PC%20assert.png)
+![schematic](./images/BRANCH_PC_ASSERT.png)
 When `PCsrc = 1` then `next_PC = PC + ImmOp`
 
 - Asserting *instr_mem* works as expected: 
 
 
-![schematic](./images/instr_mem%20ROM.png)
+![schematic](./images/INSTR_MEM_ROM.png)
 When `rst = 1` then `PC = 0` thus `dout = 0FF00313 (the instruction at address 0x0)` 
 $\newline$
 When PC increments by 4, the instructions change as expected. See below for ROM content: 
 
-![schematic](./images/rom%20mem%20.png)
+![schematic](./images/ROM_MEM.png)
 
 
 

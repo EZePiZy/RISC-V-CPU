@@ -4,7 +4,7 @@ Two modules which handle the control logic for the CPU. It probably makes sense 
 
 ## Control Unit
 
-![control_unit](./images/control_unit.png)
+![control_unit](./images/CONTROL_UNIT.png)
 
 ### The following instructions are to be implemented:
 #### `addi`
@@ -89,13 +89,13 @@ Outputs are as intended.
 
 ## Sign Extension Unit
 
-![sign_extend](./images/sign_extend.png)
+![sign_extend](./images/SIGN_EXTEND.png)
 
 The immediate operand comes from different types of instructions and has varying size. The sign extend unit converts the immediate operand from the different instructions into a `32-bit` value and sign extends it.
 
 The different instructions are in the following format:
 
-![instructions](./images/instructions.png)
+![instructions](./images/INSTRUCTION.png)
 
 This can be broken down into
 
