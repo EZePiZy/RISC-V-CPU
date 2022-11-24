@@ -1,10 +1,14 @@
-module top_PC (
-    input logic [31:0] ImmOp,
+module top_PC 
+
+import types_pkg::*; 
+
+(
+    input DATA_BUS ImmOp,
     input logic clk,
     input logic rst,
     input logic PCsrc,
-    output logic [31:0] PC,
-    output logic [29:0] dout
+    output DATA_BUS PC,
+    output logic [29:0] dout // Divided by 4
 );
 
 logic [31:0] next_PC;

@@ -1,8 +1,12 @@
-module PC (
-    input logic [31:0] next_PC,
+module PC 
+
+import types_pkg::*; 
+
+(
+    input DATA_BUS next_PC,
     input logic clk,
     input logic rst,
-    output logic [31:0] PC
+    output DATA_BUS PC
 );
 
 always_ff @(posedge clk) begin
