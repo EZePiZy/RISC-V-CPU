@@ -29,6 +29,7 @@ The develop branch looks as follows:
 Notice that obj_dir, and the *.vcd files are not included in the repository.
 
 ```
+REAMDE.md this file
 CPU ━━━━━┳━ CPU.sv
          ┣━ PC.sv
          ┣━ CONTROL.sv
@@ -36,15 +37,29 @@ CPU ━━━━━┳━ CPU.sv
          ┣━ ...
          ┣━ CPU_tb.cpp
          ┣━ Vbuddy.cpp
-         ┗━ Vbuddy.cfg
+         ┣━ Vbuddy.cfg
+         ┣━ README.md Explaining the use of the component
+         ┗━ images ━┳━ CPU.png Screaming Snake Case
+                    ┗━ ...
+
 PC ━━━━━━┳━ PC.sv
          ┣━ PC_tb.cpp
          ┣━ Vbuddy.cpp
-         ┗━ Vbuddy.cfg    
+         ┣━ Vbuddy.cfg    
+         ┣━ README.md 
+         ┗━ images ━┳━ PC.png
+                    ┗━ ...
 CONTROL ━┳━ CONTROL.sv
          ┣━ CONTROL_tb.cpp
          ┣━ Vbuddy.cpp
-         ┗━ Vbuddy.cfg
+         ┣━ Vbuddy.cfg
+         ┣━ README.md
+         ┗━ images ━┳━ CONTROL.png
+                    ┗━ ...
+.
+.
+.
+and so on
 ```
 
 and so on...
