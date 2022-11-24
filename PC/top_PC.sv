@@ -14,15 +14,8 @@ logic [31:0] next_PC;
 PC ProgramCounter (
     .clk (clk),
     .rst (rst),
-    .next_PC (next_PC),
+    .next_PC (PCsrc ? PC + ImmOp : PC + 32'b0100),
     .PC (PC)
-);
-
-Mux Multiplexor (
-    .PCsrc (PCsrc),
-    .PC (PC),
-    .ImmOp (ImmOp),
-    .next_PC (next_PC)
 );
 
 rom Rom (
