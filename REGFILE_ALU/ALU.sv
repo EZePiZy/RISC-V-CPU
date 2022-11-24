@@ -1,10 +1,7 @@
 module ALU 
 
 import types_pkg::*;
-
-#(
-    parameter DATA_WIDTH = 32
-) (
+(
     input  DATA_BUS ALUop1,
     input  DATA_BUS ALUop2,
     input  alu_ctrl ALUctrl,

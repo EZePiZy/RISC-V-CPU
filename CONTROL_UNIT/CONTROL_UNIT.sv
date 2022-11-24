@@ -30,7 +30,7 @@ always_comb begin
 			ALUsrc = 1; 	// select ImmOp as operand
 			ALUctrl = SUM_OP; 	// asumming this is correct format
 		end
-		bne: if (EQ) begin
+		bne: if (!EQ) begin
 				ImmSrc = Branch;	// branch immediate (13 bits) casted to the correct size
 				PCsrc = 1; // make branching happend
 				RegWrite = 0;

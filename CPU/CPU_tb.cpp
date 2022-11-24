@@ -15,7 +15,7 @@ int main(int argc, char **argv, char **env) {
   Verilated::commandArgs(argc, argv);
 
   // init top verilog instance
-  VCPU * top = new VCPU;
+  VCPU *top = new VCPU;
   // init trace dump
   Verilated::traceEverOn(true);
   VerilatedVcdC* tfp = new VerilatedVcdC;
@@ -39,22 +39,12 @@ int main(int argc, char **argv, char **env) {
   for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
     // dump variables into VCD file and toggle clock
     for (tick=0; tick<2; tick++) {
+      top->eval ();
       tfp->dump (2*simcyc+tick);
       top->clk = !top->clk;
-      top->eval ();
     }
 
-    // if (simcyc < 2){
-    //   top->rst = 1;
-    // } else {
-    //   top->rst = 0;
-    // };    
-
-    top->rst = 0;
-
     std::cout << top->a0 << std::endl;
-
-
     
     #ifdef VBUDDY 
     vbdCycle(simcyc);

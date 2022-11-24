@@ -7,13 +7,10 @@ import types_pkg::*;
     input   logic     clk,
     input   logic     rst,
     input   logic     PCsrc,
-    output  DATA_BUS  PC,
     output  DATA_BUS  dout 
 );
 
-logic [31:0] next_PC;
-
-
+DATA_BUS PC;
 
 PC ProgramCounter (
     .clk (clk),

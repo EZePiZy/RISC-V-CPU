@@ -15,10 +15,9 @@ DATA_BUS instruction, ALU_out, Imm_Op;
 logic RegWrite, PC_src, ALU_src;
 alu_ctrl ALU_ctrl;
 instr_format Imm_Src;
-DATA_BUS PC;
 
 // operands
-DATA_BUS OP1, OP2, RegOP2;
+DATA_BUS OP1, RegRD2, OP2;
 
 // flags
 logic EQ_flag;
@@ -28,8 +27,7 @@ PC_ROM pc_rom (
 	.clk (clk),
 	.rst (rst),
 	.PCsrc (PC_src),
-	.dout (instruction),	
-	.PC (PC)
+	.dout (instruction)
 );
 
 REGFILE regfile(
@@ -40,9 +38,11 @@ REGFILE regfile(
 	.WE3(RegWrite),
 	.WD3(ALU_out),
 	.RD1(OP1),
-	.RD2(RegOP2),
+	.RD2(RegRD2),
 	.a0(a0)
 );
+
+assign OP2 = ALU_src ? Imm_Op : RegRD2; // muxto select between immediate and regfile out
 
 ALU alu(
 	.ALUop1(OP1),
