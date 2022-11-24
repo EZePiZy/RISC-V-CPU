@@ -5,7 +5,7 @@ module sign_extend #(
 	// trick to compile even with -Wall option
 	/* verilator lint_off UNUSED */ 
 	input logic 	[DATA_WIDHT-1:0] 	instr,
-	input logic 	[IMM_BIT-1:0] 		ImmSrc,
+	input logic 	[IMM_WIDTH-1:0] 		ImmSrc,
 	output logic 	[DATA_WIDHT-1:0] 	ImmOp
 );
 
