@@ -37,17 +37,25 @@ CPU ━━━━━┳━ CPU.sv
          ┣━ ...
          ┣━ CPU_tb.cpp
          ┣━ Vbuddy.cpp
-         ┗━ Vbuddy.cfg
+         ┣━ Vbuddy.cfg
+         ┣━ README.md Explaining the use of the component
+         ┗━ images ━┳━ CPU.png Screaming Snake Case
+                    ┗━ ...
+
 PC ━━━━━━┳━ PC.sv
          ┣━ PC_tb.cpp
-         ┣━ README.md Explaining the use of the component
          ┣━ Vbuddy.cpp
-         ┗━ Vbuddy.cfg    
+         ┣━ Vbuddy.cfg    
+         ┣━ README.md 
+         ┗━ images ━┳━ PC.png
+                    ┗━ ...
 CONTROL ━┳━ CONTROL.sv
          ┣━ CONTROL_tb.cpp
-         ┣━ README.md
          ┣━ Vbuddy.cpp
-         ┗━ Vbuddy.cfg
+         ┣━ Vbuddy.cfg
+         ┣━ README.md
+         ┗━ images ━┳━ CONTROL.png
+                    ┗━ ...
 .
 .
 .
