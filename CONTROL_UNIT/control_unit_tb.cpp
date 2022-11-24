@@ -1,6 +1,6 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "Vcontrol_unit.h"
+#include "VCONTROL_UNIT.h"
 
 #include <iostream>
 #include <bitset>
@@ -12,12 +12,12 @@ int main(int argc, char **argv, char **env) {
 
 	Verilated::commandArgs(argc, argv);
 	// init top verilog instance
-	Vcontrol_unit * top = new Vcontrol_unit;
+	VCONTROL_UNIT * top = new VCONTROL_UNIT;
 	// init trace dump
 	Verilated::traceEverOn(true);
 	VerilatedVcdC* tfp = new VerilatedVcdC;
 	top->trace (tfp, 99);
-	tfp->open ("control_unit.vcd");
+	tfp->open ("CONTROL_UNIT.vcd");
 
 	top->instr = 0b00000000000000000000000000010011; // addi 
 	top->eval();

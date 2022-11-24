@@ -1,4 +1,4 @@
-module control_unit 
+module CONTROL_UNIT 
 
 import types_pkg::*; // import all data type definitions
 
