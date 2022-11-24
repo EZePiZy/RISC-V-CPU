@@ -1,19 +1,17 @@
-module sign_extend #(
-	parameter DATA_WIDHT = 32,
-	parameter IMM_WIDTH = 3 // how many bits are needed to encode all instructions formats
-)(
+module sign_extend 
+
+import types_pkg::*;
+
+(
 	// trick to compile even with -Wall option
 	/* verilator lint_off UNUSED */ 
-	input logic 	[DATA_WIDHT-1:0] 	instr,
-	input logic 	[IMM_WIDTH-1:0] 		ImmSrc,
-	output logic 	[DATA_WIDHT-1:0] 	ImmOp
+	input 	DATA_BUS 		instr,
+	input 	instr_format 	ImmSrc,
+	output 	DATA_BUS 		ImmOp
 );
 
-typedef enum bit[IMM_WIDTH-1:0] {Imm, UpperImm, Store, Branch, Jump } instr_format;
-
-instr_format ImmFormat = instr_format'(ImmSrc); // casting ImmSrc to instr format for readablity
 always_comb 
-	case (ImmFormat)
+	case (ImmSrc)
 		Imm: 		ImmOp = {instr[31] ? 20'hFFFFF : 20'h0, instr[31:20]}; // sign extend and concat with original 
 		UpperImm: 	ImmOp = {instr[31:20], 20'b0}; // no sign extension
 		Store: 		ImmOp = {instr[31] ? 20'hFFFFF : 20'h0, instr[31:25], instr[11:7]};
