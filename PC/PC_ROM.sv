@@ -1,4 +1,4 @@
-module top_PC 
+module PC_ROM
 
 import types_pkg::*; 
 
@@ -22,7 +22,7 @@ PC ProgramCounter (
     .PC (PC)
 );
 
-rom Rom (
+ROM Rom (
     .addr(PC),
     /* verilator lint_off UNUSED */
     .dout(dout) 

@@ -1,16 +1,13 @@
-module REGFILE #(
-    parameter   ADDRESS_WIDTH = 5,
-                DATA_WIDTH = 32
-) (
-    input  logic                      clk,
-    input  logic [ADDRESS_WIDTH-1:0]  AD1,
-    input  logic [ADDRESS_WIDTH-1:0]  AD2,
-    input  logic [ADDRESS_WIDTH-1:0]  AD3,
-    input  logic                      WE3,
-    input  logic [DATA_WIDTH-1:0]     WD3,
-    output logic [DATA_WIDTH-1:0]     RD1,
-    output logic [DATA_WIDTH-1:0]     RD2,
-    output logic [DATA_WIDTH-1:0]     a0
+module REGFILE (
+    input  logic    clk,
+    input  ADDR_BUS AD1,
+    input  ADDR_BUS AD2,
+    input  ADDR_BUS AD3,
+    input  logic    WE3,
+    input  DATA_BUS WD3,
+    output DATA_BUS RD1,
+    output DATA_BUS RD2,
+    output DATA_BUS a0
 );
 
 logic [DATA_WIDTH-1:0] ram_array [2 ** ADDRESS_WIDTH - 1:0];

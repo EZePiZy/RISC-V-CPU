@@ -1,4 +1,4 @@
-module rom 
+module ROM 
 import types_pkg::*; 
 #(
     parameter ADDRESS_WIDTH = 5

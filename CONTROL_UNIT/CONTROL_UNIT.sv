@@ -3,14 +3,14 @@ module CONTROL_UNIT
 import types_pkg::*; // import all data type definitions
 
 (
-	input 	logic 					EQ,
+	input 	logic 		 EQ,
 	/* verilator lint_off UNUSED */
-	input 	DATA_BUS 	instr,		// incoming instruction
-	output 	logic 					RegWrite,	// enable to write regs
-	output 	alu_ctrl 				ALUctrl,	// value to select operation in alu
-	output 	logic 					ALUsrc,		// mux to select immediate
-	output 	instr_format 			ImmSrc,		// value to select imm type
-	output 	logic 					PCsrc		// mux to select branching
+	input 	DATA_BUS 	 instr,		// incoming instruction
+	output 	logic 		 RegWrite,	// enable to write regs
+	output 	alu_ctrl 	 ALUctrl,	// value to select operation in alu
+	output 	logic 		 ALUsrc,		// mux to select immediate
+	output 	instr_format ImmSrc,		// value to select imm type
+	output 	logic 		 PCsrc		// mux to select branching
 );
 
 opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
@@ -28,7 +28,7 @@ always_comb begin
 			RegWrite = 1;
 			ImmSrc = Imm;	// normal immediate (12 bits)
 			ALUsrc = 1; 	// select ImmOp as operand
-			ALUctrl = Sum; 	// asumming this is correct format
+			ALUctrl = SUM_OP; 	// asumming this is correct format
 		end
 		bne: if (EQ) begin
 				ImmSrc = Branch;	// branch immediate (13 bits) casted to the correct size
