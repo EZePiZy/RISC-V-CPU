@@ -12,4 +12,6 @@ package types_pkg;
 	
 	// mapping ALU operations
 	typedef enum bit[ALU_WIDTH-1:0] {Sum, Sub, And} alu_ctrl;
+
+	typedef logic [DATA_WIDHT-1:0] DATA_BUS;
 endpackage
