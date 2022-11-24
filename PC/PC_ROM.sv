@@ -21,10 +21,7 @@ PC ProgramCounter (
 
 ROM Rom (
     .addr(PC),
-    /* verilator lint_off UNUSED */
-    .dout(dout) 
-
-    
+    .dout(dout)
 );
     
 endmodule
