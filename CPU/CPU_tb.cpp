@@ -2,7 +2,7 @@
 #include "verilated_vcd_c.h"
 #include "VCPU.h"
 #include <iostream>
-#define MAX_SIM_CYC 20
+#define MAX_SIM_CYC 2000
 
 // #define VBUDDY
 #ifdef VBUDDY
@@ -50,7 +50,7 @@ int main(int argc, char **argv, char **env) {
     vbdCycle(simcyc);
     if (Verilated::gotFinish() || (vbdGetkey()=='q'))
       vbdClose();
-    #else 
+    #else   
     if (Verilated::gotFinish())
     #endif
     {
@@ -62,6 +62,7 @@ int main(int argc, char **argv, char **env) {
   #ifdef VBUDDY 
   vbdClose();     // ++++
   #endif
+
   tfp->close(); 
   exit(0);
 }

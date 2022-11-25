@@ -12,7 +12,7 @@ import types_pkg::*;
 always_comb 
 	case (ImmSrc)
 		Imm: 		ImmOp = {instr[31] ? 20'hFFFFF : 20'h0, instr[31:20]}; // sign extend and concat with original 
-		UpperImm: 	ImmOp = {instr[31:12], 12'b0}; // no sign extension
+		UpperImm: 	ImmOp = {instr[31:12], 12'b0}; //Extended bottom 12 bits as 0's
 		Store: 		ImmOp = {instr[31] ? 20'hFFFFF : 20'h0, instr[31:25], instr[11:7]};
 		Branch: 	ImmOp = {instr[31] ? 19'h7FFFF : 19'h0, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0};
 		Jump: 		ImmOp = {instr[31] ? 11'h7FF : 11'h0, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0};
