@@ -4,7 +4,11 @@ on:
   push
   
 jobs:
-  doit:
+  pushToCheung:
     runs-on: ubuntu-latest
     steps:
-      - run: git push --mirror git@github.com/EIE2-IAC-Labs/iac-riscv-cw-5
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Push to P. Cheung's repo
+        run: git push --mirror git@github.com/EIE2-IAC-Labs/iac-riscv-cw-5
+        
