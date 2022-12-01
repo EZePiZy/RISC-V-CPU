@@ -24,7 +24,7 @@ int main(int argc, char **argv, char **env) {
 
 	std::cout << "ADDI \n";
 
-	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << std::endl;
+	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
 
 	top->instr = 0b00000000000000000000000001100011; // bne 
 	top->EQ = 0;
@@ -32,7 +32,7 @@ int main(int argc, char **argv, char **env) {
 
 	std::cout << "\nBNE false\n";
 
-	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << std::endl;
+	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
 
 	top->instr = 0b00000000000000000000000001100011; // bne 
 	top->EQ = 1;
@@ -40,8 +40,23 @@ int main(int argc, char **argv, char **env) {
 
 	std::cout << "\nBNE true\n";
 
-	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << std::endl;
+	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
 
+	top->instr = 0b00000000000000000000000000000011; // bne 
+	top->EQ = 0;
+	top->eval();
+
+	std::cout << "\nLoad Word\n";
+
+	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
+
+	top->instr = 0b00000000000000000000000000100011; // bne 
+	top->EQ = 0;
+	top->eval();
+
+	std::cout << "\nSave Word\n";
+
+	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
 
 	tfp->close(); 
 	exit(0);
