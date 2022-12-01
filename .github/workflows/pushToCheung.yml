@@ -14,5 +14,6 @@ jobs:
            token: ${{ secrets.DIEGO_PAT }}
         run: |
           git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+          git pull
           git push --mirror https://token:$token@github.com/EIE2-IAC-Labs/iac-riscv-cw-5.git
         
