@@ -2,7 +2,7 @@
 #include "verilated_vcd_c.h"
 #include "VCPU.h"
 #include <iostream>
-#define MAX_SIM_CYC 2000
+#define MAX_SIM_CYC 200
 
 // #define VBUDDY
 #ifdef VBUDDY
