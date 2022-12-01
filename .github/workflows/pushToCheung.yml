@@ -10,5 +10,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Push to P. Cheung's repo
-        run: git push --mirror https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5.git
+        env:
+           token: ${{ secrets.DIEGO_PAT }}
+        run: |
+          git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+          git push --mirror https://token:$token@github.com/EIE2-IAC-Labs/iac-riscv-cw-5.git
         
