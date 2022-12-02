@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository, inclding all refs by using --mirror
-        run: git clone --mirror
+        run: git clone --mirror https://github.com/EZePiZy/RISC-V-CPU.git
       - name: Push to P. Cheung's repo
         env:
            token: ${{ secrets.DIEGO_PAT }}
