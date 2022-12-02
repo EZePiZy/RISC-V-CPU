@@ -14,6 +14,7 @@ jobs:
       - name: Edit config to help with authentication to Cheung repo.
         run: |
           cd riscv-repo
+          git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
       - name: Push to P. Cheung's repo
         env:
            token: ${{ secrets.DIEGO_PAT }}
