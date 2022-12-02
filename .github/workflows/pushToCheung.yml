@@ -16,8 +16,5 @@ jobs:
            token: ${{ secrets.DIEGO_PAT }}
         run: |
           cd riscv-repo
-          rm -rf .github # don't think this actually works, so just disabled actions from running on the target repo
-          rm -rf .github
-          git commit --amend
           git push --mirror https://token:$token@github.com/EIE2-IAC-Labs/iac-riscv-cw-5.git
         
