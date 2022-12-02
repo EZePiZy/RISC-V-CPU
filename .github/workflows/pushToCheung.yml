@@ -10,11 +10,11 @@ jobs:
       - name: Clone repository, including all refs by using --mirror
         env:
            token: ${{ secrets.DIEGO_PAT }}
-        run: git clone --mirror https://token:$token@github.com/EZePiZy/RISC-V-CPU.git riscv-repo
-      - name: Edit config to help with authentication to Cheung repo.
+        run: git clone --bare https://token:$token@github.com/EZePiZy/RISC-V-CPU.git riscv-repo
+      - name: Remove this workflow from mirror
         run: |
           cd riscv-repo
-          git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+          rm -rf .github
       - name: Push to P. Cheung's repo
         env:
            token: ${{ secrets.DIEGO_PAT }}
