@@ -11,13 +11,11 @@ jobs:
         env:
            token: ${{ secrets.DIEGO_PAT }}
         run: git clone --bare https://token:$token@github.com/EZePiZy/RISC-V-CPU.git riscv-repo
-      - name: Remove this workflow from mirror
-        run: |
-          cd riscv-repo
-          rm -rf .github
-      - name: Push to P. Cheung's repo
+      - name: Remove this workflow from mirror and push to P. Cheung's repo
         env:
            token: ${{ secrets.DIEGO_PAT }}
         run: |
+          cd riscv-repo
+          rm -rf .github
           git push --mirror https://token:$token@github.com/EIE2-IAC-Labs/iac-riscv-cw-5.git
         
