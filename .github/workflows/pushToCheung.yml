@@ -11,10 +11,13 @@ jobs:
         env:
            token: ${{ secrets.DIEGO_PAT }}
         run: git clone --mirror https://tokne:$token@github.com/EZePiZy/RISC-V-CPU.git
+      - name: Edit config to help with authentication to Cheung repo.
+        run: |
+          cd RISC-V-CPU
+          git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
       - name: Push to P. Cheung's repo
         env:
            token: ${{ secrets.DIEGO_PAT }}
         run: |
-          git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
           git push --mirror https://token:$token@github.com/EIE2-IAC-Labs/iac-riscv-cw-5.git
         
