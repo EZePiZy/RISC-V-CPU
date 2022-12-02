@@ -32,7 +32,7 @@ int main(int argc, char **argv, char **env) {
   // initialize simulation inputs
 
   top->clk = 1;
-  top->rst = 0;
+  top->rst = 1;
  
   
   // run simulation for MAX_SIM_CYC clock cycles
