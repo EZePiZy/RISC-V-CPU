@@ -7,13 +7,13 @@ jobs:
   pushToCheung:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository, inclding all refs by using --mirror
+      - name: Clone repository, including all refs by using --mirror
         env:
            token: ${{ secrets.DIEGO_PAT }}
-        run: git clone --mirror https://tokne:$token@github.com/EZePiZy/RISC-V-CPU.git
+        run: git clone --mirror https://token:$token@github.com/EZePiZy/RISC-V-CPU.git
       - name: Edit config to help with authentication to Cheung repo.
         run: |
-          cd RISC-V-CPU
+          cd RISC-V-CPU.git
           git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
       - name: Push to P. Cheung's repo
         env:
