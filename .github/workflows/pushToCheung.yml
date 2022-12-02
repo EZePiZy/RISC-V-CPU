@@ -7,15 +7,15 @@ jobs:
   pushToCheung:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository, including all refs by using --mirror
+      - name: Clone repository
         env:
            token: ${{ secrets.DIEGO_PAT }}
-        run: git clone --bare https://token:$token@github.com/EZePiZy/RISC-V-CPU.git riscv-repo
+        run: git clone --bare https://token:$token@github.com/EZePiZy/RISC-V-CPU.git riscv-repo # using --bare instead of --mirror because of issues
       - name: Remove this workflow from mirror and push to P. Cheung's repo
         env:
            token: ${{ secrets.DIEGO_PAT }}
         run: |
           cd riscv-repo
-          rm -rf .github
+          rm -rf .github # don't think this actually works, so just disabled actions from running on the target repo
           git push --mirror https://token:$token@github.com/EIE2-IAC-Labs/iac-riscv-cw-5.git
         
