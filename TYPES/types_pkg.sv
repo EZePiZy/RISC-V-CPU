@@ -12,6 +12,8 @@ package types_pkg;
 	// possible formats for immediates
 	typedef enum bit[IMM_WIDTH-1:0] {Imm, UpperImm, Store, Branch, Jump } instr_format;
 
+	typedef enum bit[6:0] {R = 7'b0110011, I = 7'b0000011, I = 7'b0010011, S = 7'b0100011, B = 7'b1100011}
+
 	// mapping of opcodes to binary value
 	typedef enum bit[OPCODE_WIDTH-1:0] {addi = 7'b0010011, bne = 7'b1100011, lw = 7'b0000011, sw = 7'b0100011} opcode;
 	
