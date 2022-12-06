@@ -20,6 +20,13 @@
   *  Design a **SINGLE CYCLE CPU** that executes two (or three) RISC-V instructions. 
   *  Same function as the **8-bit binary counter** designed in Lab 1
 
+### <ins> **Branch Protection Policy:** </ins>
+
+The `main` branch is protected an cannot be directly pushed to. This is to attempt to protect production code from untested development code.
+
+When team members approve a pull request from `develop` into `main`, they are indicating that they are reasonably confident that the code in question has been tested and is working as expected. This also helps familiarise team members with others' code.
+On the other and, if a pull request is opened merging a feature branch into the `develop` branch, approval incites team members to read through new code to ensure they remain familiar with the codebase.
+
 ## Directory Format
 
 The main branch is protected and the only way to modify it is by submitting a pull request which must be approved by at least two other contributors.
