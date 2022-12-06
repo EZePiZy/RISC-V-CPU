@@ -72,6 +72,34 @@ Simulation completed
 
 Outputs are as intended.
 
+
+### Adding Data Memory Signals
+
+With the data memory additional signals needed to be added to allow for the control of storing data, as well as fetching the addresses correctly and reading data from the RAM. 
+
+This includes the ImmSrc, MemWrite, ResultSrc and AluSrc signals
+
+#### `Sw`
+
+Store Word, this is the instruction to save data from a register into a given address of the data memory, this is done by controlling the Write Enable section of the data_memory and taking the output from the regfile at RD2 as the data and the data from RD1 + Imm to get the address to write the data to.
+
+
+*Required Control Signals*
+* Enable `MemWrite` to allow data to be written to the Data Memory
+* Enable `AluSrc` to set the input to the alu to be the immediate value
+* Enable `ImmSrc` to make sure that sign extenstion occours
+* Set `AluCtrl` to the SUM operation  
+
+### Testing
+
+Further testing was then added to make sure that the control signals for the `sw` instruction is correctly controlled, also a test program was tested which stored and loaded instructions to check proper operation of the data memory block. 
+
+During this an issue was found in which the Program Counter would loop after 32 instructions of a program, this was due to simple miss labeling of a parameter and as such, would set the program counter to have a size 2^5, this was then changed to a larger value to allow for more complex programs to be ran.
+
+**NOTE:** 
+*The size of the program counter is arbituary and as such needs to be kept to a reasonable value for simulation sizes but large enough to store instructions of large programs*
+
+
 ### Notes
 
 * A package was created to hold the type definitions common to the control logic blocks. This can be further extended to other modules in the CPU.

@@ -2,7 +2,7 @@
 ---
 ## <center> **RISC-V Design - 2nd year EIE IAC coursework** </center>
 ---
-### **Team members**
+### **Team members & Lab 4 Tasks**
 * Luigi Rinaldi: 
   * Task: The Control Unit, the Sign-extension Unit and the instruction memory. 
 * Diego Van Overberghe

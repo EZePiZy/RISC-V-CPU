@@ -15,6 +15,7 @@ always_comb begin
         SUB_OP: SUM = ALUop1 - ALUop2;
         AND_OP: SUM = ALUop1 & ALUop2;
         SLT_OP: SUM = ALUop1 < ALUop2 ? 1 : 0;
+        SLL_OP: SUM = ALUop1 << ALUop2;
         default: SUM = 0;
     endcase
 
