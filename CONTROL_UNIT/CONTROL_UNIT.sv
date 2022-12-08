@@ -33,8 +33,14 @@ always_comb begin
   jumpSaveNext = 0;
 
   case (curr_opcode)
+
+    /* R-TYPE */ 
     R: begin                  // register to register instructions (no immediates used)
       ResultSrc = 0; // care about the ALU output
+      RegWrite = 1;
+      ALUsrc = 0;
+      MemWrite = 0;
+      Branch = 0;
       case({funct3, funct7})
         10'b0000000000: begin // add
 
@@ -66,14 +72,17 @@ always_comb begin
         10'b1110000000: begin // and
         
         end
-        default: begin
-
+        default: begin 
+          ALUsrc = 0; //do something for default
+          RegWrite = 0; // make sure nothing is being written to
         end
       endcase
     end
-    I1: begin         // instruction of form l** (load byte, load half etc..)
-      ImmSrc = Imm;   // 12 bit imm
-      case({funct3})
+
+    /* I1-TYPE */ 
+    I1: begin // instruction of form l** (load byte, load half etc..)
+      ImmSrc = Imm;     // 12 bit imm
+      case({funct3}):
         3'b000: begin // lb
           
         end 
@@ -93,19 +102,21 @@ always_comb begin
           
         end
         default: begin
-
-        end
+          //TODO
+        end 
       endcase
     end
-    I2: begin                 // ALU operations that use immediates
-      RegWrite = 1;           // write result to register
-      ImmSrc = Imm;           // 12 bit immediate
-      ALUsrc = 1;             // select ImmOp as operand
-      case({funct3})
-        3'b000: begin         // ADDI
-          ALUctrl = SUM_OP;   // ALU is doing addition
+
+    /* I2-TYPE */ 
+    I2: begin               // ALU operations that use immediates
+      RegWrite = 1;             // write result to register
+      ImmSrc = Imm;             // 12 bit immediate
+      ALUsrc = 1;               // select ImmOp as operand
+      case({funct3}):
+        3'b000: begin           // ADDI
+          ALUctrl = SUM_OP;     // ALU is doing addition
         end
-      3'b001: begin           // SLLI
+        3'b001: begin           // SLLI
           if ({funct7} == 7'b000000) begin 
             ALUctrl = SLL_OP; // do the shifting
           end
@@ -133,36 +144,50 @@ always_comb begin
         3'b111: begin // andi
 
         end
+        default: begin 
+          //TODO
+        end
       endcase
     end
+
+    /* I3-TYPE */ 
     I3: begin
     case({funct3})
       3'b000: begin // jalr TODO
-        
-        
+         
       end
       default: begin
-
-      end
+        //TODO
+      end 
     endcase
-
     end
+
+    /* S-TYPE */ 
     S: begin
-      case({funct3})
+      MemWrite = 1; // As we are storing, writing to memory enable
+      ImmSrc = Store; // In the SignExtend Unit, all the S-type instructions use Store. Set the ImmSrc type to that of a Store instruction 
+      ResultSrc = 0; // Bypassing Data Memory, using ALUResult (not ReadData)
+      ALUsrc = 1; // Always using ImmExt (not RD2)
+      ALUctrl = SUM_OP; //Set the ALU to complete a sum operation
+      case({funct3}):
         3'b000: begin // sb
-          
+        // Missing control signals to implement these instructions. Would need to split the word. 
+        
         end
         3'b001: begin // sh
-          
-        end
-        3'b010: begin // sw
-          
-        end
-        default: begin
+        // Missing control signals to implement these instructions. Would need to split the word. 
 
         end
+        3'b010: begin // sw
+        
+        
+        end
+        default: begin
+      end
       endcase
     end
+
+    /* B-TYPE */ 
     B: begin            // Branching instructions
       ImmSrc = Branch;  // branch immediate (13 bits where bit 0 is ignored)
       case({funct3})
@@ -188,34 +213,32 @@ always_comb begin
 
         end
         default: begin
-
+          PCsrc = 0;
         end
       endcase
     end
+
+    /* U1-TYPE */
     U1: begin // auipc
       
     end
+
+    /* U2-TYPE */
     U2: begin // lui
 
     end
+
+    /* J-TYPE */
     J: begin // jal
       jumpSaveNext = 1; // save next PC to REG
       PCsrc = 1;        // next PC is given by curent PC + ImmOp
     end
 
-
-    // sw: begin  // TODO 
-    //   ImmSrc = Store; //Set the ImmSrc type to that of a Store instruction
-    //   MemWrite = 1; //Allow writing to Data Memory
-    //   ALUctrl = SUM_OP; //Set the ALU to complete a sum operation
-    //   ResultSrc = 0;
-    //   ALUsrc = 1;
-    // end
-    default: begin
-      ALUsrc = 0;   // do something for default
-      RegWrite = 0; // make sure nothing is being written to
-    end
+  default: begin  // Default case for global case(curr_opc)
+    //TODO
+  end 
   endcase
 end
+
 
 endmodule
