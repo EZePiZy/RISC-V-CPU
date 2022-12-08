@@ -23,7 +23,7 @@ always_comb begin
 end
 
 always_ff @(posedge clk) begin
-    if (WE3) ram_array [AD3] <= WD3; 
+    if (WE3 && AD3 != 0) ram_array [AD3] <= WD3; // DO NOT WRITE TO REG 0
 end
 
 endmodule

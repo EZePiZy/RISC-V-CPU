@@ -17,11 +17,11 @@ import types_pkg::*; // import all data type definitions
 
 opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
 
-logic[2:0] funct3 = {instr[14:12]}
-logic[2:0] funct7 = {instr[31:25]}
+logic[2:0] funct3 = {instr[14:12]};
+logic[2:0] funct7 = {instr[31:25]};
 
 always_comb begin
-  // set default values 
+  // set default values
   RegWrite = 0;
   ALUctrl = SUM_OP; // 2'b0
   ALUsrc = 0;
@@ -67,9 +67,9 @@ always_comb begin
         end
       endcase
     end
-    I1: begin // instruction of form l** (load byte, load half etc..)
-      ImmSrc = Imm;     // 12 bit imm
-      case({funct3}):
+    I1: begin         // instruction of form l** (load byte, load half etc..)
+      ImmSrc = Imm;   // 12 bit imm
+      case({funct3})
         3'b000: begin // lb
           
         end 
@@ -85,22 +85,22 @@ always_comb begin
         3'b100: begin // lbu
           
         end 
-        3'b101 begin  // lhu
+        3'b101: begin  // lhu
           
         end
       endcase
     end
-    I2: begin               // ALU operations that use immediates
-      RegWrite = 1;             // write result to register
-      ImmSrc = Imm;             // 12 bit immediate
-      ALUsrc = 1;               // select ImmOp as operand
-      case({funct3}):
-        3'b000: begin           // ADDI
-          ALUctrl = SUM_OP;     // ALU is doing addition
+    I2: begin                 // ALU operations that use immediates
+      RegWrite = 1;           // write result to register
+      ImmSrc = Imm;           // 12 bit immediate
+      ALUsrc = 1;             // select ImmOp as operand
+      case({funct3})
+        3'b000: begin         // ADDI
+          ALUctrl = SUM_OP;   // ALU is doing addition
         end
-      3'b001: begin             // SLLI
-          if ({func7} == 7'b000000) begin 
-            ALUctrl = SLL_OP;   // do the shifting
+      3'b001: begin           // SLLI
+          if ({funct7} == 7'b000000) begin 
+            ALUctrl = SLL_OP; // do the shifting
           end
         end
         3'b010: begin // slti
@@ -129,7 +129,7 @@ always_comb begin
       endcase
     end
     I3: begin
-    case({funct3}):
+    case({funct3})
       3'b000: begin // jalr TODO
         
         
@@ -138,7 +138,7 @@ always_comb begin
 
     end
     S: begin
-      case({funct3}):
+      case({funct3})
         3'b000: begin // sb
           
         end
@@ -152,7 +152,7 @@ always_comb begin
     end
     B: begin            // Branching instructions
       ImmSrc = Branch;  // branch immediate (13 bits where bit 0 is ignored)
-      case({funct3}):
+      case({funct3})
         3'b000: begin // beq
 
         end
@@ -183,20 +183,20 @@ always_comb begin
 
     end
     J: begin // jal
-      jumpSaveNext = 1 // save next PC to REG
-      PCsrc = 1;       // next PC is given by curent PC + ImmOp
+      jumpSaveNext = 1; // save next PC to REG
+      PCsrc = 1;        // next PC is given by curent PC + ImmOp
     end
 
 
-    sw: begin  // TODO 
-      ImmSrc = Store; //Set the ImmSrc type to that of a Store instruction
-      MemWrite = 1; //Allow writing to Data Memory
-      ALUctrl = SUM_OP; //Set the ALU to complete a sum operation
-      ResultSrc = 0;
-      ALUsrc = 1;
-    end
+    // sw: begin  // TODO 
+    //   ImmSrc = Store; //Set the ImmSrc type to that of a Store instruction
+    //   MemWrite = 1; //Allow writing to Data Memory
+    //   ALUctrl = SUM_OP; //Set the ALU to complete a sum operation
+    //   ResultSrc = 0;
+    //   ALUsrc = 1;
+    // end
     default: begin
-      ALUsrc = 0; //do something for default
+      ALUsrc = 0;   // do something for default
       RegWrite = 0; // make sure nothing is being written to
     end
   endcase
