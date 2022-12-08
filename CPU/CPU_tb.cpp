@@ -2,9 +2,9 @@
 #include "verilated_vcd_c.h"
 #include "VCPU.h"
 #include <iostream>
-#define MAX_SIM_CYC 200
+#define MAX_SIM_CYC 2000
 
-// #define VBUDDY
+#define VBUDDY
 #ifdef VBUDDY
 #include "vbuddy.cpp"     // include vbuddy code
 #endif
@@ -26,7 +26,7 @@ int main(int argc, char **argv, char **env) {
 
   #ifdef VBUDDY
   if (vbdOpen()!=1) return(-1);
-  vbdHeader("CPU");
+  vbdHeader("RISC-V");
   #endif
 
   // initialize simulation inputs
@@ -45,15 +45,18 @@ int main(int argc, char **argv, char **env) {
     }
 
     std::cout << top->a0 << std::endl;
+
+    vbdBar(top->a0);
     
     #ifdef VBUDDY 
     vbdCycle(simcyc);
     if (Verilated::gotFinish() || (vbdGetkey()=='q'))
+    {
       vbdClose();
     #else   
     if (Verilated::gotFinish())
-    #endif
     {
+    #endif
       tfp->close();
       exit(0);
     } 
