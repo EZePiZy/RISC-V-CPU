@@ -9,8 +9,8 @@ import types_pkg::*;
 DATA_BUS rom_array [2 ** 16 - 1:0]; //Arbituary Width this allows for 65000 instructions within the rom, thats enough
 
 initial begin 
-    $display("Loading rom.");
-    $readmemh("rom.mem", rom_array);
+    $display("Loading instruction ROM.");
+    $readmemh("../CPU/instruction.mem", rom_array);
 end;
 
 assign dout = rom_array[{2'b0, addr[31:2]}];
