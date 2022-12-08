@@ -7,7 +7,7 @@
 All instructions are part of a *Type* which identifies how they interpret the bits of the immediate.
 
 Type | Opcode | Description | Implemented instructions | Shared Control Signals 
---- | --- | --- | --- | --- | ---
+--- | --- | --- | --- | --- 
 **`R`** | `0110011` | Register to Register instructions | None
 **`I1`** | `0000011` | Load instructions that use 12-bit immediate | `lw`
 **`I2`** | `0010011` | ALU instructions that use 12-bit immediate | `addi` , `slli` | set `RegWrite` to enable writing to register <br /> set `ImmSrc` to `Imm` <br /> set `ALUsrc` to select `ImmOp` as second operand
