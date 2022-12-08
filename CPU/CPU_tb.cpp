@@ -2,7 +2,7 @@
 #include "verilated_vcd_c.h"
 #include "VCPU.h"
 #include <iostream>
-#define MAX_SIM_CYC 30
+#define MAX_SIM_CYC 300
 
 // #define VBUDDY
 #ifdef VBUDDY
@@ -32,7 +32,7 @@ int main(int argc, char **argv, char **env) {
   // initialize simulation inputs
 
   top->clk = 1;
-  top->rst = 1;
+  top->rst = 0;
  
   
   // run simulation for MAX_SIM_CYC clock cycles

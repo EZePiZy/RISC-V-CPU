@@ -11,10 +11,12 @@ import types_pkg::*;
     input   logic     rst,
     input   logic     PCsrc,
     input   logic     PC2Result,
-    output  DATA_BUS  dout 
+    output  DATA_BUS  dout,
+    output  DATA_BUS  PCPlus4 
 );
 
 DATA_BUS PC;
+assign PCPlus4 = PC + 32'b0100;
 
 PC ProgramCounter (
     .clk (clk),

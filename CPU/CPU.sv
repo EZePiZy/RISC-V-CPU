@@ -9,10 +9,10 @@ import types_pkg::*;
 );
 
 // Data buses
-DATA_BUS instruction, ALU_out, Imm_Op, ReadData, Result;
+DATA_BUS instruction, ALU_out, Imm_Op, ReadData, Result, PCPlus4;
 
 // control logic
-logic RegWrite, PC_src, ALU_src, MemWrite, ResultSrc, PC2Result;
+logic RegWrite, PC_src, ALU_src, MemWrite, ResultSrc, PC2Result, StoreNextPC;
 alu_ctrl ALU_ctrl;
 instr_format Imm_Src;
 
@@ -29,7 +29,8 @@ PC_ROM pc_rom (
   .clk (clk),
   .rst (rst),
   .PCsrc (PC_src),
-  .dout (instruction)
+  .dout (instruction),
+  .PCPlus4(PCPlus4)
 );
 
 REGFILE regfile(
@@ -38,7 +39,7 @@ REGFILE regfile(
   .AD2(instruction[24:20]),
   .AD3(instruction[11:7]),
   .WE3(RegWrite),
-  .WD3(Result),
+  .WD3(StoreNextPC ? PCPlus4 : Result),
   .RD1(OP1),
   .RD2(RegRD2),
   .a0(a0)
@@ -73,7 +74,9 @@ CONTROL_UNIT control_unit(
   .ImmSrc(Imm_Src),
   .PCsrc(PC_src),
   .MemWrite(MemWrite),
-  .ResultSrc(ResultSrc)
+  .ResultSrc(ResultSrc),
+  .jumpSaveNext (StoreNextPC),
+  .PC2Result (PC2Result)
 );
 
 SIGN_EXTEND sign_extend(

@@ -4,7 +4,9 @@ import types_pkg::*;
 
 (
 	// trick to compile even with -Wall option
+	/* verilator lint_off UNUSED */
 	input 	DATA_BUS 		instr,
+	/* verilator lint_on UNUSED */
 	input 	instr_format 	ImmSrc,
 	output 	DATA_BUS 		ImmOp
 );
