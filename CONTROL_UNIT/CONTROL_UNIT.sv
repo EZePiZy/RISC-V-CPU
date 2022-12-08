@@ -4,6 +4,7 @@ import types_pkg::*; // import all data type definitions
 
 (
   input  logic        EQ,
+  /* verilator lint_off UNUSED */ // ignore unused parts of instruction
   input  DATA_BUS     instr,       // incoming instruction
   output logic        RegWrite,    // enable to write regs
   output alu_ctrl     ALUctrl,     // value to select operation in alu
@@ -18,7 +19,7 @@ import types_pkg::*; // import all data type definitions
 opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
 
 logic[2:0] funct3 = {instr[14:12]};
-logic[2:0] funct7 = {instr[31:25]};
+logic[6:0] funct7 = {instr[31:25]};
 
 always_comb begin
   // set default values
@@ -65,6 +66,9 @@ always_comb begin
         10'b1110000000: begin // and
         
         end
+        default: begin
+
+        end
       endcase
     end
     I1: begin         // instruction of form l** (load byte, load half etc..)
@@ -87,6 +91,9 @@ always_comb begin
         end 
         3'b101: begin  // lhu
           
+        end
+        default: begin
+
         end
       endcase
     end
@@ -134,6 +141,9 @@ always_comb begin
         
         
       end
+      default: begin
+
+      end
     endcase
 
     end
@@ -147,6 +157,9 @@ always_comb begin
         end
         3'b010: begin // sw
           
+        end
+        default: begin
+
         end
       endcase
     end
@@ -172,6 +185,9 @@ always_comb begin
           
         end
         3'b111: begin // bgeu
+
+        end
+        default: begin
 
         end
       endcase

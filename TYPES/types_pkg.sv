@@ -4,6 +4,7 @@ package types_pkg;
   parameter ALU_WIDTH = 3; // number of bits needed to encode possible ALU commands
   parameter OPCODE_WIDTH = 7; // number of bits to encode opcodes
   parameter ADDRESS_WIDTH = 5; //The address_width of a given register
+  /* verilator lint_off UNUSED */ // UNUSED IN INDIVIDUAL COMPONENT TESTBENCHES
   parameter RAM_ADDRESS_WIDTH = 18; //The address of a given location in data_memory this is an arbitrary value 
 
   typedef logic [ADDRESS_WIDTH-1:0] ADDR_BUS;
