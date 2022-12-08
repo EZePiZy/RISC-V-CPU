@@ -42,7 +42,6 @@ always_comb begin
       RegWrite = 1;
       ALUsrc = 0;
       MemWrite = 0;
-      Branch = 0;
       case({funct3, funct7})
         10'b0000000000: begin // add
 
@@ -84,7 +83,7 @@ always_comb begin
     /* I1-TYPE */ 
     I1: begin // instruction of form l** (load byte, load half etc..)
       ImmSrc = Imm;     // 12 bit imm
-      case({funct3}):
+      case({funct3})
         3'b000: begin // lb
           
         end 
@@ -114,7 +113,7 @@ always_comb begin
       RegWrite = 1;             // write result to register
       ImmSrc = Imm;             // 12 bit immediate
       ALUsrc = 1;               // select ImmOp as operand
-      case({funct3}):
+      case({funct3})
         3'b000: begin           // ADDI
           ALUctrl = SUM_OP;     // ALU is doing addition
         end
@@ -178,7 +177,7 @@ always_comb begin
       ResultSrc = 0; // Bypassing Data Memory, using ALUResult (not ReadData)
       ALUsrc = 1; // Always using ImmExt (not RD2)
       ALUctrl = SUM_OP; //Set the ALU to complete a sum operation
-      case({funct3}):
+      case({funct3})
         3'b000: begin // sb
         // Missing control signals to implement these instructions. Would need to split the word. 
         

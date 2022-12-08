@@ -8,13 +8,13 @@ All instructions are part of a *Type* which identifies how they interpret the bi
 
 Type | Opcode | Description | Implemented instructions | Shared Control Signals 
 --- | --- | --- | --- | --- 
-**`R`** | `0110011` | Register to Register instructions | None
-**`I1`** | `0000011` | Load instructions that use 12-bit immediate | `lw`
-**`I2`** | `0010011` | ALU instructions that use 12-bit immediate | `addi` , `slli` | set `RegWrite` to enable writing to register <br /> set `ImmSrc` to `Imm` <br /> set `ALUsrc` to select `ImmOp` as second operand
-**`I3`** | `1100111` | Jump with 12-bit immediate | `jalr`
-**`S`** | `0100011` | Store instruction with 12-bit immediate | `sw`
-**`B`** | `1100011` | Branch instructions with 13-bit immediate | `bne`
-**`U`** | `0010111` <br /> `0110111` | Upper immediate instructions | None
+**`R`** | `0110011` | Register to Register instructions | None |Set `ResultSrc` to disable as we care about the ALU output.<br> Set `RegWrite` to enable as we want to write in the registers.</br>
+**`I1`** | `0000011` | Load instructions that use 12-bit immediate | `lw`|Set `ImmSrc` to `Imm` to sign extend and concatenate with original.
+**`I2`** | `0010011` | ALU instructions that use 12-bit immediate | `addi` , `slli` | Set `RegWrite` to enable writing to register <br> set `ImmSrc` to `Imm`. </br><br>Set `ALUsrc` to select `ImmOp` as second operand</br>
+**`I3`** | `1100111` | Jump with 12-bit immediate | `jalr` | TODO (@Corey)
+**`S`** | `0100011` | Store instruction with 12-bit immediate | `sw` |Set `MemWrite` to enable as we are storing a word in the memory.<br> `ImmSrc` to `Store`.</br><br> `ResultSrc` to disable as we are bypassing the Data Memory Unit, using ALUResult.</br><br> Set `ALUsrc` to enable because we are always using `ImmExt`.</br><br>Set `ALUctrl` to `SUM_OP` to set the ALU to complete a sum operation.</br>
+**`B`** | `1100011` | Branch instructions with 13-bit immediate | `bne` | Set `ImmSrc` to `Branch` as we use branch immediate. 
+**`U`** | `0010111` <br /> `0110111` | Upper immediate instructions | None | None
 **`J`** | `1101111` | Jump instructions with 20-bit immediate | `jal` | Only one instruction is implemented so no shared signals
 
 ### Implemented instructions
