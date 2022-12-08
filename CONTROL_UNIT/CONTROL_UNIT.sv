@@ -154,7 +154,7 @@ always_comb begin
     /* I3-TYPE */ 
     I3: begin
     case({funct3})
-      3'b000: begin // jalr TODO
+      3'b000: begin // jalr 
 
         RegWrite = 1;
         ALUctrl = SUM_OP; // 2'b0
