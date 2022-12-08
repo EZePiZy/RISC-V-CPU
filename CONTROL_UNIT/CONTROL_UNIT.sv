@@ -13,7 +13,8 @@ import types_pkg::*; // import all data type definitions
   output logic        PCsrc,       // mux to select branching
   output logic        MemWrite,    // Sets the Data Memory Write Enable
   output logic        ResultSrc,   // Sets the output value to be that of the ALU or Data Memory
-  output logic        jumpSaveNext // sets MUX to write PC + 4 to the REGFILE
+  output logic        jumpSaveNext, // Sets MUX to write PC + 4 to the REGFILE
+  output logic        PC2Result    // Sets the PC to the value of the Result Wire
 );
 
 opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
@@ -31,6 +32,7 @@ always_comb begin
   MemWrite = 0;
   ResultSrc = 0;
   jumpSaveNext = 0;
+  PC2Result = 0;
 
   case (curr_opcode)
 
@@ -154,7 +156,14 @@ always_comb begin
     I3: begin
     case({funct3})
       3'b000: begin // jalr TODO
-         
+
+        RegWrite = 1;
+        ALUctrl = SUM_OP; // 2'b0
+        ALUsrc = 1;
+        ImmSrc = Imm; // 3'b0
+        jumpSaveNext = 1;
+        PC2Result = 1;
+        
       end
       default: begin
         //TODO

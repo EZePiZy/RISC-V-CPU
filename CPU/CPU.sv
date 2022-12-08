@@ -12,7 +12,7 @@ import types_pkg::*;
 DATA_BUS instruction, ALU_out, Imm_Op, ReadData, Result;
 
 // control logic
-logic RegWrite, PC_src, ALU_src, MemWrite, ResultSrc;
+logic RegWrite, PC_src, ALU_src, MemWrite, ResultSrc, PC2Result;
 alu_ctrl ALU_ctrl;
 instr_format Imm_Src;
 
@@ -24,6 +24,8 @@ logic EQ_flag;
 
 PC_ROM pc_rom (
   .ImmOp(Imm_Op),
+  .Result(Result),
+  .PC2Result(PC2Result),
   .clk (clk),
   .rst (rst),
   .PCsrc (PC_src),

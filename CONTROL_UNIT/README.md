@@ -76,9 +76,19 @@ This instructions changes the `PC` to `PC + ImmOP` and saves what would have bee
 
 #### `jalr`
 
-This instruction changes the `PC` to the sum of a given register and the immediate. It then saves what would have been the next instruction address to another given register. The instructions is used to return from subroutines. 
+This instruction changes the `PC` to the sum of a given register and the immediate. It then saves what would have been the next instruction address to another given register. The instructions is used to return from subroutines. To do this we need to add an additional mux that will allow us to set `PC` to the value of the output `Result`. 
+
+* Enable `jumpSaveNext` to connect `WD3` to `nextPC`
+* Enable `RegWrite` to enable writing to registers
+* Enable `ALUsrc` to make the ALU add an immediate and a register value
+* Enable `PC2Result` A new signal to set a mux to set the PC to the Result Value
+* Enable `Resultsrc` This changes the output of result to be from the ALU instead of Data Memory
+* set `ImmSrc` to make sure the immediate value is that for a jump instruction as well as it is sign extended
+* set `AluCtrl` to the SUM operation
 
 **TODO**
+
+* Change PC_ROM components to be a single block with the muxs controlling them to be within the top file.
 
 #### Opcode and funct mapping
 
