@@ -239,6 +239,8 @@ always_comb begin
     /* J-TYPE */
     J: begin // jal
       jumpSaveNext = 1; // save next PC to REG
+      ImmSrc = Jump;
+      RegWrite = 1;
       PCsrc = 1;        // next PC is given by curent PC + ImmOp
     end
 
