@@ -1,39 +1,86 @@
 # Control Unit
 
-![control_unit](./images/CONTROL_UNIT.png)
+![control_unit](./images/microarchitecture.jpg)
 
-### The following instructions are to be implemented:
+### Instruction types
+
+All instructions are part of a *Type* which identifies how they interpret the bits of the immediate.
+
+Type | Opcode | Description | Implemented instructions | Shared Control Signals 
+--- | --- | --- | --- | --- | ---
+**`R`** | `0110011` | Register to Register instructions | None
+**`I1`** | `0000011` | Load instructions that use 12-bit immediate | `lw`
+**`I2`** | `0010011` | ALU instructions that use 12-bit immediate | `addi` , `slli` | set `RegWrite` to enable writing to register <br /> set `ImmSrc` to `Imm` <br /> set `ALUsrc` to select `ImmOp` as second operand
+**`I3`** | `1100111` | Jump with 12-bit immediate | `jalr`
+**`S`** | `0100011` | Store instruction with 12-bit immediate | `sw`
+**`B`** | `1100011` | Branch instructions with 13-bit immediate | `bne`
+**`U`** | `0010111` <br /> `0110111` | Upper immediate instructions | None
+**`J`** | `1101111` | Jump instructions with 20-bit immediate | `jal` | Only one instruction is implemented so no shared signals
+
+### Implemented instructions
 #### `addi`
 
 Add immediate. Add the value of an immediate to the value of a register and store the result in another register.
 
 *Required control signals*
 
-* Enable `RegWrite` so value can be stored in reg
-* Set `ImmSrc` to the correct format
-* Set `ALUsrc` to `1` to select `ImmOp` as the second operand
 * Set `ALUctrl` to value that selects the *SUM* operation
 
 #### `bne`
 
 Branch not equal. If the operands from the previous instruction are not the same then change the PC to PC + the value of the immediate.
 
-**NOTE:** 
-*The implementation is based on the diagram in the lab, where the branching is based only on the value of the immediate and not of the register*
-
 *Required control signals*
 
 * Check on input `EQ` to decide whether to branch or not
-* Set `ImmSrc` to the correct format
 * If branching is happending then set `PCsrc` to `1` to change the next program counter to PC + Imm
 
 #### `lw` 
 
 Load word. Load into a register the word at the address given by another register and offset by the immediate.
 
-***Requires significant changes to the components***
+*Required Control Signals*
+* Set `RegWrite` to high to allow writing to registers
+* Set `ALUctrl` to execute sum operation
+* Set `ResultSrc` to high to select Data Memory output as write content
+* Set `ALUsrc` to high to select `ImmOp` as the second operand
 
-### Technical details
+#### `sw`
+
+Store Word, this is the instruction to save data from a register into a given address of the data memory, this is done by controlling the Write Enable section of the data_memory and taking the output from the regfile at RD2 as the data and the data from RD1 + Imm to get the address to write the data to.
+
+
+*Required Control Signals*
+* Enable `MemWrite` to allow data to be written to the Data Memory
+* Enable `AluSrc` to set the input to the alu to be the immediate value
+* Enable `ImmSrc` to make sure that sign extenstion occours
+* Set `AluCtrl` to the SUM operation  
+
+#### `slli`
+
+Shift logical left immediate, this instruction shifts the contents of a given register left by the amount specified in the immediate. 
+
+*Required Control Signals*
+
+* Set `ALUCtrl` to the *SLL_OP* operation, which shifts left
+
+#### `jal`
+
+This instructions changes the `PC` to `PC + ImmOP` and saves what would have been the next instruction to a given register
+
+*Required Control Signals*
+
+* Enable `jumpSaveNext` to connect `WD3` to `nextPC`
+* Enable `RegWrite` to enable writing to registers
+* Enable `PCsrc` to make the next PC be given by `PC + ImmOp`
+
+#### `jalr`
+
+This instruction changes the `PC` to the sum of a given register and the immediate. It then saves what would have been the next instruction address to another given register. The instructions is used to return from subroutines. 
+
+**TODO**
+
+#### Opcode and funct mapping
 
 Instruction | opcode | funct3 | funct7 | Type
 --- | :---: | :---: | :---: | :---: 
@@ -41,9 +88,18 @@ Instruction | opcode | funct3 | funct7 | Type
 *`lw`* | `0000011` | `010` | - | I 
 *`bne`* | `1100011` | `001` | - | B 
 
-It can be observed that each opcode uniquely identifies each instructions so the funct are redudant for now.
+**TODO add other instructions**
 
-### Testing
+### First implementation
+A package was created to hold the type definitions common to the control logic blocks. This can be further extended to other modules in the CPU.
+To have proper compilation the package (`types_pkg.sv` in this case) must be placed before the other files. In turn the `--top-module` flag must be specified in order to get the correct file names and structure, for example:
+  ```sh
+  verilator -Wall --cc --trace types_pkg.sv control_unit.sv --top-module control_unit --exe control_unit_tb.cpp
+  ```
+
+In the combinational logic block the outputs are initialized to zero so that they always hold that default value. This prevents rogue HIGH signals where not desired.
+
+#### Testing
 
 ```
 Running simulation
@@ -79,33 +135,14 @@ With the data memory additional signals needed to be added to allow for the cont
 
 This includes the ImmSrc, MemWrite, ResultSrc and AluSrc signals
 
-#### `Sw`
+#### Testing
 
-Store Word, this is the instruction to save data from a register into a given address of the data memory, this is done by controlling the Write Enable section of the data_memory and taking the output from the regfile at RD2 as the data and the data from RD1 + Imm to get the address to write the data to.
+  Further testing was then added to make sure that the control signals for the `sw` instruction is correctly controlled, also a test program was tested which stored and loaded instructions to check proper operation of the data memory block. 
 
+  During this an issue was found in which the Program Counter would loop after 32 instructions of a program, this was due to simple miss labeling of a parameter and as such, would set the program counter to have a size 2^5, this was then changed to a larger value to allow for more complex programs to be ran.
 
-*Required Control Signals*
-* Enable `MemWrite` to allow data to be written to the Data Memory
-* Enable `AluSrc` to set the input to the alu to be the immediate value
-* Enable `ImmSrc` to make sure that sign extenstion occours
-* Set `AluCtrl` to the SUM operation  
-
-### Testing
-
-Further testing was then added to make sure that the control signals for the `sw` instruction is correctly controlled, also a test program was tested which stored and loaded instructions to check proper operation of the data memory block. 
-
-During this an issue was found in which the Program Counter would loop after 32 instructions of a program, this was due to simple miss labeling of a parameter and as such, would set the program counter to have a size 2^5, this was then changed to a larger value to allow for more complex programs to be ran.
-
-**NOTE:** 
-*The size of the program counter is arbituary and as such needs to be kept to a reasonable value for simulation sizes but large enough to store instructions of large programs*
+  **NOTE:** 
+  *The size of the program counter is arbituary and as such needs to be kept to a reasonable value for simulation sizes but large enough to store instructions of large programs*
 
 
-### Notes
-
-* A package was created to hold the type definitions common to the control logic blocks. This can be further extended to other modules in the CPU.
-	* To have proper compilation the package (`types_pkg.sv` in this case) must be placed before the other files. In turn the `--top-module` flag must be specified in order to get the correct file names and structure. For example:
-		```sh
-		verilator -Wall --cc --trace types_pkg.sv control_unit.sv --top-module control_unit --exe control_unit_tb.cpp
-		```
-* In the combinational logic block the outputs are initialized to zero so that they always hold that default value. This prevents rogue HIGH signals where not desired.
 
