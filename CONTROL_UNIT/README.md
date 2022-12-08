@@ -146,3 +146,22 @@ This includes the ImmSrc, MemWrite, ResultSrc and AluSrc signals
 
 
 
+## Control Unit Refactor
+The motivation for refactoring the control unit was the fact that depending on the instruction type, the CPU requires more or less of the instruction to correctly set the control signals.
+
+For example, R-Type instructions need the following parts of the instruction to set control signals appropriately: 
+`opcode: instr[6:0], func3: instr[14:12], funct7: instr[31:25]`.
+
+On the other hand, B-Type instructions only require `opcode: instr[6:0]` to set the control signals.
+### Hardware changes
+
+A simple switch `case(instr)` could have been used, but this would have most likely quickly gotten out of hand, as this switch would list the encoding for every single RISC-V instruction implemented.
+
+Instead, a nested switch approach will be used, where the top level switch checks the opcode, which sepecifies the instruction format, and nested switches for every instruction format so that the switch can check `funct3`, `funct7` or neither as required.
+
+### Testing
+
+Each instruction will be tested in turn, with the control unit isolated from other CPU components.
+
+#### `addi`
+

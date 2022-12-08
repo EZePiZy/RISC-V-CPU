@@ -6,58 +6,35 @@
 #include <bitset>
 
 int main(int argc, char **argv, char **env) {
-	int simcyc;     // simulation clock count
-	int tick;       // each clk cycle has two ticks for two edges
-	int lights = 0; // state to toggle LED lights
+  int simcyc;     // simulation clock count
+  int tick;       // each clk cycle has two ticks for two edges
+  int lights = 0; // state to toggle LED lights
 
-	Verilated::commandArgs(argc, argv);
-	// init top verilog instance
-	VCONTROL_UNIT * top = new VCONTROL_UNIT;
-	// init trace dump
-	Verilated::traceEverOn(true);
-	VerilatedVcdC* tfp = new VerilatedVcdC;
-	top->trace (tfp, 99);
-	tfp->open ("CONTROL_UNIT.vcd");
+  Verilated::commandArgs(argc, argv);
+  // init top verilog instance
+  VCONTROL_UNIT *top = new VCONTROL_UNIT;
+  // init trace dump
+  Verilated::traceEverOn(true);
+  VerilatedVcdC *tfp = new VerilatedVcdC;
+  top->trace (tfp, 99);
+  tfp->open ("CONTROL_UNIT.vcd");
 
-	top->instr = 0b00000000000000000000000000010011; // addi 
-	top->eval();
+// addi x1, x1, 5
+  std::cout << "addi, x1, x1, 5" << std::endl;
+  top->instr = 0b00000000010100001000000010010011; // addi 
+  top->eval();
+  tfp->dump(0);
+  
+  std::cout << "addi, x1, x1, -2" << std::endl;
+  top->instr = 0b11111111111000001000000010010011; // bne 
+  top->eval();
+  tfp->dump(1);
 
-	std::cout << "ADDI \n";
+  std::cout << "addi, x2, x1, 2" << std::endl;
+  top->instr = 0b00000000001000001000000100010011;
+  top->eval();
+  tfp->dump(2);
 
-	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
-
-	top->instr = 0b00000000000000000000000001100011; // bne 
-	top->EQ = 0;
-	top->eval();
-
-	std::cout << "\nBNE false\n";
-
-	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
-
-	top->instr = 0b00000000000000000000000001100011; // bne 
-	top->EQ = 1;
-	top->eval();
-
-	std::cout << "\nBNE true\n";
-
-	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
-
-	top->instr = 0b00000000000000000000000000000011; // bne 
-	top->EQ = 0;
-	top->eval();
-
-	std::cout << "\nLoad Word\n";
-
-	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
-
-	top->instr = 0b00000000000000000000000000100011; // bne 
-	top->EQ = 0;
-	top->eval();
-
-	std::cout << "\nSave Word\n";
-
-	std::cout << "RegWrite: " << int(top->RegWrite) << "\nALUctrl: " << std::bitset<2>(top->ALUctrl) << "\nALUsrc: " << int(top->ALUsrc) << "\nImmSrc: " << std::bitset<3>(top->ImmSrc) << "\nPCsrc: " << int(top->PCsrc) << "\nMemWrite: " << int(top->MemWrite) << std::endl;
-
-	tfp->close(); 
-	exit(0);
+  tfp->close(); 
+  exit(0);
 }
