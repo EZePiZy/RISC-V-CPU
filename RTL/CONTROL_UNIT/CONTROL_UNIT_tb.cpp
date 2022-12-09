@@ -20,20 +20,25 @@ int main(int argc, char **argv, char **env) {
   tfp->open ("CONTROL_UNIT.vcd");
 
 // addi x1, x1, 5
-  std::cout << "addi, x1, x1, 5" << std::endl;
-  top->instr = 0b00000000010100001000000010010011; // addi 
-  top->eval();
-  tfp->dump(0);
+  // std::cout << "addi, x1, x1, 5" << std::endl;
+  // top->instr = 0b00000000010100001000000010010011;
+  // top->eval();
+  // tfp->dump(0);
   
-  std::cout << "addi, x1, x1, -2" << std::endl;
-  top->instr = 0b11111111111000001000000010010011; // bne 
-  top->eval();
-  tfp->dump(1);
+  // std::cout << "addi, x1, x1, -2" << std::endl;
+  // top->instr = 0b11111111111000001000000010010011;
+  // top->eval();
+  // tfp->dump(1);
 
-  std::cout << "addi, x2, x1, 2" << std::endl;
-  top->instr = 0b00000000001000001000000100010011;
+  // std::cout << "addi, x2, x1, 2" << std::endl;
+  // top->instr = 0b00000000001000001000000100010011;
+  // top->eval();
+  // tfp->dump(2);
+
+  std::cout << "jalr, zero, sp, 0" << std::endl;
+  top->instr = 0x00010067;
   top->eval();
-  tfp->dump(2);
+  tfp->dump(3);
 
   tfp->close(); 
   exit(0);

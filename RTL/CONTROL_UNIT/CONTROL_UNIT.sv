@@ -4,17 +4,17 @@ import types_pkg::*; // import all data type definitions
 
 (
   input  logic        EQ,
-  /* verilator lint_off UNUSED */ // ignore unused parts of instruction
-  input  DATA_BUS     instr,       // incoming instruction
-  output logic        RegWrite,    // enable to write regs
-  output alu_ctrl     ALUctrl,     // value to select operation in alu
-  output logic        ALUsrc,      // mux to select immediate
-  output instr_format ImmSrc,      // value to select imm type
-  output logic        PCsrc,       // mux to select branching
-  output logic        MemWrite,    // Sets the Data Memory Write Enable
-  output logic        ResultSrc,   // Sets the output value to be that of the ALU or Data Memory
+  /* verilator lint_off UNUSED */   // ignore unused parts of instruction
+  input  DATA_BUS     instr,        // incoming instruction
+  output logic        RegWrite,     // enable to write regs
+  output alu_ctrl     ALUctrl,      // value to select operation in alu
+  output logic        ALUsrc,       // mux to select immediate
+  output instr_format ImmSrc,       // value to select imm type
+  output logic        PCsrc,        // mux to select branching
+  output logic        MemWrite,     // Sets the Data Memory Write Enable
+  output logic        ResultSrc,    // Sets the output value to be that of the ALU or Data Memory
   output logic        jumpSaveNext, // Sets MUX to write PC + 4 to the REGFILE
-  output logic        PC2Result    // Sets the PC to the value of the Result Wire
+  output logic        PC2Result     // Sets the PC to the value of the Result Wire
 );
 
 opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
@@ -23,7 +23,7 @@ logic[2:0] funct3 = {instr[14:12]};
 logic[6:0] funct7 = {instr[31:25]};
 
 always_comb begin
-  // set default values
+// set default values
   RegWrite = 0;
   ALUctrl = SUM_OP; // 2'b0
   ALUsrc = 0;

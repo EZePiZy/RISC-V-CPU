@@ -6,17 +6,16 @@
 
 All instructions are part of a *Type* which identifies how they interpret the bits of the immediate.
 
-Type | Opcode | Description | Implemented instructions | Shared Control Signals 
---- | --- | --- | --- | --- 
-**`R`** | `0110011` | Register to Register instructions | None |Set `ResultSrc` to disable as we care about the ALU output.<br> Set `RegWrite` to enable as we want to write in the registers.</br>
-**`I1`** | `0000011` | Load instructions that use 12-bit immediate | `lw`|Set `ImmSrc` to `Imm` to sign extend and concatenate with original.
-**`I2`** | `0010011` | ALU instructions that use 12-bit immediate | `addi` , `slli` | Set `RegWrite` to enable writing to register <br> set `ImmSrc` to `Imm`. </br><br>Set `ALUsrc` to select `ImmOp` as second operand</br>
-**`I3`** | `1100111` | Jump with 12-bit immediate | `jalr` | TODO (@Corey)
-**`S`** | `0100011` | Store instruction with 12-bit immediate | `sw` |Set `MemWrite` to enable as we are storing a word in the memory.<br> `ImmSrc` to `Store`.</br><br> `ResultSrc` to disable as we are bypassing the Data Memory Unit, using ALUResult.</br><br> Set `ALUsrc` to enable because we are always using `ImmExt`.</br><br>Set `ALUctrl` to `SUM_OP` to set the ALU to complete a sum operation.</br>
-**`B`** | `1100011` | Branch instructions with 13-bit immediate | `bne` | Set `ImmSrc` to `Branch` as we use branch immediate. 
-**`U`** | `0010111` <br /> `0110111` | Upper immediate instructions | None | None
-**`J`** | `1101111` | Jump instructions with 20-bit immediate | `jal` | Only one instruction is implemented so no shared signals
-
+Type     | Opcode                     | Description                                 | Implemented instructions | Shared Control Signals 
+-------- | -------------------------- | ------------------------------------------- | ------------------------ | ---------------------- 
+**`R`**  | `0110011`                  | Register to Register instructions           | None                     | Set `ResultSrc` to disable as we care about the ALU output.<br> Set `RegWrite` to enable as we want to write in the registers.</br>
+**`I1`** | `0000011`                  | Load instructions that use 12-bit immediate | `lw`                     | Set `ImmSrc` to `Imm` to sign extend and concatenate with original.
+**`I2`** | `0010011`                  | ALU instructions that use 12-bit immediate  | `addi` , `slli`          | Set `RegWrite` to enable writing to register <br> set `ImmSrc` to `Imm`. </br><br>Set `ALUsrc` to select `ImmOp` as second operand</br>
+**`I3`** | `1100111`                  | Jump with 12-bit immediate                  | `jalr`                   | TODO (@Corey)
+**`S`**  | `0100011`                  | Store instruction with 12-bit immediate     | `sw`                     | Set `MemWrite` to enable as we are storing a word in the memory.<br> `ImmSrc` to `Store`.</br><br> `ResultSrc` to disable as we are bypassing the Data Memory Unit, using ALUResult.</br><br> Set `ALUsrc` to enable because we are always using `ImmExt`.</br><br>Set `ALUctrl` to `SUM_OP` to set the ALU to complete a sum operation.</br>
+**`B`**  | `1100011`                  | Branch instructions with 13-bit immediate   | `bne`                    | Set `ImmSrc` to `Branch` as we use branch immediate. 
+**`U`**  | `0010111` <br /> `0110111` | Upper immediate instructions                | None                     | None
+**`J`**  | `1101111`                  | Jump instructions with 20-bit immediate     | `jal`                    | Only one instruction is implemented so no shared signals
 ### Implemented instructions
 #### `addi`
 
@@ -92,11 +91,11 @@ This instruction changes the `PC` to the sum of a given register and the immedia
 
 #### Opcode and funct mapping
 
-Instruction | opcode | funct3 | funct7 | Type
---- | :---: | :---: | :---: | :---: 
-*`addi`* | `0010011` | `000` | - | I 
-*`lw`* | `0000011` | `010` | - | I 
-*`bne`* | `1100011` | `001` | - | B 
+Instruction | opcode    | funct3 | funct7 | Type
+----------- | :-------: | :----: | :----: | :---: 
+*`addi`*    | `0010011` | `000`  | -      | I 
+*`lw`*      | `0000011` | `010`  | -      | I 
+*`bne`*     | `1100011` | `001`  | -      | B 
 
 **TODO add other instructions**
 
@@ -171,7 +170,58 @@ Instead, a nested switch approach will be used, where the top level switch check
 
 ### Testing
 
+Recall the usage of the control signals: 
+
+- `RegWrite`: Enable writing to registers.
+- `ALUctrl`: Select ALU operation mode.
+- `ALUsrc`: mux to select immediateImmSrc,      // value to select imm type
+
+- `PCsrc` mux to select branching
+- `MemWrite` Sets the Data Memory Write Enable
+- `ResultSrc` Sets the output value to be that of the ALU or Data Memory
+- `jumpSaveNext` Sets MUX to write PC + 4 to the REGFILE
+- `PC2Result` Sets the PC to the value of the Result Wire
+
 Each instruction will be tested in turn, with the control unit isolated from other CPU components.
+
+Operation | Expected Control Unit Output | Actual Control Unit Output
+ :------: | :--------------------------: | :------------------------:
+ `addi`   | `RegWrite`,    // enable to write regs
+            `ALUctrl`,     // value to select operation in alu
+            `ALUsrc`,      // mux to select immediate
+            `ImmSrc`,      // value to select imm type
+            `PCsrc`,       // mux to select branching
+            `MemWrite`,    // Sets the Data Memory Write Enable
+            `ResultSrc`,   // Sets the output value to be that of the ALU or Data Memory
+            `jumpSaveNext`, // Sets MUX to write PC + 4 to the REGFILE
+            `PC2Result`    // Sets the PC to the value of the Result Wire
+ `bne`    | 
+ `lw`     | 
+ `sw`     | 
+ `slli`   | 
+ `jal`    | 
+ `jalr`   | 
 
 #### `addi`
 
+Expected and got the following control signals:
+
+- 
+
+#### ``
+
+#### ``
+
+#### `jalr`
+
+Expected and got the following control signals:
+
+RegWrite,     // enable to write regs
+ALUctrl,      // value to select operation in alu
+ALUsrc,       // mux to select immediate
+ImmSrc,       // value to select imm type
+PCsrc,        // mux to select branching
+MemWrite,     // Sets the Data Memory Write Enable
+ResultSrc,    // Sets the output value to be that of the ALU or Data Memory
+jumpSaveNext, // Sets MUX to write PC + 4 to the REGFILE
+PC2Result     // Sets the PC to the value of the Result Wire

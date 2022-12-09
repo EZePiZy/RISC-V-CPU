@@ -1,5 +1,22 @@
 #!/bin/sh
 
+cd CPU/
+
+if [ $# -eq 1 ]; then
+  if [ -f ../../programs/$1.mem ]; then
+    echo "Deleting old program, and loading $1 into CPU."
+    rm -f instruction.mem
+    cp ../../programs/$1.mem instruction.mem
+  else
+    echo "File does not exist in the programs folder!"
+  fi
+elif [ $# -eq 0 ]; then
+  echo "Running previous program!"
+else
+  echo "Expected one or two parameters!"
+  exit 
+fi
+
 # cleanup
 rm -rf obj_dir
 rm -f *.vcd
