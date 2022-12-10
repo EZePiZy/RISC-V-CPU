@@ -9,6 +9,7 @@ import types_pkg::*;
   input  ADDR_BUS AD3,
   input  logic    WE3,
   input  DATA_BUS WD3,
+  input  logic    in_EN,  // enable to write to input register
   input  DATA_BUS x31,    // input register to set 1 second clock
   output DATA_BUS RD1,
   output DATA_BUS RD2,
@@ -17,7 +18,6 @@ import types_pkg::*;
 
 logic [DATA_WIDTH-1:0] ram_array [2 ** ADDRESS_WIDTH - 1:0];
 
-assign ram_array[31] = x31;    // hard coded input to x31 register to interact with outside world
 
 always_comb begin
     RD1 = ram_array [AD1];
@@ -26,6 +26,7 @@ always_comb begin
 end
 
 always_ff @(posedge clk) begin
+    if (in_EN) ram_array[31] <= x31;             // hard coded input to x31 register to interact with outside world, clocked and with enable
     if (WE3 && AD3 != 0) ram_array [AD3] <= WD3; // DO NOT WRITE TO REG 0
 end
 

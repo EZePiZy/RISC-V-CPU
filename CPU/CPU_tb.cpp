@@ -40,9 +40,11 @@ int main(int argc, char **argv, char **env) {
 
   auto start_time = std::chrono::high_resolution_clock::now();
   auto end_time = std::chrono::high_resolution_clock::now();
-  auto prev_time = std::chrono::high_resolution_clock::now();
 
+  // vars for 1 second pulse
+  auto prev_time = std::chrono::high_resolution_clock::now();
   int elapased_time = 0;
+  bool sec_pulse = 0;
 
   long int total_duration = 0;
   
@@ -60,17 +62,23 @@ int main(int argc, char **argv, char **env) {
       top->clk = !top->clk;
     }
 
-    top->input_reg = 0; // reset to 0 so it's only a quick impulse
-    if (elapased_time > 1000){
-      elapased_time = 0;
-      prev_time = start_time;
-      std::cout << "1 second elapsed!" << std::endl;
-      top->input_reg = 1;
-    }
+    top->write_in_EN = 0;
+
 
     // only update trigger when a0 is back to 0
     if (top->a0 == 0) {
+      top->write_in_EN = 1;
       top->input_reg = vbdFlag();
+    } else {
+      // if (elapased_time > 1000){
+      //   elapased_time = 0;
+      //   prev_time = start_time;
+      //   std::cout << "1 second elapsed!" << std::endl;
+      //   top->write_in_EN = 1;
+      //   top->input_reg = 1;
+      // }
+      top->write_in_EN = 1;
+      top->input_reg = 1;
     }
 
     std::cout << top->a0 << std::endl;
@@ -95,7 +103,7 @@ int main(int argc, char **argv, char **env) {
     #endif
       tfp->close();
       std::cout << "Average time per clock cycle: " << (total_duration/simcyc) << " us" << std::endl;
-      std::cout << "Average frequency: " << (double(simcyc)/total_duration) * 10e6 << " Hz" << std::endl;
+      std::cout << "Average frequency: " << (double(1)/((total_duration * 10e-6)/simcyc)  )  << " Hz" << std::endl;
       exit(0);
     } 
   }
