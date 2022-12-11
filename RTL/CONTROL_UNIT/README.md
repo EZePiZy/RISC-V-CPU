@@ -19,6 +19,8 @@ Type     | Opcode                     | Description                             
 ### Implemented instructions
 #### `addi`
 
+Add immediate. Add the value of an immediate to the value of a register and store the result in another register.
+
 Control Signal | Expected | Notes                |
  :-----------: | :------: | :------------------- |
 `RegWrite`     | `1`      | None                 |
@@ -32,6 +34,8 @@ Control Signal | Expected | Notes                |
 `WriteNextPC`  | `0`      | No Jump              |
 
 #### `bne`
+
+Branch not equal. If the operands from the previous instruction are not the same then change the PC to PC + the value of the immediate.
 
 Control Signal | Expected | Notes                                               |
  :-----------: | :------: | :-------------------------------------------------- |
@@ -47,6 +51,8 @@ Control Signal | Expected | Notes                                               
 
 #### `lw`
 
+Load word. Load into a register the word at the address given by another register and offset by the immediate.
+
 Control Signal | Expected | Notes                 |
  :-----------: | :------: | :-------------------- |
 `RegWrite`     | `1`      | Writing to Registers  |
@@ -60,6 +66,8 @@ Control Signal | Expected | Notes                 |
 `WriteNextPC`  | `0`      | No PC write           |
 
 #### `sw`
+
+Store Word, this is the instruction to save data from a register into a given address of the data memory, this is done by controlling the Write Enable section of the data_memory and taking the output from the regfile at RD2 as the data and the data from RD1 + Imm to get the address to write the data to.
 
 Control Signal | Expected | Notes                                |
  :-----------: | :------: | :----------------------------------- |
@@ -75,6 +83,8 @@ Control Signal | Expected | Notes                                |
 
 #### `slli`
 
+Shift logical left immediate, this instruction shifts the contents of a given register left by the amount specified in the immediate. 
+
 Control Signal | Expected | Notes               |
  :-----------: | :------: | :------------------ |
 `RegWrite`     | `1`      | Writing to Register |
@@ -89,6 +99,8 @@ Control Signal | Expected | Notes               |
 
 #### `jal`
 
+This instructions changes the `PC` to `PC + ImmOP` and saves what would have been the next instruction to a given register.
+
 Control Signal | Expected | Notes                                                           |
  :-----------: | :------: | :-------------------------------------------------------------- |
 `RegWrite`     | `1`      | Write PC + 4 to Register                                        |
@@ -102,6 +114,8 @@ Control Signal | Expected | Notes                                               
 `WriteNextPC`  | `1`      | Write next PC to Register                                       |
 
 #### `jalr`
+
+This instruction changes the `PC` to the sum of a given register and the immediate. It then saves what would have been the next instruction address to another given register. The instructions is used to return from subroutines. To do this we need to add an additional mux that will allow us to set `PC` to the value of the output `Result`.
 
 Control Signal | Expected | Notes                                                                                                           |
  :-----------: | :------: | :-------------------------------------------------------------------------------------------------------------- |
@@ -207,9 +221,9 @@ Recall the usage of the control signals:
 - `ALUsrc`: Select whether ALU's second input comes from an immediate or a register.
 - `ImmSrc`: Select Immediate type (I, R, S...).
 - `PCsrc`: Select whether next PC comes from immediate or is current + 4.
+- `JumpType` Sets the PC to the value of the Result Wire
 - `MemWrite`: Enable writing to Data Memory
 - `ResultSrc`: Select whether result source comes from ALU or Data Memory.
 - `WriteNextPC`: When comines with `RegWrite`, writes PC + 4 to the REGFILE. Used in `jal`.
-- `JumpType` Sets the PC to the value of the Result Wire
 
 Each instruction will be tested in turn, with the control unit isolated from other CPU components.
