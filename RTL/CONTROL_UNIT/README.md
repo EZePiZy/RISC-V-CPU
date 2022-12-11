@@ -19,71 +19,101 @@ Type     | Opcode                     | Description                             
 ### Implemented instructions
 #### `addi`
 
-Add immediate. Add the value of an immediate to the value of a register and store the result in another register.
-
-*Required control signals*
-
-* Set `ALUctrl` to value that selects the *SUM* operation
+Control Signal | Expected | Notes                |
+ :-----------: | :------: | :------------------- |
+`RegWrite`     | `1`      | None                 |
+`ALUctrl`      | `000`    | SUM Mode             |
+`ALUsrc`       | `1`      | Immediate Operation  |
+`ImmSrc`       | `000`    | Immediate type I     |
+`PCsrc`        | `0`      | No Jump              |
+`JumpType`     | `x`      | No Jump              |
+`MemWrite`     | `0`      | No Memory Write      |
+`ResultSrc`    | `0`      | Reading ALU result   |
+`WriteNextPC`  | `0`      | No Jump              |
 
 #### `bne`
 
-Branch not equal. If the operands from the previous instruction are not the same then change the PC to PC + the value of the immediate.
+Control Signal | Expected | Notes                                               |
+ :-----------: | :------: | :-------------------------------------------------- |
+`RegWrite`     | `0`      | No Register Write                                   |
+`ALUctrl`      | `xxx`    | ALU has built in equality check regardless of mode  |
+`ALUsrc`       | `x`      | ALU bypassed                                        |
+`ImmSrc`       | `011`    | Immediate type B                                    |
+`PCsrc`        | `0 or 1` | Jump if `EQ` flag is set                            |
+`JumpType`     | `0`      | Jump to immediate                                   |
+`MemWrite`     | `0`      | No Memory Write                                     |
+`ResultSrc`    | `x`      | Doesn't affect instruction execution                |
+`WriteNextPC`  | `0`      | No PC write                                         |
 
-*Required control signals*
+#### `lw`
 
-* Check on input `EQ` to decide whether to branch or not
-* If branching is happending then set `PCsrc` to `1` to change the next program counter to PC + Imm
-
-#### `lw` 
-
-Load word. Load into a register the word at the address given by another register and offset by the immediate.
-
-*Required Control Signals*
-* Set `RegWrite` to high to allow writing to registers
-* Set `ALUctrl` to execute sum operation
-* Set `ResultSrc` to high to select Data Memory output as write content
-* Set `ALUsrc` to high to select `ImmOp` as the second operand
+Control Signal | Expected | Notes                 |
+ :-----------: | :------: | :-------------------- |
+`RegWrite`     | `1`      | Writing to Registers  |
+`ALUctrl`      | `xxx`    | ALU Bypassed          |
+`ALUsrc`       | `x`      | ALU Bypassed          |
+`ImmSrc`       | `000`    | Immediate type I      |
+`PCsrc`        | `0`      | No Jump               |
+`JumpType`     | `x`      | No Jump               |
+`MemWrite`     | `0`      | No Memory Write       |
+`ResultSrc`    | `1`      | Data Memory Read      |
+`WriteNextPC`  | `0`      | No PC write           |
 
 #### `sw`
 
-Store Word, this is the instruction to save data from a register into a given address of the data memory, this is done by controlling the Write Enable section of the data_memory and taking the output from the regfile at RD2 as the data and the data from RD1 + Imm to get the address to write the data to.
-
-
-*Required Control Signals*
-* Enable `MemWrite` to allow data to be written to the Data Memory
-* Enable `AluSrc` to set the input to the alu to be the immediate value
-* Enable `ImmSrc` to make sure that sign extenstion occours
-* Set `AluCtrl` to the SUM operation  
+Control Signal | Expected | Notes                                |
+ :-----------: | :------: | :----------------------------------- |
+`RegWrite`     | `0`      | No Register Write                    |
+`ALUctrl`      | `xxx`    | ALU Bypassed                         |
+`ALUsrc`       | `x`      | ALU Bypassed                         |
+`ImmSrc`       | `010`    | Immediate type S                     |
+`PCsrc`        | `0`      | No Jump                              |
+`JumpType`     | `x`      | No Jump                              |
+`MemWrite`     | `1`      | Writing to Data Memory               |
+`ResultSrc`    | `x`      | Doesn't affect instruction execution |
+`WriteNextPC`  | `0`      | No PC Write                          |
 
 #### `slli`
 
-Shift logical left immediate, this instruction shifts the contents of a given register left by the amount specified in the immediate. 
-
-*Required Control Signals*
-
-* Set `ALUCtrl` to the *SLL_OP* operation, which shifts left
+Control Signal | Expected | Notes               |
+ :-----------: | :------: | :------------------ |
+`RegWrite`     | `1`      | Writing to Register |
+`ALUctrl`      | `100`    | SLL Mode            |
+`ALUsrc`       | `1`      | Immediate Operation |
+`ImmSrc`       | `000`    | Immediate type I    |
+`PCsrc`        | `0`      | No Jump             |
+`JumpType`     | `x`      | No Jump             |
+`MemWrite`     | `0`      | No Memory Write     |
+`ResultSrc`    | `0`      | ALU Result Read     |
+`WriteNextPC`  | `0`      | No PC Write         |
 
 #### `jal`
 
-This instructions changes the `PC` to `PC + ImmOP` and saves what would have been the next instruction to a given register
-
-*Required Control Signals*
-
-* Enable `jumpSaveNext` to connect `WD3` to `nextPC`
-* Enable `RegWrite` to enable writing to registers
-* Enable `PCsrc` to make the next PC be given by `PC + ImmOp`
+Control Signal | Expected | Notes                                                           |
+ :-----------: | :------: | :-------------------------------------------------------------- |
+`RegWrite`     | `1`      | Write PC + 4 to Register                                        |
+`ALUctrl`      | `xxx`    | ALU Bypassed                                                    |
+`ALUsrc`       | `x`      | ALU Bypassed                                                    |
+`ImmSrc`       | `100`    | Immediate type J                                                |
+`PCsrc`        | `1`      | Jump                                                            |
+`JumpType`     | `0`      | Jump to Immediate                                               |
+`MemWrite`     | `0`      | No Memory Write                                                 |
+`ResultSrc`    | `x`      | Doesn't affect instruction execution, PC + 4 has separate adder |
+`WriteNextPC`  | `1`      | Write next PC to Register                                       |
 
 #### `jalr`
 
-This instruction changes the `PC` to the sum of a given register and the immediate. It then saves what would have been the next instruction address to another given register. The instructions is used to return from subroutines. To do this we need to add an additional mux that will allow us to set `PC` to the value of the output `Result`. 
-
-* Enable `jumpSaveNext` to connect `WD3` to `nextPC`
-* Enable `RegWrite` to enable writing to registers
-* Enable `ALUsrc` to make the ALU add an immediate and a register value
-* Enable `PC2Result` A new signal to set a mux to set the PC to the Result Value
-* Enable `Resultsrc` This changes the output of result to be from the ALU instead of Data Memory
-* set `ImmSrc` to make sure the immediate value is that for a jump instruction as well as it is sign extended
-* set `AluCtrl` to the SUM operation
+Control Signal | Expected | Notes                                                                                                           |
+ :-----------: | :------: | :-------------------------------------------------------------------------------------------------------------- |
+`RegWrite`     | `1`      | Although `RegWrite` is 1, most of the time, `jalr` is programmed to write to register `zero` which does nothing |
+`ALUctrl`      | `000`    | SUM Mode                                                                                                        |
+`ALUsrc`       | `1`      | Immediate Operation                                                                                             |
+`ImmSrc`       | `000`    | Immediate type I                                                                                                |
+`PCsrc`        | `1`      | Jump                                                                                                            |
+`JumpType`     | `1`      | Jump to Register Value                                                                                          |
+`MemWrite`     | `0`      | No Memory Write                                                                                                 |
+`ResultSrc`    | `0`      | ALU Result Read                                                                                                 |
+`WriteNextPC`  | `1`      | Although `RegWrite` is 1, most of the time, `jalr` is programmed to write to register `zero` which does nothing |
 
 **TODO**
 
@@ -174,54 +204,12 @@ Recall the usage of the control signals:
 
 - `RegWrite`: Enable writing to registers.
 - `ALUctrl`: Select ALU operation mode.
-- `ALUsrc`: mux to select immediateImmSrc,      // value to select imm type
-
-- `PCsrc` mux to select branching
-- `MemWrite` Sets the Data Memory Write Enable
-- `ResultSrc` Sets the output value to be that of the ALU or Data Memory
-- `jumpSaveNext` Sets MUX to write PC + 4 to the REGFILE
-- `PC2Result` Sets the PC to the value of the Result Wire
+- `ALUsrc`: Select whether ALU's second input comes from an immediate or a register.
+- `ImmSrc`: Select Immediate type (I, R, S...).
+- `PCsrc`: Select whether next PC comes from immediate or is current + 4.
+- `MemWrite`: Enable writing to Data Memory
+- `ResultSrc`: Select whether result source comes from ALU or Data Memory.
+- `WriteNextPC`: When comines with `RegWrite`, writes PC + 4 to the REGFILE. Used in `jal`.
+- `JumpType` Sets the PC to the value of the Result Wire
 
 Each instruction will be tested in turn, with the control unit isolated from other CPU components.
-
-Operation | Expected Control Unit Output | Actual Control Unit Output
- :------: | :--------------------------: | :------------------------:
- `addi`   | `RegWrite`,    // enable to write regs
-            `ALUctrl`,     // value to select operation in alu
-            `ALUsrc`,      // mux to select immediate
-            `ImmSrc`,      // value to select imm type
-            `PCsrc`,       // mux to select branching
-            `MemWrite`,    // Sets the Data Memory Write Enable
-            `ResultSrc`,   // Sets the output value to be that of the ALU or Data Memory
-            `jumpSaveNext`, // Sets MUX to write PC + 4 to the REGFILE
-            `PC2Result`    // Sets the PC to the value of the Result Wire
- `bne`    | 
- `lw`     | 
- `sw`     | 
- `slli`   | 
- `jal`    | 
- `jalr`   | 
-
-#### `addi`
-
-Expected and got the following control signals:
-
-- 
-
-#### ``
-
-#### ``
-
-#### `jalr`
-
-Expected and got the following control signals:
-
-RegWrite,     // enable to write regs
-ALUctrl,      // value to select operation in alu
-ALUsrc,       // mux to select immediate
-ImmSrc,       // value to select imm type
-PCsrc,        // mux to select branching
-MemWrite,     // Sets the Data Memory Write Enable
-ResultSrc,    // Sets the output value to be that of the ALU or Data Memory
-jumpSaveNext, // Sets MUX to write PC + 4 to the REGFILE
-PC2Result     // Sets the PC to the value of the Result Wire
