@@ -44,7 +44,6 @@ fi
 # cleanup
 rm -rf obj_dir
 rm -f *.vcd
-rm -f vbuddy.cfg
 
 # run Verilator to translate Verilog into C++, including C++ testbench
 verilator --Wall --cc --trace ../TYPES/types_pkg.sv CPU.sv -I../CONTROL_UNIT -I../DATA_MEMORY -I../SIGN_EXTEND -I../PC -I../REGFILE_ALU/REGFILE -I../REGFILE_ALU/ALU --top-module CPU --exe $testbench
