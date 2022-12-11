@@ -62,23 +62,27 @@ int main(int argc, char **argv, char **env) {
       top->clk = !top->clk;
     }
 
+    // set input registers to 0 
     top->write_in_EN = 0;
+    top->input_reg = 0;
 
+    sec_pulse = top->a0 == 0xFF;  // check whether a0 just was 255
 
-    // only update trigger when a0 is back to 0
-    if (top->a0 == 0) {
+    // only update trigger when a0 is back to 0 after being 255
+    if (sec_pulse && top->a0 == 0) {
       top->write_in_EN = 1;
       top->input_reg = vbdFlag();
+      sec_pulse = 0;
     } else {
-      // if (elapased_time > 1000){
-      //   elapased_time = 0;
-      //   prev_time = start_time;
-      //   std::cout << "1 second elapsed!" << std::endl;
-      //   top->write_in_EN = 1;
-      //   top->input_reg = 1;
-      // }
-      top->write_in_EN = 1;
-      top->input_reg = 1;
+      if (elapased_time > 1000){
+        elapased_time = 0;
+        prev_time = start_time;
+        std::cout << "1 second elapsed!" << std::endl;
+
+        // give pulse
+        top->write_in_EN = 1;
+        top->input_reg = 1;
+      }
     }
 
     std::cout << top->a0 << std::endl;
@@ -89,7 +93,6 @@ int main(int argc, char **argv, char **env) {
     end_time = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
-    // std::cout << duration.count() << "us " << double(1/duration.count()) << " Hz\n";
     total_duration += duration.count();
 
     #ifdef VBUDDY 

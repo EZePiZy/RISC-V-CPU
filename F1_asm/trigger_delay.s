@@ -7,11 +7,11 @@ trig_loop:                  # loop while trigger is not 1
     addi t6, zero, 0        # reset t6 to 0
 start:
     addi t0, zero, 8
-    addi a0, zero, 0
+    addi a0, zero, 0  
 countdown:
+    jal sp, wait_second
     slli a0, a0, 1
     addi a0, a0, 1     
-    jal sp, wait_second
     addi t0, t0, -1
     bne t0, zero, countdown 
     jal sp, delay 
@@ -28,6 +28,6 @@ loop:                       # Loops 10 times
     jalr zero, sp, 0        # return
 wait_second:                # subroutine that does nothing while 1 second pulse is not high
     addi t1, t6, -1         # subtract to check if it's one
-    bne t1, zero, second_loop   # jump if not equal to 1    
+    bne t1, zero, wait_second   # jump if not equal to 1    
     addi t6, zero, 0        # once set to 1 reset back to 0
     jalr zero, sp, 0        # return from subroutine
