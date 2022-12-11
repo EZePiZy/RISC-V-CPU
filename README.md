@@ -48,32 +48,36 @@ Notice that obj_dir, and the *.vcd files are not included in the repository.
 
 ```
 REAMDE.md this file
-CPU ━━━━━┳━ CPU.sv
-         ┣━ PC.sv
-         ┣━ CONTROL.sv
-         ┣━ INSTR_MEM.sv
-         ┣━ ...
-         ┣━ CPU_tb.cpp
-         ┣━ Vbuddy.cpp
-         ┣━ Vbuddy.cfg
-         ┣━ README.md Explaining the use of the component
-         ┗━ images ━┳━ CPU.png Screaming Snake Case
-                    ┗━ ...
-
-PC ━━━━━━┳━ PC.sv
-         ┣━ PC_tb.cpp
-         ┣━ Vbuddy.cpp
-         ┣━ Vbuddy.cfg    
-         ┣━ README.md 
-         ┗━ images ━┳━ PC.png
-                    ┗━ ...
-CONTROL ━┳━ CONTROL.sv
-         ┣━ CONTROL_tb.cpp
-         ┣━ Vbuddy.cpp
-         ┣━ Vbuddy.cfg
-         ┣━ README.md
-         ┗━ images ━┳━ CONTROL.png
-                    ┗━ ...
+Assembler P Cheung recommended assembler
+F1_asm and other code
+programs machine code (.mem) that will be run with the cpu exe.sh comman d
+RTL ━━━━━┳━ exe.sh build to full CPU testbench, and when entering a parameter (ie. hello), moves hello.mem from programs folder to instruction.mem in the CPU folder.
+         ┣━ CPU ━━━━━┳━ CPU.sv
+         ┃           ┣━ PC.sv
+         ┃           ┣━ CONTROL.sv
+         ┃           ┣━ INSTR_MEM.sv
+         ┃           ┣━ ...
+         ┃           ┣━ CPU_tb.cpp
+         ┃           ┣━ Vbuddy.cpp
+         ┃           ┣━ Vbuddy.cfg
+         ┃           ┣━ README.md Explaining the use of the component
+         ┃           ┗━ images ━┳━ CPU.png Screaming Snake Case
+         ┃                      ┗━ ...
+         ┃
+         ┣━ PC ━━━━━━┳━ PC.sv
+         ┃           ┣━ PC_tb.cpp
+         ┃           ┣━ Vbuddy.cpp
+         ┃           ┣━ Vbuddy.cfg    
+         ┃           ┣━ README.md 
+         ┃           ┗━ images ━┳━ PC.png
+         ┃                      ┗━ ...
+         ┗━ CONTROL ━┳━ CONTROL.sv
+                     ┣━ CONTROL_tb.cpp
+                     ┣━ Vbuddy.cpp
+                     ┣━ Vbuddy.cfg
+                     ┣━ README.md
+                     ┗━ images ━┳━ CONTROL.png
+                                ┗━ ...
 .
 .
 .
