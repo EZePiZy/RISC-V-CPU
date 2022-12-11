@@ -36,11 +36,16 @@ int main(int argc, char **argv, char **env) {
   // initialize simulation inputs
 
   top->clk = 1;
+<<<<<<< Updated upstream:programs/pc_test_tb.cpp
   top->rst = 0;
   top->write_in_EN = 0;
   top->input_reg = 0;
 
 
+=======
+  top->rst = 1;
+ 
+>>>>>>> Stashed changes:CPU/CPU_tb.cpp
   
   // run simulation for MAX_SIM_CYC clock cycles
   for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
@@ -51,6 +56,21 @@ int main(int argc, char **argv, char **env) {
       tfp->dump (2*simcyc+tick);
       top->clk = !top->clk;
     }
+<<<<<<< Updated upstream:programs/pc_test_tb.cpp
+=======
+
+    if (simcyc < 2){
+      top->rst = 1;
+    } else {
+      top->rst = 0;
+    }   
+
+    // top->rst = 0;
+
+    std::cout << top->a0 << std::endl;
+
+
+>>>>>>> Stashed changes:CPU/CPU_tb.cpp
     
     std::cout << top->PC << std::endl;
     vbdBar(top->a0);
