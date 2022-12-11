@@ -5,6 +5,8 @@ import types_pkg::*;
 (
   input logic clk,
   input logic rst,
+  input DATA_BUS input_reg,
+  input logic   write_in_EN,
   output DATA_BUS a0
 );
 
@@ -40,6 +42,8 @@ REGFILE regfile(
   .AD3(instruction[11:7]),
   .WE3(RegWrite),
   .WD3(StoreNextPC ? PCPlus4 : Result),
+  .x31(input_reg),
+  .in_EN(write_in_EN),
   .RD1(OP1),
   .RD2(RegRD2),
   .a0(a0)
