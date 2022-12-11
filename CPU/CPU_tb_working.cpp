@@ -72,9 +72,8 @@ int main(int argc, char **argv, char **env) {
     if (sec_pulse && top->a0 == 0) {
       top->write_in_EN = 1;
       top->input_reg = vbdFlag();
-      sec_pulse = !vbdFlag();     // keep checking while its not pressed
-      std::cout << "waiting\n";
-    } else { 
+      sec_pulse = 0;
+    } else {
       if (elapased_time > 1000){
         elapased_time = 0;
         prev_time = start_time;
