@@ -53,7 +53,7 @@ verilator --Wall --cc --trace ../TYPES/types_pkg.sv CPU.sv -I../CONTROL_UNIT -I.
 make -j -C obj_dir/ -f VCPU.mk VCPU
 
 # create cfg file
-echo "/dev/ttyS12" > vbuddy.cfg
+echo "/dev/ttyS5" > vbuddy.cfg
 
 # run executable simulation file
 echo "Running simulation"

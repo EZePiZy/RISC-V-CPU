@@ -7,14 +7,15 @@ import types_pkg::*;
   input logic rst,
   input DATA_BUS input_reg,
   input logic   write_in_EN,
-  output DATA_BUS a0
+  output DATA_BUS a0,
+  output DATA_BUS PC
 );
 
 // Data buses
-DATA_BUS instruction, ALU_out, Imm_Op, ReadData, Result, PCPlus4;
+DATA_BUS instruction, ALU_out, Imm_Op, ReadData, Result;
 
 // control logic
-logic RegWrite, PC_src, ALU_src, MemWrite, ResultSrc, PC2Result, StoreNextPC;
+logic RegWrite, PC_src, ALU_src, MemWrite, ResultSrc, StoreNextPC, JumpType;
 alu_ctrl ALU_ctrl;
 instr_format Imm_Src;
 
@@ -24,16 +25,19 @@ DATA_BUS OP1, RegRD2, OP2;
 // flags
 logic EQ_flag;
 
-PC_ROM pc_rom (
-  .ImmOp(Imm_Op),
-  .Result(Result),
-  .PC2Result(PC2Result),
+PC pc(
+  .next_PC (PC_src ? (JumpType ? Result : (PC + Imm_Op)) : (PC + 32'h4)), 
   .clk (clk),
   .rst (rst),
-  .PCsrc (PC_src),
-  .dout (instruction),
-  .PCPlus4(PCPlus4)
+  .PC (PC)
 );
+
+
+ROM rom(
+  .addr(PC),
+  .dout(instruction)
+);
+
 
 REGFILE regfile(
   .clk(clk),
@@ -41,7 +45,7 @@ REGFILE regfile(
   .AD2(instruction[24:20]),
   .AD3(instruction[11:7]),
   .WE3(RegWrite),
-  .WD3(StoreNextPC ? PCPlus4 : Result),
+  .WD3(StoreNextPC ? (PC + 32'b0100) : Result),
   .x31(input_reg),
   .in_EN(write_in_EN),
   .RD1(OP1),
@@ -49,7 +53,7 @@ REGFILE regfile(
   .a0(a0)
 );
 
-assign OP2 = ALU_src ? Imm_Op : RegRD2; // muxto select between immediate and regfile out
+assign OP2 = ALU_src ? Imm_Op : RegRD2; // mux to select between immediate and regfile out
 
 ALU alu(
   .ALUop1(OP1),
@@ -80,7 +84,7 @@ CONTROL_UNIT control_unit(
   .MemWrite(MemWrite),
   .ResultSrc(ResultSrc),
   .jumpSaveNext (StoreNextPC),
-  .PC2Result (PC2Result)
+  .JumpType (JumpType)
 );
 
 SIGN_EXTEND sign_extend(

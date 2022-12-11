@@ -64,7 +64,7 @@ int main(int argc, char **argv, char **env) {
 
     // set input registers to 0 
     top->write_in_EN = 0;
-    top->input_reg = 0;
+    // top->input_reg = 0;
 
     sec_pulse = top->a0 == 0xFF;  // check whether a0 just was 255
 

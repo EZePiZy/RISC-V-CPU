@@ -3,10 +3,10 @@ module PC
 import types_pkg::*; 
 
 (
-    input DATA_BUS next_PC,
-    input logic clk,
-    input logic rst,
-    output DATA_BUS PC
+    input   DATA_BUS  next_PC,
+    input   logic     clk,
+    input   logic     rst,
+    output  DATA_BUS  PC
 );
 
 always_ff @(posedge clk) begin

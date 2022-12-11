@@ -13,8 +13,8 @@ import types_pkg::*; // import all data type definitions
   output logic        PCsrc,        // mux to select branching
   output logic        MemWrite,     // Sets the Data Memory Write Enable
   output logic        ResultSrc,    // Sets the output value to be that of the ALU or Data Memory
-  output logic        jumpSaveNext, // Sets MUX to write PC + 4 to the REGFILE
-  output logic        PC2Result     // Sets the PC to the value of the Result Wire
+  output logic        WriteNextPC, // Sets MUX to write PC + 4 to the REGFILE
+  output logic        JumpType     // Sets the PC to the value of the Result Wire
 );
 
 opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
@@ -31,8 +31,8 @@ always_comb begin
   PCsrc = 0;
   MemWrite = 0;
   ResultSrc = 0;
-  jumpSaveNext = 0;
-  PC2Result = 0;
+  WriteNextPC = 0;
+  JumpType = 0;
 
   case (curr_opcode)
 
@@ -160,8 +160,9 @@ always_comb begin
         ALUctrl = SUM_OP; // 2'b0
         ALUsrc = 1;
         ImmSrc = Imm; // 3'b0
-        jumpSaveNext = 1;
-        PC2Result = 1;
+        WriteNextPC = 1;
+        JumpType = 1;
+        PCsrc = 1;
         
       end
       default: begin
@@ -205,6 +206,7 @@ always_comb begin
         3'b001: begin // bne
           if (!EQ) begin  // branching logic
             PCsrc = 1;    // make branching happend
+            JumpType = 0;
             
           end
         end
@@ -238,10 +240,11 @@ always_comb begin
 
     /* J-TYPE */
     J: begin // jal
-      jumpSaveNext = 1; // save next PC to REG
+      WriteNextPC = 1; // save next PC to REG
       ImmSrc = Jump;
       RegWrite = 1;
-      PCsrc = 1;        // next PC is given by curent PC + ImmOp
+      PCsrc = 1;       
+      JumpType = 0;
     end
 
   default: begin  // Default case for global case(curr_opc)
