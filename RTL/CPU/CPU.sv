@@ -83,7 +83,7 @@ CONTROL_UNIT control_unit(
   .PCsrc(PC_src),
   .MemWrite(MemWrite),
   .ResultSrc(ResultSrc),
-  .jumpSaveNext (StoreNextPC),
+  .WriteNextPC (StoreNextPC),
   .JumpType (JumpType)
 );
 

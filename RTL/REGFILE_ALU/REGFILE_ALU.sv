@@ -5,7 +5,7 @@ module REGFILE_ALU #(
     input  logic                     clk,
     input  logic                     ALUsrc,
     input  logic                     RegWrite,
-    input  logic                     jumpSaveNext
+    input  logic                     WriteNextPC
     input  DATA_BUS                  next_PC
     input  logic [31:0]              ImmOp,
     input  logic [2:0]               ALUctrl,
@@ -26,7 +26,7 @@ REGFILE regfile (
     .AD2(rs2),
     .AD3(rd),
     .WE3(RegWrite),
-    .WD3(jumpSaveNext ? next_PC : WD3),
+    .WD3(WriteNextPC ? next_PC : WD3),
     .RD1(ALUop1),
     .RD2(regOp2),
     .a0(a0)

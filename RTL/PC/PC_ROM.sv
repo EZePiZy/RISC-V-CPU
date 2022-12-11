@@ -10,7 +10,7 @@ import types_pkg::*;
     input   logic     clk,
     input   logic     rst,
     input   logic     PCsrc,
-    input   logic     PC2Result,
+    input   logic     JumpType,
     output  DATA_BUS  dout,
     output  DATA_BUS  PCPlus4 
 );
@@ -21,7 +21,7 @@ assign PCPlus4 = PC + 32'b0100;
 PC ProgramCounter (
     .clk (clk),
     .rst (rst),
-    .next_PC (PCsrc ? PC + ImmOp : (PC2Result ? Result : PC + 32'b0100)),
+    .next_PC (PCsrc ? PC + ImmOp : (JumpType ? Result : PC + 32'b0100)),
     .PC (PC)
 );
 
