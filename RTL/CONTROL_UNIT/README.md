@@ -56,8 +56,8 @@ Load word. Load into a register the word at the address given by another registe
 Control Signal | Expected | Notes                 |
  :-----------: | :------: | :-------------------- |
 `RegWrite`     | `1`      | Writing to Registers  |
-`ALUctrl`      | `xxx`    | ALU Bypassed          |
-`ALUsrc`       | `x`      | ALU Bypassed          |
+`ALUctrl`      | `000`    | SUM Mode              |
+`ALUsrc`       | `1`      | Immediate Operation   |
 `ImmSrc`       | `000`    | Immediate type I      |
 `PCsrc`        | `0`      | No Jump               |
 `JumpType`     | `x`      | No Jump               |
@@ -72,8 +72,8 @@ Store Word, this is the instruction to save data from a register into a given ad
 Control Signal | Expected | Notes                                |
  :-----------: | :------: | :----------------------------------- |
 `RegWrite`     | `0`      | No Register Write                    |
-`ALUctrl`      | `xxx`    | ALU Bypassed                         |
-`ALUsrc`       | `x`      | ALU Bypassed                         |
+`ALUctrl`      | `000`    | SUM Mode                             |
+`ALUsrc`       | `1`      | Immediate Operation                  |
 `ImmSrc`       | `010`    | Immediate type S                     |
 `PCsrc`        | `0`      | No Jump                              |
 `JumpType`     | `x`      | No Jump                              |
