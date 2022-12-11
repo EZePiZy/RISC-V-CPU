@@ -16,6 +16,8 @@ int main(int argc, char **argv, char **env) {
   int tick;       // each clk cycle has two ticks for two edges
   Verilated::commandArgs(argc, argv);
 
+  std::cout << "Default testbench!" << std::endl;
+
   // init top verilog instance
   VCPU *top = new VCPU;
   // init trace dump
