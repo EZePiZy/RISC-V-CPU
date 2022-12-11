@@ -14,7 +14,8 @@ import types_pkg::*; // import all data type definitions
   output logic        MemWrite,     // Sets the Data Memory Write Enable
   output logic        ResultSrc,    // Sets the output value to be that of the ALU or Data Memory
   output logic        WriteNextPC, // Sets MUX to write PC + 4 to the REGFILE
-  output logic        JumpType     // Sets the PC to the value of the Result Wire
+  output logic        JumpType,    // Sets the PC to the value of the Result 
+  output byte_format  ByteSelect    // Sets the size for the given instruction(Word, Half Word, Byte)
 );
 
 opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
@@ -33,6 +34,7 @@ always_comb begin
   ResultSrc = 0;
   WriteNextPC = 0;
   JumpType = 0;
+  ByteSelect = Word;
 
   case (curr_opcode)
 
@@ -82,28 +84,34 @@ always_comb begin
 
     /* I1-TYPE */ 
     I1: begin // instruction of form l** (load byte, load half etc..)
-      ImmSrc = Imm;     // 12 bit imm
+      RegWrite = 1;       // Allow writing to Registers
+      ALUctrl = SUM_OP;   // Set the ALU to complete an sum operation
+      ResultSrc = 1;      // Set the mux to take the value of the Data Memory
+      ALUsrc = 1;         // Use immOp as second operand
       case({funct3})
-        3'b000: begin // lb
-          
+        3'b000: begin // lb Load Byte
+          ImmSrc = Imm;     // 12 bit imm
+          ByteSelect = Byte;
         end 
-        3'b001: begin // lh
-          
+        3'b001: begin // lh Load Half Word
+          ImmSrc = Imm;     // 12 bit imm
+          ByteSelect = HalfWord;
         end
-        3'b010: begin // lw
-          RegWrite = 1;       // Allow writing to Registers
-          ALUctrl = SUM_OP;   // Set the ALU to complete an sum operation
-          ResultSrc = 1;      // Set the mux to take the value of the Data Memory
-          ALUsrc = 1;         // Use immOp as second operand
+        3'b010: begin // lw Load Word
+          ImmSrc = Imm;     // 12 bit imm
+          ByteSelect = Word;
         end
-        3'b100: begin // lbu
-          
+        3'b100: begin // lbu Load Byte Upper
+          ImmSrc = UpperImm;     // 20 bit imm
+          ByteSelect = Byte;
         end 
-        3'b101: begin  // lhu
-          
+        3'b101: begin  // lhu Load Half Word Upper
+          ImmSrc = UpperImm;     // 20 bit imm
+          ByteSelect = HalfWord;
         end
         default: begin
           //TODO
+
         end 
       endcase
     end
@@ -179,19 +187,20 @@ always_comb begin
       ALUsrc = 1; // Always using ImmExt (not RD2)
       ALUctrl = SUM_OP; //Set the ALU to complete a sum operation
       case({funct3})
-        3'b000: begin // sb
-        // Missing control signals to implement these instructions. Would need to split the word. 
-        
+        3'b000: begin // sb Store Byte
+          ByteSelect = Byte;
+  
         end
-        3'b001: begin // sh
-        // Missing control signals to implement these instructions. Would need to split the word. 
+        3'b001: begin // sh Store Half Word
+          ByteSelect = HalfWord;
 
         end
-        3'b010: begin // sw
-        
-        
+        3'b010: begin // sw Store Word
+          ByteSelect = Word;
+  
         end
         default: begin
+
       end
       endcase
     end

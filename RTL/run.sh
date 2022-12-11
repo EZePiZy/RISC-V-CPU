@@ -35,6 +35,7 @@ elif [ $# -eq 2 ]; then # passing aasembly file and testbench
   fi
 elif [ $# -eq 0 ]; then
   echo "Running previous program!"
+  cd CPU/
 else
   echo "Expected one or two parameters!"
   exit 

@@ -4,6 +4,7 @@ package types_pkg;
   parameter ALU_WIDTH = 3; // number of bits needed to encode possible ALU commands
   parameter OPCODE_WIDTH = 7; // number of bits to encode opcodes
   parameter ADDRESS_WIDTH = 5; //The address_width of a given register
+  parameter BYTE_SELECT_WIDTH = 2; //The size of the control signal to choose between data selection size
   /* verilator lint_off UNUSED */ // UNUSED IN INDIVIDUAL COMPONENT TESTBENCHES
   parameter RAM_ADDRESS_WIDTH = 18; //The address of a given location in data_memory this is an arbitrary value 
 
@@ -12,6 +13,9 @@ package types_pkg;
 
   // possible formats for immediates
   typedef enum bit[IMM_WIDTH-1:0] {Imm = 3'b000, UpperImm = 3'b001, Store = 3'b010, Branch = 3'b011, Jump = 3'b100} instr_format;
+
+  // possible formats for the size of the bytes an instruction can use
+  typedef enum bit[BYTE_SELECT_WIDTH-1:0] {Byte, HalfWord, Word} byte_format;
 
   // mapping opcode types to binary values
   typedef enum bit[OPCODE_WIDTH-1:0] {R = 7'b0110011, I1 = 7'b0000011, I2 = 7'b0010011, S = 7'b0100011, B = 7'b1100011, U1 = 7'b0010111, U2 = 7'b0110111, I3 = 7'b1100111, J = 7'b1101111} opcode;

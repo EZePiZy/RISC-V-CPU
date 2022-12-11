@@ -18,6 +18,7 @@ DATA_BUS instruction, ALU_out, Imm_Op, ReadData, Result;
 logic RegWrite, PC_src, ALU_src, MemWrite, ResultSrc, StoreNextPC, JumpType;
 alu_ctrl ALU_ctrl;
 instr_format Imm_Src;
+byte_format ByteSelect;
 
 // operands
 DATA_BUS OP1, RegRD2, OP2;
@@ -63,12 +64,13 @@ ALU alu(
   .EQ(EQ_flag)
 );
 
-DATA_MEMORY data_memory(
+DATA_MEMORY DATA_MEMORY(
   .clk(clk),
   .A(ALU_out),
   .WE(MemWrite),
   .WD(RegRD2),
-  .RD(ReadData)
+  .RD(ReadData),
+  .ByteSelect(ByteSelect)
 );
 
 assign Result = ResultSrc ?  ReadData : ALU_out; // Mux to select between ALU's output and the Data Memories Output
@@ -84,7 +86,8 @@ CONTROL_UNIT control_unit(
   .MemWrite(MemWrite),
   .ResultSrc(ResultSrc),
   .WriteNextPC (StoreNextPC),
-  .JumpType (JumpType)
+  .JumpType (JumpType),
+  .ByteSelect (ByteSelect)
 );
 
 SIGN_EXTEND sign_extend(
