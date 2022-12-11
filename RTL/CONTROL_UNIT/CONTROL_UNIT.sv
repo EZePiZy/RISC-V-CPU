@@ -15,7 +15,8 @@ import types_pkg::*; // import all data type definitions
   output logic        ResultSrc,    // Sets the output value to be that of the ALU or Data Memory
   output logic        WriteNextPC, // Sets MUX to write PC + 4 to the REGFILE
   output logic        JumpType,    // Sets the PC to the value of the Result 
-  output byte_format  ByteSelect    // Sets the size for the given instruction(Word, Half Word, Byte)
+  output byte_format  ByteSelect,    // Sets the size for the given instruction(Word, Half Word, Byte)
+  output logic        MemExtend
 );
 
 opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
@@ -34,7 +35,8 @@ always_comb begin
   ResultSrc = 0;
   WriteNextPC = 0;
   JumpType = 0;
-  ByteSelect = Word;
+  ByteSelect = Word; // 2'b0;
+  MemExtend = 1;  // set default to 1 (always sign extend)
 
   case (curr_opcode)
 
@@ -88,30 +90,31 @@ always_comb begin
       ALUctrl = SUM_OP;   // Set the ALU to complete an sum operation
       ResultSrc = 1;      // Set the mux to take the value of the Data Memory
       ALUsrc = 1;         // Use immOp as second operand
+      ImmSrc = Imm;     // 12 bit imm
       case({funct3})
         3'b000: begin // lb Load Byte
-          ImmSrc = Imm;     // 12 bit imm
           ByteSelect = Byte;
+          MemExtend = 1;
         end 
         3'b001: begin // lh Load Half Word
-          ImmSrc = Imm;     // 12 bit imm
           ByteSelect = HalfWord;
+          MemExtend = 1;
         end
         3'b010: begin // lw Load Word
-          ImmSrc = Imm;     // 12 bit imm
           ByteSelect = Word;
+          MemExtend = 1; // doesnt actually matter
         end
-        3'b100: begin // lbu Load Byte Upper
-          ImmSrc = UpperImm;     // 20 bit imm
+        3'b100: begin // lbu Load Byte unsigned
           ByteSelect = Byte;
+          MemExtend = 0; // 0 extend
         end 
-        3'b101: begin  // lhu Load Half Word Upper
-          ImmSrc = UpperImm;     // 20 bit imm
+        3'b101: begin  // lhu Load Half Word unsigned
           ByteSelect = HalfWord;
+          MemExtend = 0; // 0 extend
         end
         default: begin
-          //TODO
-
+          ByteSelect = Word;
+          MemExtend = 1;
         end 
       endcase
     end
@@ -151,7 +154,7 @@ always_comb begin
 
         end
         3'b111: begin // andi
-
+          ALUctrl = AND_OP; // do the anding
         end
         default: begin 
           //TODO
@@ -243,8 +246,13 @@ always_comb begin
     end
 
     /* U2-TYPE */
-    U2: begin // lui
-
+    U2: begin // lui : rd = {UpperImm, 12'b0}
+      RegWrite = 1;
+      ALUctrl = UIM_OP; 
+      ALUsrc = 1;
+      ImmSrc = UpperImm;
+      ResultSrc = 0; // choose ALU result
+      WriteNextPC = 0; // dont store next pc
     end
 
     /* J-TYPE */

@@ -15,7 +15,7 @@ package types_pkg;
   typedef enum bit[IMM_WIDTH-1:0] {Imm = 3'b000, UpperImm = 3'b001, Store = 3'b010, Branch = 3'b011, Jump = 3'b100} instr_format;
 
   // possible formats for the size of the bytes an instruction can use
-  typedef enum bit[BYTE_SELECT_WIDTH-1:0] {Byte, HalfWord, Word} byte_format;
+  typedef enum bit[BYTE_SELECT_WIDTH-1:0] {Byte = 2'b10, HalfWord = 2'b01 , Word = 2'b0} byte_format;
 
   // mapping opcode types to binary values
   typedef enum bit[OPCODE_WIDTH-1:0] {R = 7'b0110011, I1 = 7'b0000011, I2 = 7'b0010011, S = 7'b0100011, B = 7'b1100011, U1 = 7'b0010111, U2 = 7'b0110111, I3 = 7'b1100111, J = 7'b1101111} opcode;
@@ -23,5 +23,5 @@ package types_pkg;
   // typedef enum bit[9:0] {add}
 
   // mapping ALU operations
-  typedef enum bit[ALU_WIDTH-1:0] {SUM_OP = 3'b000, SUB_OP = 3'b001, AND_OP = 3'b010, SLT_OP = 3'b101, SLL_OP = 3'b100} alu_ctrl;
+  typedef enum bit[ALU_WIDTH-1:0] {SUM_OP = 3'b000, SUB_OP = 3'b001, AND_OP = 3'b010, SLT_OP = 3'b101, SLL_OP = 3'b100, UIM_OP = 3'b111} alu_ctrl;
 endpackage
