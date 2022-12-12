@@ -26,7 +26,7 @@ always_comb begin
 
         // shift right to extract correct byte and cast it to 8 bits only
         // sign extend with ternary statement
-        RD = { SignExtend ? {24{1'b1}} : {24{1'b0}}, 8'(read >> (8 * {A[1:0]}))}; 
+        RD = { SignExtend ? {24{(read >> (8 * {A[1:0]}))[7]}} : {24{1'b0}}, 8'(read >> (8 * {A[1:0]}))}; 
 
         // Writing
 
