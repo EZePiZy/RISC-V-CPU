@@ -2,43 +2,84 @@
 ---
 ## <center> **RISC-V Design - 2nd year EIE IAC coursework** </center>
 ---
-### **Team members & Lab 4 Tasks**
-* Luigi Rinaldi: 
-  * Task: The Control Unit, the Sign-extension Unit and the instruction memory. 
-* Diego Van Overberghe
-  * Task: The Register File, ALU and the related MUX.
-* Corey O'Malley: 
-  * Task: The testbench and verification of the design working via gtkWave and Vbuddy (where appropriate).
-* Ezra Reich: 
-  * Task: Program Counter and related adders.
+
+
+# Stretch Goal 1: Pipelined RV32I Design
+
+- [**IAC\_RISC-V**](#iac_risc-v)
+  - [ **RISC-V Design - 2nd year EIE IAC coursework** ](#-risc-v-design---2nd-year-eie-iac-coursework-)
+- [Stretch Goal 1: Pipelined RV32I Design](#stretch-goal-1-pipelined-rv32i-design)
+  - [**DESIRED BEHAVIOUR**](#desired-behaviour)
+  - [**IMPLEMENTATION**:](#implementation)
+    - [Hardware:](#hardware)
+    - [Software:](#software)
+  - [**ALLOCATION OF TASKS**:](#allocation-of-tasks)
+  - [**Branch Protection Policy**](#branch-protection-policy)
+  - [**Directory Format**](#directory-format)
+
+
+![schematic](./images/Pipeline_diagram.png)
+
+## <ins>**DESIRED BEHAVIOUR**</ins>
+
+1. Upon receving a trigger the routine is executed
+2. The `a0` drives the led bar on the *VBuddy* turning on each light every second
+3. Once all 8 lights are on a random amount of time elapses before they all turn off
+4. The testbench uses *VBuddy* methods to measure how long it takes the user to press the button after the lights turn off
+5. Make the instruction work in parallel instead of series. Allow the CPU to be **faster** because **each stage** is now a pipeline stage taking
+**one clock cycle**. Multiple instructions are executed at the same time, but progressing at different stages. Therefore in theory, we could be executing instructions over 3 times
+faster.
+
+
+
+![schematic](./images/Single_vs_Pipeline.png)
+
+---
+## <ins>**IMPLEMENTATION**</ins>: 
+
+### Hardware: 
+  1. Divide the microarchitecture in 5 stages: 
+     1. Fetch
+     2. Decode 
+     3. Execute 
+     4. Memory 
+     5. Writeback
+  2. Insert registers between each five stages 
+      * <ins>Consequence</ins>: Create signals with the same purpose but for different instructions.
+  3. Make the registers **WriteBack** happen on the **FALL EDGE** &rarr; Data can be written in the
+first half cycle and read back in the second half of the cycle for use in a
+subsequent instruction.
+1. Keep same control unit signals as single-processor **. /!\ .** All the control signals MUST be pipelined so that they arrive in synchrony to the datapath **. /!\ .**
+    1. Split up PC and ROM components 
+---
+### Software: 
+   1. By inspection, analyse the software program and insert `NOP` (`addi, zero, zer0, 0` &rarr; *do nothing*) when needed: 
+       *  If two S/I/R-Type instruction are one after the other and the destination register of the first instruction is used as a source the register for the seocnd instruction 
+       *  When a Branch instruction occurs the fetched instructions after branch but before branch occurs must be **flushed** if the branch happens. 
 
 ---
 
-### **Lab Specifications**
+## <ins>**ALLOCATION OF TASKS**</ins>: 
+* Luigi Rinaldi, Diego Van Overberghe, Ezra Reich: 
+  * Task:  
+    * Implement the various registers and change the Control Unit signals accordingly. 
+    * Add logic gates and multiplexors (See circuit diagram above)
+* Corey O'Malley: 
+  * Task: 
+    * The testbench and verification of the design working via gtkWave and Vbuddy (where appropriate).
 
-* Lab 4 - A Reduced RISC-V CPU
-  *  Design a **SINGLE CYCLE CPU** that executes two (or three) RISC-V instructions. 
-  *  Same function as the **8-bit binary counter** designed in Lab 1
 
-### **Branch Protection Policy**
+---
+
+## **Branch Protection Policy**
 
 The `main` branch is protected an cannot be directly pushed to. This is to attempt to protect production code from untested development code.
 
 When team members approve a pull request from `develop` into `main`, they are indicating that they are reasonably confident that the code in question has been tested and is working as expected. This also helps familiarise team members with others' code.
 On the other and, if a pull request is opened merging a feature branch into the `develop` branch, approval incites team members to read through new code to ensure they remain familiar with the codebase.
 
-### **Tasks to do** 
-
-- Finish Lab 4 extended.
-  - Test `DATAMEM`.
-  - Write `sinegen` program.
-- Write the F1 code in assembly
-  - Find which new instructions are needed and implement them.
-- Make a suitable testbench to test our F1 program on the `vbuddy`.
-- Document properly all along
-
 ---
-### **Directory Format**
+## **Directory Format**
 
 The main branch is protected and the only way to modify it is by submitting a pull request which must be approved by at least two other contributors.
 
