@@ -1,5 +1,5 @@
 # Simplest F1 program
-
+start:
     addi a1, zero, 8
     addi a0, zero, 0
 countdown:
@@ -10,6 +10,7 @@ countdown:
     addi a2, a2, 74
     jal sp, delay 
     addi a0, zero, 0 
+    jal zero, start
 delay:
     addi t0, t0, 10
 loop:                   # Loops 10 times

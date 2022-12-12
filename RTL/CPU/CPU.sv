@@ -16,7 +16,7 @@ import types_pkg::*;
 DATA_BUS instruction, ALU_out, Imm_Op, ReadData, Result;
 
 // control logic
-logic RegWrite, PC_src, ALU_src, MemWrite, ResultSrc, StoreNextPC, JumpType, MemExtend;
+logic RegWrite, PC_src, ALU_src, MemWrite, ResultSrc, StoreNextPC, JumpImmType, JumpResultType, BranchType, MemExtend;
 alu_ctrl ALU_ctrl;
 instr_format Imm_Src;
 byte_format ByteSelect;
@@ -27,8 +27,11 @@ DATA_BUS OP1, RegRD2, OP2;
 // flags
 logic EQ_flag;
 
+
+assign PC_src = JumpImmType | JumpResultType | (BranchType & !EQ_flag);
+
 PC pc(
-  .next_PC (PC_src ? (JumpType ? Result : (PC + Imm_Op)) : (PC + 32'h4)), 
+  .next_PC (PC_src ? (JumpResultType ? Result : (PC + Imm_Op)) : (PC + 32'h4)), 
   .clk (clk),
   .rst (rst),
   .PC (PC)
@@ -79,19 +82,19 @@ DATA_MEMORY DATA_MEMORY(
 assign Result = ResultSrc ?  ReadData : ALU_out; // Mux to select between ALU's output and the Data Memories Output
 
 CONTROL_UNIT control_unit(
-  .EQ(EQ_flag),
   .instr(instruction),
   .RegWrite(RegWrite),
   .ALUctrl(ALU_ctrl),
   .ALUsrc(ALU_src),
   .ImmSrc(Imm_Src),
-  .PCsrc(PC_src),
   .MemWrite(MemWrite),
   .ResultSrc(ResultSrc),
   .WriteNextPC (StoreNextPC),
-  .JumpType (JumpType),
   .ByteSelect (ByteSelect),
-  .MemExtend(MemExtend)
+  .MemExtend(MemExtend),
+  .BranchType(BranchType),
+  .JumpImmType(JumpImmType),
+  .JumpResultType(JumpResultType)
 );
 
 SIGN_EXTEND sign_extend(

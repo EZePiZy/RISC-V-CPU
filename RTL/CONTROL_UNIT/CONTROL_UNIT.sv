@@ -3,20 +3,20 @@ module CONTROL_UNIT
 import types_pkg::*; // import all data type definitions
 
 (
-  input  logic        EQ,
   /* verilator lint_off UNUSED */   // ignore unused parts of instruction
   input  DATA_BUS     instr,        // incoming instruction
   output logic        RegWrite,     // enable to write regs
   output alu_ctrl     ALUctrl,      // value to select operation in alu
   output logic        ALUsrc,       // mux to select immediate
   output instr_format ImmSrc,       // value to select imm type
-  output logic        PCsrc,        // mux to select branching
   output logic        MemWrite,     // Sets the Data Memory Write Enable
   output logic        ResultSrc,    // Sets the output value to be that of the ALU or Data Memory
   output logic        WriteNextPC, // Sets MUX to write PC + 4 to the REGFILE
-  output logic        JumpType,    // Sets the PC to the value of the Result 
+  output logic        JumpResultType,// Sets the PC to the value of the Result
+  output logic        JumpImmType,   // Sets the PC to the Value of the PC + Imm
+  output logic        BranchType,  //Sets the control flag for a branch type
   output byte_format  ByteSelect,    // Sets the size for the given instruction(Word, Half Word, Byte)
-  output logic        MemExtend
+  output logic        MemExtend     //Set the Signal to extend a byte or half word once loaded
 );
 
 opcode curr_opcode = opcode'(instr[6:0]); // extract opcode and type cast it
@@ -30,11 +30,12 @@ always_comb begin
   ALUctrl = SUM_OP; // 2'b0
   ALUsrc = 0;
   ImmSrc = Imm; // 3'b0
-  PCsrc = 0;
   MemWrite = 0;
   ResultSrc = 0;
   WriteNextPC = 0;
-  JumpType = 0;
+  JumpResultType = 0;
+  JumpImmType = 0;
+  BranchType = 0;
   ByteSelect = Word; // 2'b0;
   MemExtend = 1;  // set default to 1 (always sign extend)
 
@@ -172,8 +173,9 @@ always_comb begin
         ALUsrc = 1;
         ImmSrc = Imm; // 3'b0
         WriteNextPC = 1;
-        JumpType = 1;
-        PCsrc = 1;
+        JumpResultType = 1;
+        JumpImmType = 0;
+        BranchType = 0;
         
       end
       default: begin
@@ -211,33 +213,9 @@ always_comb begin
     /* B-TYPE */ 
     B: begin            // Branching instructions
       ImmSrc = Branch;  // branch immediate (13 bits where bit 0 is ignored)
-      case({funct3})
-        3'b000: begin // beq
-
-        end
-        3'b001: begin // bne
-          if (!EQ) begin  // branching logic
-            PCsrc = 1;    // make branching happend
-            JumpType = 0;
-            
-          end
-        end
-        3'b100: begin // blt
-          
-        end
-        3'b101: begin // bge
-          
-        end
-        3'b110: begin // bltu
-          
-        end
-        3'b111: begin // bgeu
-
-        end
-        default: begin
-          PCsrc = 0;
-        end
-      endcase
+      BranchType = 1;
+      JumpImmType = 0;
+      JumpResultType = 0;
     end
 
     /* U1-TYPE */
@@ -260,8 +238,9 @@ always_comb begin
       WriteNextPC = 1; // save next PC to REG
       ImmSrc = Jump;
       RegWrite = 1;
-      PCsrc = 1;       
-      JumpType = 0;
+      JumpResultType = 0;
+      JumpImmType = 1;
+      BranchType = 0;
     end
 
   default: begin  // Default case for global case(curr_opc)
