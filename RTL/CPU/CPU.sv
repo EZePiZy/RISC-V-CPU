@@ -3,12 +3,13 @@ module CPU
 import types_pkg::*;
 
 (
-  input logic clk,
-  input logic rst,
-  input DATA_BUS input_reg,
-  input logic   write_in_EN,
-  output DATA_BUS a0,
-  output DATA_BUS PC
+  input   logic     clk,
+  input   logic     rst,
+  input   DATA_BUS  input_reg,
+  input   logic     write_in_EN,
+  output  DATA_BUS  x31,
+  output  DATA_BUS  a0,
+  output  DATA_BUS  PC
 );
 
 // Data buses
@@ -47,11 +48,12 @@ REGFILE regfile(
   .AD3(instruction[11:7]),
   .WE3(RegWrite),
   .WD3(StoreNextPC ? (PC + 32'b0100) : Result),
-  .x31(input_reg),
+  .x31_in(input_reg),
   .in_EN(write_in_EN),
   .RD1(OP1),
   .RD2(RegRD2),
-  .a0(a0)
+  .a0(a0),
+  .x31_out(x31)
 );
 
 assign OP2 = ALU_src ? Imm_Op : RegRD2; // mux to select between immediate and regfile out

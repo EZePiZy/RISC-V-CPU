@@ -31,12 +31,14 @@ int main(int argc, char **argv, char **env) {
   vbdHeader("RISC-V");
   #endif
 
-  vbdSetMode(0); 
+  vbdSetMode(1); 
 
   // initialize simulation inputs
 
   top->clk = 1;
   top->rst = 0;
+
+ 
 
   auto start_time = std::chrono::high_resolution_clock::now();
   auto end_time = std::chrono::high_resolution_clock::now();
@@ -64,30 +66,28 @@ int main(int argc, char **argv, char **env) {
 
     // set input registers to 0 
     top->write_in_EN = 0;
-    // top->input_reg = 0;
 
-    sec_pulse = top->a0 == 0xFF;  // check whether a0 just was 255
+    uint32_t output = top->x31;
 
-    // only update trigger when a0 is back to 0 after being 255
-    if (sec_pulse && top->a0 == 0) {
+
+    if ((top->x31 & 2 ) == 0) { // check trigger bit is reset
       top->write_in_EN = 1;
-      top->input_reg = vbdFlag();
-      sec_pulse = 0;
-    } else {
-      if (elapased_time > 1000){
-        elapased_time = 0;
-        prev_time = start_time;
-        std::cout << "1 second elapsed!" << std::endl;
-
-        // give pulse
-        top->write_in_EN = 1;
-        top->input_reg = 1;
-      }
+      output = vbdFlag() ? output | 2 : output;  
     }
 
-    std::cout << top->a0 << std::endl;
+    if (elapased_time > 1000){
+      elapased_time = 0;
+      prev_time = start_time;
+      std::cout << "1 second elapsed!" << std::endl;
 
-    vbdBar(top->a0);
+      top->write_in_EN = 1;
+      output = output | 1;
+    }
+    
+    top->input_reg = output;
+
+    std::cout << top->x31 << ", " << int32_t(top->a0) << std::endl;
+
     
     // END OF LOOP
     end_time = std::chrono::high_resolution_clock::now();
@@ -96,6 +96,7 @@ int main(int argc, char **argv, char **env) {
     total_duration += duration.count();
 
     #ifdef VBUDDY 
+    vbdBar(top->a0);
     vbdCycle(simcyc);
     if (Verilated::gotFinish() || (vbdGetkey()=='q'))
     {

@@ -11,6 +11,7 @@ if [ $# -eq 1 ]; then
     cd ../RTL/CPU
     rm -f instruction.mem
     cp ../../programs/$1.mem instruction.mem
+    rm -f ../../programs/$1.mem
   else
     echo "File does not exist in the programs folder!"
   fi
@@ -23,6 +24,7 @@ elif [ $# -eq 2 ]; then # passing aasembly file and testbench
     cd ../RTL/CPU
     rm -f instruction.mem
     cp ../../programs/$1.mem instruction.mem
+    rm -f ../../programs/$1.mem
   else
     echo "File does not exist in the programs folder!"
   fi
