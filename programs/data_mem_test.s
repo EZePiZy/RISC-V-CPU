@@ -17,4 +17,5 @@ sb t0, 7(zero)
 lw a0, 4(zero)
 
 lbu a0, 5(zero)
+addi a0, zero, 69
 lb a0, 5(zero)
