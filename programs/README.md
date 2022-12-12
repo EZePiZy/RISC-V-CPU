@@ -16,8 +16,8 @@ Even better testing [website](https://venus.kvakil.me/)
 #### 1. Executing on trigger
 
 - Register `x31` (`t6`) is used as a user input 
-- Loop while `x31` is not `0`
-- Once `x31` becomes `1` the rest of the program is executed
+- Loop while bit 2 of `x31` is not `1`
+- Once bit 2 of `x31` becomes `1` the rest of the program is executed
 - At the end of the program `x31` is reset to `0` and ready to wait for another trigger input
 - `x31` register has to be exposed to the top level component in order to be accessible by testbench
 
@@ -25,6 +25,7 @@ Even better testing [website](https://venus.kvakil.me/)
 
 - Loop 8 times using a temporary register (`t0`) 
 - Each iteration shift `a0` left by 1 and add 1
+- Call the `wait_second` subroutine which as the name implies loops indefinitely while the first bit of the `t6` register is not 1. The bit is selected with an `andi` instruction.
 
 #### 3. Random delay
 
@@ -39,7 +40,9 @@ Even better testing [website](https://venus.kvakil.me/)
 
 #### 4. Testbench and VBuddy
 
-*TO-DO*
+- Using `<chrono>` library the amount of time elapsed is measured every cycle.
+- Once 1 second is reached the LSB of the `t6` register is flipped to `1` to signal to the program that 1 second has passed
+- If the 2nd bit of the `t6` register is `0` this means that it's ok to send another bit of input, at this point the `vbdFlag()` is sampled in one shot mode and the result sent to the CPU.
 
 ## Issues
 
@@ -49,6 +52,18 @@ Even better testing [website](https://venus.kvakil.me/)
 ### 1 second delay:
 - In order to achieve one second delay between each turning on the CPU clock could be adjusted to execute one instruction per clock.
 - This would however make it impossible to use the pseudo-random generator sub-routine as it would take too long, therefore an alternative has to be found
+
+### Input interference:
+
+**Problem**
+
+The program uses the register `x31` or `t6` to interact with the testbench and user. The first bit of the register is set to 1 every second giving the program a known pulse and allowing for it to wait until this pulse arrives, this works under the assumption that checking if this value is 1 takes less than one second which fortunately it does. 
+To allow for a trigger signal from the encoder on the Vbuddy the second bit of the register is used as signal. Here a problem is encountered however, since writing for the trigger input might overwrite the pulse input.
+
+**Solution**
+
+The register has to be exposed as an output for the testbench to be able to write to it without overwriting other values. This way the program can reset a given input bit to 0 signaling to the testbench that it's ready to receive another input. This then allows for up to 32 boolean inputs to the register. 
+
 
 ## Required hardware changes
 
