@@ -71,6 +71,16 @@ The `pdf.s` program has been slightly modified from the one provided.
 
 In order to easily save the computed values when they are displayed the register `a0` is set to be `-1`, this signals to the testbench that on the next cycle `a0` is being written with a value. 
 
+##### *How to run*
+
+After pluggin *VBUDDY* in, use `run.sh` from the RTL directory and pass the assembly file, `pdf`, the testbench, `pdf_tb` and some `.mem` file. For example:
+
+```bash
+source run.sh pdf pdf_tb triangle
+```
+
+This will run the program and generate an `out.csv` with the pdf for a given `data.mem`
+
 ### Testbench
 
 #### Compute PDF
@@ -79,6 +89,7 @@ Simulation is run for an arbitrarily long amount of cycles.
 
 - When `a0` is equal to `-1` a boolean value is set to high
 - If the boolean is high the value of `a0` is stored to an array and a counter is incremented
+- Store the value in `out.csv` file
 
 #### Display on *VBUDDY*  
 
@@ -86,3 +97,21 @@ Once all values are computed display on *VBUDDY*
 
 - Loop from 0 to 240 (the resolution of the display on ***VBUDDY***)
 - Use `vbdPlot()` to display the value
+
+### Results
+
+#### gaussian.mem
+
+![](./images/gaussian_graph.png) 
+
+#### noisy.mem
+
+![](./images/noise_graph.png)
+
+#### triangle.mem
+
+![](./images/triangle_graph.png)
+
+#### sine.mem
+
+![](./images/sine_graph.png)
