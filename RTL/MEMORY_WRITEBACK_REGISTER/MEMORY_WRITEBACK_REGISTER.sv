@@ -1,4 +1,4 @@
-module FETCH_DECODE_REGISTER
+module MEMORY_WRITEBACK_REGISTER
 
 import types_pkg::*; 
 
@@ -16,8 +16,8 @@ import types_pkg::*;
     output  logic           ResultSrcW_o,
     input   logic           StoreNextPCM_i,
     output  logic           StoreNextPCW_o,
-    input   ADDRESS_WIDTH   RdM_i,
-    output  ADDRESS_WIDTH   RdW_o
+    input   ADDR_BUS   RdM_i,
+    output  ADDR_BUS   RdW_o
 );
 
 always_ff @(negedge clk) begin

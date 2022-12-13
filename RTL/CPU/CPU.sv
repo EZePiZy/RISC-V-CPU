@@ -5,12 +5,8 @@ import types_pkg::*;
 (
   input   logic     clk,
   input   logic     rst,
-  input   DATA_BUS  input_reg,
-  input   logic     write_in_EN,
-  output  DATA_BUS  x31,
-  output  DATA_BUS  a0,
-  output  DATA_BUS  PCF
-);
+  output  DATA_BUS  a0
+  );
 
 //----------------------------------------------------------------------- Wire Definition
 
@@ -20,15 +16,15 @@ import types_pkg::*;
 //Decode
 
 //Execute
-ADDRESS_WIDTH RdE;
+ADDR_BUS RdE;
 // Delayed AD3 {5} |
 
 //Memory
-ADDRESS_WIDTH RdM;
+ADDR_BUS RdM;
 // Delayed AD3 {5} |
 
 //Write Back
-ADDRESS_WIDTH RdW;
+ADDR_BUS RdW;
 // Delayed AD3 {5} |
 
 //------------------ Data buses
@@ -50,7 +46,7 @@ DATA_BUS ReadDataM, PCPlus4M, ALU_outM;
 //Data Output From Data Memory {32} | Program Counter + 4 {32} | Output of the ALU {32} |
 
 //Write Back
-DATA_BUS ReadDataW, ResultW, PCPlus4W, ReadDataW, ALU_outW;
+DATA_BUS ReadDataW, ResultW, PCPlus4W, ALU_outW;
 
 // ----------------control logic
 
@@ -64,12 +60,12 @@ instr_format Imm_SrcD;
 byte_format ByteSelectD;
 
 //Execute
-logic RegWriteE, ALU_srcE, MemWriteE, ResultSrcE, StoreNextPCE, JumpImmTypeE, JumpImmTypeE, BranchTypeE, MemExtendE;
+logic RegWriteE, ALU_srcE, MemWriteE, ResultSrcE, StoreNextPCE, JumpImmTypeE, JumpResultTypeE, BranchTypeE, MemExtendE, PC_srcE;
 alu_ctrl ALU_ctrlE;
 byte_format ByteSelectE;
 
 //Memory
-logic RegWriteM, MemWriteE, ResultSrcM, StoreNextPCM, MemExtendM;
+logic RegWriteM, MemWriteM, ResultSrcM, StoreNextPCM, MemExtendM;
 byte_format ByteSelectM;
 
 //Write Back
@@ -83,7 +79,7 @@ DATA_BUS OP1D, RegRD2D;
 //Execute
 DATA_BUS OP1E, RegRD2E, OP2E;
 //Memory
-
+DATA_BUS WriteDataM;
 //Write Back
 
 // ----------------flags
@@ -107,7 +103,7 @@ assign PCPlus4F = PCF + 32'h4; // Set the wire PCPlus4F to the value of the fetc
 assign Next_PCF = PC_srcE ? (JumpResultTypeE ? ResultW : PCTargetE) : (PCPlus4F); //Use PCTarget, PC_src from execute with result from write back to find the next pc value
 
 PC pc(
-  .Next_PC (Next_PCF), 
+  .next_PC (Next_PCF), 
   .clk (clk),
   .rst (rst),
   .PC (PCF)
@@ -121,7 +117,7 @@ ROM rom(
 
 //--------------------------------------------------------------------------------Register Block
 
-FETCH_DECODE_REGISTER Fetch_Decode_Register (
+FETCH_DECODE_REGISTER fetch_decode_register (
   .clk(clk),
   .instructionF_i(instructionF),
   .instructionD_o(instructionD),
@@ -170,7 +166,7 @@ SIGN_EXTEND sign_extend(
 
 //--------------------------------------------------------------------------------------- Register Block
 
-DECODE_EXECUTE_REGISTER Decode_Execute_Register (
+DECODE_EXECUTE_REGISTER decode_execute_register (
   .clk(clk),
   .PCD_i(PCD),
   .PCE_o(PCE),
@@ -199,7 +195,7 @@ DECODE_EXECUTE_REGISTER Decode_Execute_Register (
   .ALU_ctrlD_i(ALU_ctrlD),
   .ALU_ctrlE_o(ALU_ctrlE),
   .ByteSelectD_i(ByteSelectD),
-  .ByteSelectE_o(ByteSelectE)
+  .ByteSelectE_o(ByteSelectE),
   .OP1D_i(OP1D),
   .OP1E_o(OP1E),
   .RegRD2D_i(RegRD2D),
@@ -227,7 +223,7 @@ assign PC_srcE = JumpImmTypeE | JumpResultTypeE | (BranchTypeE & !EQ_flagE); //L
 
 //-------------------------------------------------------------------------------------- Register Block
 
-EXECUTE_MEMORY_REGISTER Execute_Memory_Register (
+EXECUTE_MEMORY_REGISTER execute_memory_register (
   .clk(clk),
   .PCPlus4E_i(PCPlus4E),
   .PCPlus4M_o(PCPlus4M),
@@ -246,7 +242,9 @@ EXECUTE_MEMORY_REGISTER Execute_Memory_Register (
   .MemExtendE_i(MemExtendE),
   .MemExtendM_o(MemExtendM),
   .ByteSelectE_i(ByteSelectE),
-  .ByteSelectM_o(ByteSelectM)
+  .ByteSelectM_o(ByteSelectM),
+  .WriteDataE_i(RegRD2E),
+  .WriteDataM_o(WriteDataM)
 );
 
 //-------------------------------------------------------------------------------------- Memory Block
@@ -255,7 +253,7 @@ DATA_MEMORY DATA_MEMORY(
   .clk(clk),
   .A(ALU_outM),
   .WE(MemWriteM),
-  .WD(RegRD2M),
+  .WD(WriteDataM),
   .RD(ReadDataM),
   .ByteSelect(ByteSelectM),
   .SignExtend(MemExtendM)
@@ -263,10 +261,10 @@ DATA_MEMORY DATA_MEMORY(
 
 //------------------------------------------------------------------------------------- Register Block
 
-MEMORY_WRITEBACK_REGISTER Memory_WriteBack_Register (
+MEMORY_WRITEBACK_REGISTER memory_writeback_register (
   .clk(clk),
   .ReadDataM_i(ReadDataM),
-  .ReadDataW_o(ReadDataW).
+  .ReadDataW_o(ReadDataW),
   .PCPlus4M_i(PCPlus4M),
   .PCPlus4W_o(PCPlus4W),
   .ALU_outM_i(ALU_outM),

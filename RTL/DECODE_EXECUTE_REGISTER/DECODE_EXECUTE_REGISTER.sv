@@ -10,10 +10,10 @@ import types_pkg::*;
     output  DATA_BUS        PCPlus4E_o,
     input   DATA_BUS        Imm_OpD_i,
     output  DATA_BUS        Imm_OpE_o,
-    input   DATA_BUS        RegWriteD_i,
-    output  DATA_BUS        RegWriteE_o,
-    input   DATA_BUS        ALU_srcD_i,
-    output  DATA_BUS        ALU_srcE_o,
+    input   logic        RegWriteD_i,
+    output  logic        RegWriteE_o,
+    input   logic          ALU_srcD_i,
+    output  logic          ALU_srcE_o,
     input   logic           MemWriteD_i,
     output  logic           MemWriteE_o,
     input   logic           ResultSrcD_i,
@@ -36,8 +36,8 @@ import types_pkg::*;
     output  DATA_BUS        OP1E_o,
     input   DATA_BUS        RegRD2D_i,
     output  DATA_BUS        RegRD2E_o,
-    input   address_width   RdD_i,
-    output  address_width   RdE_o  
+    input   ADDR_BUS   RdD_i,
+    output  ADDR_BUS   RdE_o  
 );
 
 always_ff @(negedge clk) begin
