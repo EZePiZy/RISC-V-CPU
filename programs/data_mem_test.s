@@ -1,21 +1,8 @@
-# lui a0, 0xFFFFF # store 20 bits of 1
-addi a0, zero, 0
-addi a0, a0, -1 # same as loading 0xFFFF FFFF into a0
+LI t0, 0x10000
 
-sw a0, 5(zero)
-lw t0, 5(zero)
-addi a0, zero, 42
-addi a0, t0, 0
-andi a0, t0, 0x0F
-
-sb a0, 4(zero)
-lw a0, 5(zero)
-addi a0, zero, -1
-# sw a0, 4(zero)
-addi t0, zero, 0x01
-sb t0, 7(zero)
-lw a0, 4(zero)
-
-lbu a0, 5(zero)
-addi a0, zero, 69
-lb a0, 5(zero)
+lbu a0, 0(t0)
+lbu a0, 1(t0)
+lbu a0, 2(t0)
+lbu a0, 3(t0)
+lbu a0, 4(t0)
+lbu a0, 5(t0)

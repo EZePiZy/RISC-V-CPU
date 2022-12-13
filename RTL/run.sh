@@ -35,6 +35,33 @@ elif [ $# -eq 2 ]; then # passing aasembly file and testbench
   else
     echo "Testbench file not found, using default CPU_tb.cpp"
   fi
+elif [ $# -eq 3 ]; then # passing aasembly file and testbench
+  if [ -f ../programs/$1.s ]; then
+    echo "Assembling $1.s from programs"
+    cd ../assembler
+    ./assemble.sh $1
+    echo "Deleting old program, and loading $1.mem into CPU."
+    cd ../RTL/CPU
+    rm -f instruction.mem
+    cp ../../programs/$1.mem instruction.mem
+    rm -f ../../programs/$1.mem
+  else
+    echo "File does not exist in the programs folder!"
+  fi
+  if [ -f ../../programs/$2.cpp ]; then
+    echo "Using $2.cpp as testbench"
+    cp ../../programs/$2.cpp tmp_tb.cpp
+    testbench=tmp_tb.cpp
+  else
+    echo "Testbench file not found, using default CPU_tb.cpp"
+  fi
+
+  if [ -f ../../programs/$3.mem ]; then
+    rm -f data.mem
+    cp ../../programs/$3.mem data.mem
+  else 
+    echo "Data mem $3.mem not found"
+  fi
 elif [ $# -eq 0 ]; then
   echo "Running previous program!"
   cd CPU/

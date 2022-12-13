@@ -9,3 +9,7 @@
 - If the `exe.sh` file is run with a parameter it will look for the corresponding `.s` file in the programs folder 
 - Once found it will assemble the file using `assemble.sh` 
 - Finally the resulting `.mem` is copied into CPU as `instruction.mem` in order to be executed
+
+## `format_mem.py`
+
+Python file to convert a `wrong.mem` file to a `right.mem` file. The `wrong.mem` contains multiples of 4 bytes in each line separated by spaces. The 4 bytes are joined into 32 bit words and stored in `right.mem`
