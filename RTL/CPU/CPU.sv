@@ -234,7 +234,7 @@ EXECUTE_MEMORY_REGISTER Execute_Memory_Register (
   .ALU_outE_i(ALU_outE),
   .ALU_outM_o(ALU_outM),
   .RdE_i(RdE),
-  .RdM_o(RdM)
+  .RdM_o(RdM),
   .RegWriteE_i(RegWriteE),
   .RegWriteM_o(RegWriteM),
   .MemWriteE_i(MemWriteE),
