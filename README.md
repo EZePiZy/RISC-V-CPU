@@ -13,6 +13,7 @@
   - [**IMPLEMENTATION**:](#implementation)
     - [Hardware:](#hardware)
     - [Software:](#software)
+  - [](#)
   - [**ALLOCATION OF TASKS**:](#allocation-of-tasks)
   - [**Branch Protection Policy**](#branch-protection-policy)
   - [**Directory Format**](#directory-format)
@@ -59,6 +60,9 @@ subsequent instruction.
 
 ---
 
+![schematic](./images/schematic_pipe_1.png) ![schematic](./images/schematic_pipe_2.png)
+![schematic](./images/schematic_pipe_complete.jpg)
+---
 ## <ins>**ALLOCATION OF TASKS**</ins>: 
 * Luigi Rinaldi, Diego Van Overberghe, Ezra Reich: 
   * Task:  
