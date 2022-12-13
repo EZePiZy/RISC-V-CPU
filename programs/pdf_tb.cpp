@@ -6,7 +6,7 @@
 
 #define MAX_SIM_CYC 1000000
 
-// #define VBUDDY
+#define VBUDDY
 #ifdef VBUDDY
 #include "vbuddy.cpp"     // include vbuddy code
 #endif
@@ -28,7 +28,7 @@ int main(int argc, char **argv, char **env) {
 
   #ifdef VBUDDY
   if (vbdOpen()!=1) return(-1);
-  vbdHeader("RISC-V");
+  vbdHeader("Computing PDF");
   vbdSetMode(0); 
   #endif
 
@@ -42,8 +42,9 @@ int main(int argc, char **argv, char **env) {
 
   int display = 0;
 
-
-  uint8_t counter = 0;
+  bool readVal = 0;
+  int counter = 0;
+  int vals[256];
   
   // run simulation for MAX_SIM_CYC clock cycles
   for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
@@ -54,22 +55,32 @@ int main(int argc, char **argv, char **env) {
       top->clk = !top->clk;
     }
 
-    std::cout << top->a0 << std::endl;
-    
+    // std::cout << top->a0 << std::endl;
+    if (readVal) {
+      if (counter <= 255) {
+        // std::cout << top->a0 << std::endl;
+        vals[counter] = top->a0;
+        counter++;
+        readVal = 0;
+      } else {
+        break;
+      }
+    }
 
-    #ifdef VBUDDY 
-    vbdBar(top->a0);
-    vbdCycle(simcyc);
-    if (Verilated::gotFinish() || (vbdGetkey()=='q'))
-    {
-      vbdClose();
-    #else   
+    if (int(top->a0) == -1) readVal = 1;
+
+    
     if (Verilated::gotFinish())
     {
-    #endif
       tfp->close();
       exit(0);
     } 
+  }
+
+  vbdHeader("PDF");
+  for (int i = 0; i < 240; ++i){
+    std::cout << i << ": " << vals[i] << std::endl;
+    vbdPlot(vals[i], 0, 200);
   }
 
   #ifdef VBUDDY 

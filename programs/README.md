@@ -65,43 +65,24 @@ To allow for a trigger signal from the encoder on the Vbuddy the second bit of t
 The register has to be exposed as an output for the testbench to be able to write to it without overwriting other values. This way the program can reset a given input bit to 0 signaling to the testbench that it's ready to receive another input. This then allows for up to 32 boolean inputs to the register. 
 
 
-## Required hardware changes
+# PDF
 
-### User input
+The `pdf.s` program has been slightly modified from the one provided.
 
-- Expose `x31` register to the top level file to be used as input for the trigger of the program, and possibly other flags
+In order to easily save the computed values when they are displayed the register `a0` is set to be `-1`, this signals to the testbench that on the next cycle `a0` is being written with a value. 
 
-### New instructions
+### Testbench
 
-- **`slli`**
+#### Compute PDF
 
-  Logical shift left by immediate:
+Simulation is run for an arbitrarily long amount of cycles.
 
-  ```asm
-  slli rd, rs1, imm12
+- When `a0` is equal to `-1` a boolean value is set to high
+- If the boolean is high the value of `a0` is stored to an array and a counter is incremented
 
-  rd <- rs1 << imm12
-  ```
+#### Display on *VBUDDY*  
 
-- **`jal`**
+Once all values are computed display on *VBUDDY*
 
-  Jump and link:
-
-  ```
-  jal rd, imm20
-
-  rd <- pc + 4
-  pc <- pc + imm20
-  ```
-
-- **`jalr`** 
-  Jump and link register:
-
-  ```
-  jal rd, rs1, imm12
-
-  rd <- pc + 4
-  pc <- rs1 + imm20
-  ```
-
-  Used to return from subroutine, `rd` can be set to `x0` when not interested in pc
+- Loop from 0 to 240 (the resolution of the display on ***VBUDDY***)
+- Use `vbdPlot()` to display the value

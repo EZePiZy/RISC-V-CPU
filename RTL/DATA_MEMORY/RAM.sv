@@ -20,7 +20,7 @@ end
 always_ff @(posedge clk) begin
     if (WE == 1'b1) begin
         // Need to always read entire word, exluding offset that could be induced by word
-        ram_array[{A[31:2], 2'b00}]     <= WD[7:0]; //If Write Enable is high, write the value of Write Data to the ram location 
+        ram_array[{A[31:2], 2'b00}] <= WD[7:0]; //If Write Enable is high, write the value of Write Data to the ram location 
         ram_array[{A[31:2], 2'b01}] <= WD[15:8];
         ram_array[{A[31:2], 2'b10}] <= WD[23:16];
         ram_array[{A[31:2], 2'b11}] <= WD[31:24];
