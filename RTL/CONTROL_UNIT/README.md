@@ -8,7 +8,7 @@ All instructions are part of a *Type* which identifies how they interpret the bi
 
 Type     | Opcode                     | Description                                 | Implemented instructions | Shared Control Signals 
 -------- | -------------------------- | ------------------------------------------- | ------------------------ | ---------------------- 
-**`R`**  | `0110011`                  | Register to Register instructions           | None                     | Set `ResultSrc` to disable as we care about the ALU output.<br> Set `RegWrite` to enable as we want to write in the registers.</br>
+**`R`**  | `0110011`                  | Register to Register instructions           | `add`                    | Set `ResultSrc` to disable as we care about the ALU output.<br> Set `RegWrite` to enable as we want to write in the registers.</br>
 **`I1`** | `0000011`                  | Load instructions that use 12-bit immediate | `lw`                     | Set `ImmSrc` to `Imm` to sign extend and concatenate with original.
 **`I2`** | `0010011`                  | ALU instructions that use 12-bit immediate  | `addi` , `slli`          | Set `RegWrite` to enable writing to register <br> set `ImmSrc` to `Imm`. </br><br>Set `ALUsrc` to select `ImmOp` as second operand</br>
 **`I3`** | `1100111`                  | Jump with 12-bit immediate                  | `jalr`                   | Set `ImmSrc` to `Imm` <br> Set `RegWrite` to enable writing to register </br><br> Set `AluCtrl` to SUM to make the alu complete an addition</br> <br> Set `ALUsrc` to select `ImmOp` as it will use this within the ALU</br> <br>Set `WriteNextPc` to make the current PC plus four be stored in a register</br><br>Set `JumpType` and `PCsrc` to enable to choose the correct next PC value</br>
@@ -32,6 +32,8 @@ Control Signal | Expected | Notes                |
 `MemWrite`     | `0`      | No Memory Write      |
 `ResultSrc`    | `0`      | Reading ALU result   |
 `WriteNextPC`  | `0`      | No Jump              |
+`ByteSelect`   | `xx`     | No Byte Op           |
+`MemExtend`    | `x`      | No Memo Op           |
 
 #### `bne`
 
@@ -48,24 +50,26 @@ Control Signal | Expected | Notes                                               
 `MemWrite`     | `0`      | No Memory Write                                     |
 `ResultSrc`    | `x`      | Doesn't affect instruction execution                |
 `WriteNextPC`  | `0`      | No PC write                                         |
+`ByteSelect`   | `xx`     | No Byte Op                                          |
+`MemExtend`    | `x`      | No Memo Op                                          |
 
 #### `lw`
 
 Load word. Load into a register the word at the address given by another register and offset by the immediate.
 
-Control Signal | Expected | Notes                 |
- :-----------: | :------: | :-------------------- |
-`RegWrite`     | `1`      | Writing to Registers  |
-`ALUctrl`      | `000`    | SUM Mode              |
-`ALUsrc`       | `1`      | Immediate Operation   |
-`ImmSrc`       | `000`    | Immediate type I      |
-`PCsrc`        | `0`      | No Jump               |
-`JumpType`     | `x`      | No Jump               |
-`MemWrite`     | `0`      | No Memory Write       |
-`ResultSrc`    | `1`      | Data Memory Read      |
-`WriteNextPC`  | `0`      | No PC write           |
-`ByteSelect`   | `Word` | 
-`MemExtend`    | `x` | Doesn't matter since entire word is being loaded
+Control Signal | Expected | Notes                                            |
+ :-----------: | :------: | :----------------------------------------------- |
+`RegWrite`     | `1`      | Writing to Registers                             |
+`ALUctrl`      | `000`    | SUM Mode                                         |
+`ALUsrc`       | `1`      | Immediate Operation                              |
+`ImmSrc`       | `000`    | Immediate type I                                 |
+`PCsrc`        | `0`      | No Jump                                          |
+`JumpType`     | `x`      | No Jump                                          |
+`MemWrite`     | `0`      | No Memory Write                                  |
+`ResultSrc`    | `1`      | Data Memory Read                                 |
+`WriteNextPC`  | `0`      | No PC write                                      |
+`ByteSelect`   | `00`     | Word                                             |
+`MemExtend`    | `x`      | Doesn't matter since entire word is being loaded |
 
 #### `sw`
 
@@ -82,8 +86,8 @@ Control Signal | Expected | Notes                                |
 `MemWrite`     | `1`      | Writing to Data Memory               |
 `ResultSrc`    | `x`      | Doesn't affect instruction execution |
 `WriteNextPC`  | `0`      | No PC Write                          |
-`ByteSelect`   | `Word` | 
-`MemExtend` | `x` | Storing values, no sign extension to be done
+`ByteSelect`   | `10`     | Byte                                 |
+`MemExtend`    | `x`      | Storing, no sign extension           |
 #### `slli`
 
 Shift logical left immediate, this instruction shifts the contents of a given register left by the amount specified in the immediate. 
@@ -99,6 +103,9 @@ Control Signal | Expected | Notes               |
 `MemWrite`     | `0`      | No Memory Write     |
 `ResultSrc`    | `0`      | ALU Result Read     |
 `WriteNextPC`  | `0`      | No PC Write         |
+`ByteSelect`   | `xx`     | No Byte Op          |
+`MemExtend`    | `x`      | No Memo Op          |
+
 
 #### `jal`
 
@@ -115,6 +122,8 @@ Control Signal | Expected | Notes                                               
 `MemWrite`     | `0`      | No Memory Write                                                 |
 `ResultSrc`    | `x`      | Doesn't affect instruction execution, PC + 4 has separate adder |
 `WriteNextPC`  | `1`      | Write next PC to Register                                       |
+`ByteSelect`   | `xx`     | No Byte Op                                                      |
+`MemExtend`    | `x`      | No Memo Op                                                      |
 
 #### `jalr`
 
@@ -131,73 +140,158 @@ Control Signal | Expected | Notes                                               
 `MemWrite`     | `0`      | No Memory Write                                                                                                 |
 `ResultSrc`    | `0`      | ALU Result Read                                                                                                 |
 `WriteNextPC`  | `1`      | Although `RegWrite` is 1, most of the time, `jalr` is programmed to write to register `zero` which does nothing |
+`ByteSelect`   | `xx`     | No Byte Op                                                                                                      |
+`MemExtend`    | `x`      | No Memo Op                                                                                                      |
 
 #### `sb`
 
 This instruction stores the bottom 8 bits of a given register (`rs2`) into an address using byte addressing. The address is given by the register `rs1` offset by a 1 bit immediate 
 
 Control Signal | Expected | Notes                           |
- :-----------: | :------: | :----                           |
+ :-----------: | :------: | :------------------------------ |
 `RegWrite`     | `0`      |                                 |
-`ALUctrl`      | `SUM_OP` | Sum rs1 with imm to get address |
+`ALUctrl`      | `0`      | Sum rs1 with imm to get address |
 `ALUsrc`       | `1`      | using ImmOp                     |
-`ImmSrc`       | `Store`  | 12 bit imm                      |
+`ImmSrc`       | `010`    | Immediate type S                |
 `PCsrc`        | `0`      |                                 |
 `JumpType`     | `x`      |                                 |
 `MemWrite`     | `1`      |                                 |
 `ResultSrc`    | `x`      |                                 |
 `WriteNextPC`  | `0`      |                                 |
-`ByteSelect`   | `Byte`   |                                 |
-`MemExtend`    | `x`      | Doesn't matter when storing value |
+`ByteSelect`   | `10`     | Byte                            |
+`MemExtend`    | `x`      | Storing, no sign extension      |
 #### `lbu`
 
 Load unsigned byte, this loads a byte from a given address into a register `rd`, the value is 0 extended before being saved into the register. The address is given by the sum of the register `rs1` and a 12 bit immediate offset.
 
-Control Signal | Expected | Notes |
- :-----------: | :------: | :---- |
-`RegWrite`     | `1` | Save byte into register|
-`ALUctrl`      | `SUM_OP` | Compute address by offsetting `rs1` by and immediate |
-`ALUsrc`       | `1` | |
-`ImmSrc`       | `Imm` | |
-`PCsrc`        | `0` | |
-`JumpType`     | `x` | |
-`MemWrite`     | `0` | |
-`ResultSrc`    | `1` | Save contents of data mem into register|
-`WriteNextPC`  | `0` | |
-`ByteSelect`   | `x`   |                                 |
-`MemExtend`    | `0` | Not sign extending (0 extending) |
+Control Signal | Expected | Notes                                                |
+ :-----------: | :------: | :--------------------------------------------------- |
+`RegWrite`     | `1`      | Save byte into register                              |
+`ALUctrl`      | `000`    | Compute address by offsetting `rs1` by and immediate |
+`ALUsrc`       | `1`      |                                                      |
+`ImmSrc`       | `000`    |                                                      |
+`PCsrc`        | `0`      |                                                      |
+`JumpType`     | `x`      |                                                      |
+`MemWrite`     | `0`      |                                                      |
+`ResultSrc`    | `1`      | Save contents of data mem into register              |
+`WriteNextPC`  | `0`      |                                                      |
+`ByteSelect`   | `10`     | Byte                                                 |
+`MemExtend`    | `0`      | Not sign extending (0 extending)                     |
 #### `lui`
 
 Load upper immediate, stores the 20 bits of the immediate as the most significant bits in a given register. `rd = {upimm, 12'b0}`
 
-Control Signal | Expected | Notes |
- :-----------: | :------: | :---- |
-`RegWrite`     | `1` | |
-`ALUctrl`      | `UIM_OP` | Take the Op2 and concatenate 12 bits of 0s |
-`ALUsrc`       | `1` | Using immediate |
-`ImmSrc`       | `UpperImm` | Using upper immediate|
-`PCsrc`        | `0` | |
-`JumpType`     | `x` | |
-`MemWrite`     | `0` | |
-`ResultSrc`    | `0` | Take the ALU result|
-`WriteNextPC`  | `0` | |
-`ByteSelect`   | `x`   |                                 |
+Control Signal | Expected | Notes                                      |
+ :-----------: | :------: | :----------------------------------------- |
+`RegWrite`     | `1`      |                                            |
+`ALUctrl`      | `111`    | Take the Op2 and concatenate 12 bits of 0s |
+`ALUsrc`       | `1`      | Using immediate                            |
+`ImmSrc`       | `001`    | Using upper immediate                      |
+`PCsrc`        | `0`      |                                            |
+`JumpType`     | `x`      |                                            |
+`MemWrite`     | `0`      |                                            |
+`ResultSrc`    | `0`      | Take the ALU result                        |
+`WriteNextPC`  | `0`      |                                            |
+`ByteSelect`   | `xx`     | No Byte Op                                 |
+`MemExtend`    | `x`      | No Memo Op                                 |
 #### `andi`
 
 And the contents of a register (`rs1`) with a sign extended 12 bit immediate and store the result in `rd`
 
-Control Signal | Expected | Notes |
- :-----------: | :------: | :---- |
-`RegWrite`     | `1` | Write to destination register |
-`ALUctrl`      | `AND_OP` | Actually does the anding  |
-`ALUsrc`       | `1` | Use `ImmOp` as op2|
-`ImmSrc`       | `Imm` | |
-`PCsrc`        | `0` | |
-`JumpType`     | `x` | |
-`MemWrite`     | `0` | |
-`ResultSrc`    | `0` | Store result of ALU in register|
-`WriteNextPC`  | `0` | |
-`ByteSelect`   | `x`   |                                 |
+Control Signal | Expected | Notes                        |
+ :-----------: | :------: | :--------------------------- |
+`RegWrite`     | `1`   | Write to destination register   |
+`ALUctrl`      | `010` | Actually does the anding        |
+`ALUsrc`       | `1`   | Use `ImmOp` as op2              |
+`ImmSrc`       | `000` |                                 |
+`PCsrc`        | `0`   |                                 |
+`JumpType`     | `x`   |                                 |
+`MemWrite`     | `0`   |                                 |
+`ResultSrc`    | `0`   | Store result of ALU in register |
+`WriteNextPC`  | `0`   |                                 |
+`ByteSelect`   | `xx`  | No Byte Op                      |
+`MemExtend`    | `x`   | No Memo Op                      |
+
+#### `add`
+
+Control Signal | Expected | Notes                 |
+ :-----------: | :------: | :---------------------|
+`RegWrite`     | `1`      | Write SUM to register |
+`ALUctrl`      | `000`    | SUM Mode              |
+`ALUsrc`       | `0`      | Register Operation    |
+`ImmSrc`       | `xxx`    | No Immediate          |
+`PCsrc`        | `0`      | No Jump               |
+`JumpType`     | `x`      | No Jump               |
+`MemWrite`     | `0`      | No Memory Write       |
+`ResultSrc`    | `0`      | ALU Result Read       |
+`WriteNextPC`  | `0`      |                       |
+`ByteSelect`   | `xx`     | No Byte Op            |
+`MemExtend`    | `x`      | No Memo Op            |
+
+#### `sub`
+
+Control Signal | Expected | Notes                 |
+ :-----------: | :------: | :---------------------|
+`RegWrite`     | `1`      | Write SUM to register |
+`ALUctrl`      | `001`    | SUM Mode              |
+`ALUsrc`       | `0`      | Register Operation    |
+`ImmSrc`       | `xxx`    | No Immediate          |
+`PCsrc`        | `0`      | No Jump               |
+`JumpType`     | `x`      | No Jump               |
+`MemWrite`     | `0`      | No Memory Write       |
+`ResultSrc`    | `0`      | ALU Result Read       |
+`WriteNextPC`  | `0`      |                       |
+`ByteSelect`   | `xx`     | No Byte Op            |
+`MemExtend`    | `x`      | No Memo Op            |
+
+#### `and`
+
+Control Signal | Expected | Notes                 |
+ :-----------: | :------: | :---------------------|
+`RegWrite`     | `1`      | Write SUM to register |
+`ALUctrl`      | `010`    | SUM Mode              |
+`ALUsrc`       | `0`      | Register Operation    |
+`ImmSrc`       | `xxx`    | No Immediate          |
+`PCsrc`        | `0`      | No Jump               |
+`JumpType`     | `x`      | No Jump               |
+`MemWrite`     | `0`      | No Memory Write       |
+`ResultSrc`    | `0`      | ALU Result Read       |
+`WriteNextPC`  | `0`      |                       |
+`ByteSelect`   | `xx`     | No Byte Op            |
+`MemExtend`    | `x`      | No Memo Op            |
+
+#### `slt`
+
+Control Signal | Expected | Notes                 |
+ :-----------: | :------: | :---------------------|
+`RegWrite`     | `1`      | Write SUM to register |
+`ALUctrl`      | `101`    | SUM Mode              |
+`ALUsrc`       | `0`      | Register Operation    |
+`ImmSrc`       | `xxx`    | No Immediate          |
+`PCsrc`        | `0`      | No Jump               |
+`JumpType`     | `x`      | No Jump               |
+`MemWrite`     | `0`      | No Memory Write       |
+`ResultSrc`    | `0`      | ALU Result Read       |
+`WriteNextPC`  | `0`      |                       |
+`ByteSelect`   | `xx`     | No Byte Op            |
+`MemExtend`    | `x`      | No Memo Op            |
+
+#### `sll`
+
+Control Signal | Expected | Notes                 |
+ :-----------: | :------: | :---------------------|
+`RegWrite`     | `1`      | Write SUM to register |
+`ALUctrl`      | `100`    | SUM Mode              |
+`ALUsrc`       | `0`      | Register Operation    |
+`ImmSrc`       | `xxx`    | No Immediate          |
+`PCsrc`        | `0`      | No Jump               |
+`JumpType`     | `x`      | No Jump               |
+`MemWrite`     | `0`      | No Memory Write       |
+`ResultSrc`    | `0`      | ALU Result Read       |
+`WriteNextPC`  | `0`      |                       |
+`ByteSelect`   | `xx`     | No Byte Op            |
+`MemExtend`    | `x`      | No Memo Op            |
+
 #### Opcode and funct mapping
 
 Instruction | opcode    | funct3 | funct7 | Type

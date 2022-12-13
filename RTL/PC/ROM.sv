@@ -13,6 +13,6 @@ initial begin
     $readmemh("../CPU/instruction.mem", rom_array);
 end;
 
-assign dout = rom_array[{2'b0, addr[31:2]}];
+assign dout = rom_array[{2'b0, addr[31:2]} - 'hBFC00000];
 
 endmodule

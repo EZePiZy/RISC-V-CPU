@@ -13,9 +13,9 @@ import types_pkg::*; //Import Bit Sizing
 
 logic [DATA_WIDTH-1:0] ram_array [2**RAM_ADDRESS_WIDTH-1:0]; //This defines a RAM array with 2^18 Addresses each of 32bits (Two bottom bits ignored giving 2^16)
 
-// initial begin
-//     $readmemh("{ENTER RAM DATA FILE HERE}", ram_array, 0); //This allows for loading of data into the data memory from intially running the program
-// end
+initial begin
+    $readmemh("../CPU/data.mem", ram_array, 'h4000); //This allows for loading of data into the data memory from intially running the program
+end
 
 always_ff @(posedge clk) begin
     if (WE == 1'b1)

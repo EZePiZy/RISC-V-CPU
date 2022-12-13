@@ -48,16 +48,16 @@ always_comb begin
       MemWrite = 0;
       case({funct3, funct7})
         10'b0000000000: begin // add
-
+          ALUctrl = SUM_OP;
         end
         10'b0000100000: begin // sub
-
+          ALUctrl = SUB_OP;
         end
         10'b0010000000: begin // sll
-        
+          ALUctrl = SLL_OP;
         end
         10'b0100000000: begin // slt
-        
+          ALUctrl = SLT_OP;
         end
         10'b0110000000: begin // sltu
         
@@ -75,7 +75,7 @@ always_comb begin
 
         end
         10'b1110000000: begin // and
-        
+          ALUctrl = AND_OP;
         end
         default: begin 
           ALUsrc = 0; //do something for default

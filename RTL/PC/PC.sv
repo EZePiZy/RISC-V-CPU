@@ -9,9 +9,13 @@ import types_pkg::*;
     output  DATA_BUS  PC
 );
 
+initial begin
+    PC = 32'hBFC00000;
+end
+
 always_ff @(posedge clk) begin
     if (rst)
-        PC <= 32'b0;
+        PC <= 32'hBFC00000;
     else
         PC <= next_PC;
 end
