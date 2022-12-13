@@ -4,7 +4,7 @@
 #include <iostream>
 #include <chrono>
 
-#define MAX_SIM_CYC 20
+#define MAX_SIM_CYC 1000000
 
 // #define VBUDDY
 #ifdef VBUDDY
@@ -40,6 +40,11 @@ int main(int argc, char **argv, char **env) {
   top->write_in_EN = 0;
   top->input_reg = 0;
 
+  int display = 0;
+
+
+  uint8_t counter = 0;
+  
   // run simulation for MAX_SIM_CYC clock cycles
   for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
     // dump variables into VCD file and toggle clock
@@ -51,6 +56,7 @@ int main(int argc, char **argv, char **env) {
 
     std::cout << top->a0 << std::endl;
     
+
     #ifdef VBUDDY 
     vbdBar(top->a0);
     vbdCycle(simcyc);
