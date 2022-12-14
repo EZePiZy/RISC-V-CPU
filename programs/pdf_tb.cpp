@@ -38,7 +38,6 @@ int main(int argc, char **argv, char **env) {
   top->clk = 1;
   top->rst = 0;
 
-
   int display = 0;
 
   bool readVal = 0;
