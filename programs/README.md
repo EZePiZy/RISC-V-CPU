@@ -114,3 +114,10 @@ Once all values are computed display on *VBUDDY*
 * After LI (translated to LUI followed by ADDI) &rarr; No NOPs as whenever LUI is executed no data hazard will be occur with the ADDI instruction (separated by 1 cycle between Fetch and Decode)
 * After LBU  takes 1 more stage in the pipeline to store in memory 
 * 
+
+### Debugging process: 
+* The pdf program does not execute as expected when it is in the pipeline version of the CPU 
+* To fix it I tried to add 5 NOPs per instruction as it should then act as a non-pipeline CPU but still does not work. 
+* I could see a pattern in the output; the distribution is summed incorrectly at every 48 bin. 
+* I therefore conclude that the possible error comes from the build function which builds the PDF by iterating over the data set, incrementing the count for each value in the PDF buffer, and storing the updated count in the PDF buffer.
+

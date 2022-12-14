@@ -37,8 +37,7 @@ int main(int argc, char **argv, char **env) {
 
   top->clk = 1;
   top->rst = 0;
-  top->write_in_EN = 0;
-  top->input_reg = 0;
+
 
   int display = 0;
 
