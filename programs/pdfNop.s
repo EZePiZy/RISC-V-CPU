@@ -83,14 +83,6 @@ _loop3:                         # repeat
     bne     a1, a2, _loop3      # until end of pdf array
     nop#
     nop#
-    nop#
-    nop#
-    nop#
-    # li      a0, 0x6969          # signal that next data is coming
     ret
-    nop#
-    nop#
-    nop#
-    nop#
     nop#
     nop#
