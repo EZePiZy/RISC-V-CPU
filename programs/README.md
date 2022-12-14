@@ -86,3 +86,31 @@ Once all values are computed display on *VBUDDY*
 
 - Loop from 0 to 240 (the resolution of the display on ***VBUDDY***)
 - Use `vbdPlot()` to display the value
+  Jump and link:
+
+  ```
+  jal rd, imm20
+
+  rd <- pc + 4
+  pc <- pc + imm20
+  ```
+
+- **`jalr`** 
+  Jump and link register:
+
+  ```
+  jal rd, rs1, imm12
+
+  rd <- pc + 4
+  pc <- rs1 + imm20
+  ```
+
+  Used to return from subroutine, `rd` can be set to `x0` when not interested in pc
+
+
+### Hazard handling using software: 
+
+* After a JAL &rarr; 2 NOPs
+* After LI (translated to LUI followed by ADDI) &rarr; No NOPs as whenever LUI is executed no data hazard will be occur with the ADDI instruction (separated by 1 cycle between Fetch and Decode)
+* After LBU  takes 1 more stage in the pipeline to store in memory 
+* 
