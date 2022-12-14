@@ -21,7 +21,7 @@
 
 ![schematic](./images/Pipeline_diagram.png)
 
-## <ins>**DESIRED BEHAVIOUR**</ins>
+## **DESIRED BEHAVIOUR**
 
 1. Upon receving a trigger the routine is executed
 2. The `a0` drives the led bar on the *VBuddy* turning on each light every second
@@ -36,7 +36,7 @@ faster.
 ![schematic](./images/Single_vs_Pipeline.png)
 
 ---
-## <ins>**IMPLEMENTATION**</ins>: 
+## **IMPLEMENTATION**
 
 ### Hardware: 
   1. Divide the microarchitecture in 5 stages: 
@@ -53,6 +53,7 @@ subsequent instruction.
 1. Keep same control unit signals as single-processor **. /!\ .** All the control signals MUST be pipelined so that they arrive in synchrony to the datapath **. /!\ .**
     1. Split up PC and ROM components 
 Additionally, to facilitate debugging, the delayed instruction is passed to all registers, so that one can easily ascertain which instruction is in which pipeline stage.
+
 ---
 ### Software: 
    1. By inspection, analyse the software program and insert `NOP` (`addi, zero, zer0, 0` &rarr; *do nothing*) when needed: 
@@ -63,8 +64,19 @@ Additionally, to facilitate debugging, the delayed instruction is passed to all 
 
 ![schematic](./images/schematic_pipe_1.png) ![schematic](./images/schematic_pipe_2.png)
 ![schematic](./images/schematic_pipe_complete.jpg)
+
+### Debugging
+
+Firstly, as a precautionary measure, NOP was added five times between each instruction. This guaranteed that no pipeline issues could cause problems. However, the pdf program did not function. This could only be linked to an issue with the instruction execution itself.
+
+Testing each instruction in turn, we found there were issues with `jalr`. The issue was linked to the input of the `jumpType` MUX. The signal was being fed by a component in the Writeback stage, while the control signal was being driven by components in the Execute stage. The consequence was jumping to a different location than the label.
+
+![problem](./images/problem.jpg)
+
+After this fix, we read through the program, removing as many NOPs as possible. This made the program run much faster, and most importantly, we got the same output as the non pipelined version.
+
 ---
-## <ins>**ALLOCATION OF TASKS**</ins>: 
+## **ALLOCATION OF TASKS**
 * Luigi Rinaldi, Diego Van Overberghe, Ezra Reich: 
   * Task:  
     * Implement the various registers and change the Control Unit signals accordingly. 

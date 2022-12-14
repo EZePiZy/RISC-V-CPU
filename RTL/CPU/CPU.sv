@@ -46,7 +46,10 @@ DATA_BUS InstructionM, ReadDataM, PCPlus4M, ALU_outM;
 //Data Output From Data Memory {32} | Program Counter + 4 {32} | Output of the ALU {32} |
 
 //Write Back
-DATA_BUS InstructionW, ReadDataW, ResultW, PCPlus4W, ALU_outW;
+/* verilator lint_off UNUSED */ // InstructionW is a debug signal and not connected to anything
+DATA_BUS InstructionW;
+/* verilator lint_on UNUSED */ // 
+DATA_BUS ReadDataW, ResultW, PCPlus4W, ALU_outW;
 
 // ----------------control logic
 
@@ -100,7 +103,8 @@ logic EQ_flagE;
 
 
 assign PCPlus4F = PCF + 32'h4; // Set the wire PCPlus4F to the value of the fetch block PC plus 4
-assign Next_PCF = PC_srcE ? (JumpResultTypeE ? ResultW : PCTargetE) : (PCPlus4F); //Use PCTarget, PC_src from execute with result from write back to find the next pc value
+//Use PCTarget, PC_src from execute with result from write back to find the next pc value. Determine next PC based on control signals, for JALR, select ALU result from the execute stage, JAL and BXX jump to PC + Immediate, othewise PC + 4.
+assign Next_PCF = PC_srcE ? (JumpResultTypeE ? ALU_outE : PCTargetE) : (PCPlus4F); 
 
 PC pc(
   .next_PC (Next_PCF), 

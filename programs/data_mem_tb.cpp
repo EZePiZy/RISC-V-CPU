@@ -4,7 +4,7 @@
 #include <iostream>
 #include <chrono>
 
-#define MAX_SIM_CYC 20
+#define MAX_SIM_CYC 10000000
 
 // #define VBUDDY
 #ifdef VBUDDY
@@ -37,10 +37,6 @@ int main(int argc, char **argv, char **env) {
 
   top->clk = 1;
   top->rst = 0;
-  top->write_in_EN = 0;
-  top->input_reg = 0;
-
-
   
   // run simulation for MAX_SIM_CYC clock cycles
   for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
@@ -52,7 +48,7 @@ int main(int argc, char **argv, char **env) {
       top->clk = !top->clk;
     }
     
-    std::cout << top->a0 << std::endl;
+    if (true) std::cout << int(top->a0) << std::endl;
     
 
     #ifdef VBUDDY 
