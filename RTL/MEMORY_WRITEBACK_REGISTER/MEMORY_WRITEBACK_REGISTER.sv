@@ -10,6 +10,8 @@ import types_pkg::*;
     output  DATA_BUS        PCPlus4W_o,
     input   DATA_BUS        ALU_outM_i,
     output  DATA_BUS        ALU_outW_o,
+    input   DATA_BUS        InstructionM_i,
+    output  DATA_BUS        InstructionW_o,
     input   logic           RegWriteM_i,
     output  logic           RegWriteW_o,
     input   logic           ResultSrcM_i,
@@ -28,6 +30,7 @@ always_ff @(negedge clk) begin
     ResultSrcW_o <= ResultSrcM_i;
     StoreNextPCW_o <= StoreNextPCM_i;
     RdW_o <= RdM_i;
+    InstructionW_o <= InstructionM_i;
 end
 
 endmodule 

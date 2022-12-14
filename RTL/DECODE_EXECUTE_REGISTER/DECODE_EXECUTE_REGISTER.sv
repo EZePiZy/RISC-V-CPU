@@ -3,41 +3,43 @@ module DECODE_EXECUTE_REGISTER
 import types_pkg::*; 
 
 (
-    input   logic           clk,
-    input   DATA_BUS        PCD_i,
-    output  DATA_BUS        PCE_o,
-    input   DATA_BUS        PCPlus4D_i,
-    output  DATA_BUS        PCPlus4E_o,
-    input   DATA_BUS        Imm_OpD_i,
-    output  DATA_BUS        Imm_OpE_o,
-    input   logic        RegWriteD_i,
-    output  logic        RegWriteE_o,
-    input   logic          ALU_srcD_i,
-    output  logic          ALU_srcE_o,
-    input   logic           MemWriteD_i,
-    output  logic           MemWriteE_o,
-    input   logic           ResultSrcD_i,
-    output  logic           ResultSrcE_o,
-    input   logic           StoreNextPCD_i,
-    output  logic           StoreNextPCE_o,
-    input   logic           JumpImmTypeD_i,
-    output  logic           JumpImmTypeE_o,
-    input   logic           JumpResultTypeD_i,
-    output  logic           JumpResultTypeE_o,
-    input   logic           BranchTypeD_i,
-    output  logic           BranchTypeE_o,
-    input   logic           MemExtendD_i,
-    output  logic           MemExtendE_o,
-    input   alu_ctrl        ALU_ctrlD_i,
-    output  alu_ctrl        ALU_ctrlE_o,
-    input   byte_format     ByteSelectD_i,
-    output  byte_format     ByteSelectE_o,
-    input   DATA_BUS        OP1D_i,
-    output  DATA_BUS        OP1E_o,
-    input   DATA_BUS        RegRD2D_i,
-    output  DATA_BUS        RegRD2E_o,
-    input   ADDR_BUS   RdD_i,
-    output  ADDR_BUS   RdE_o  
+    input   logic       clk,
+    input   DATA_BUS    PCD_i,
+    output  DATA_BUS    PCE_o,
+    input   DATA_BUS    PCPlus4D_i,
+    output  DATA_BUS    PCPlus4E_o,
+    input   DATA_BUS    Imm_OpD_i,
+    output  DATA_BUS    Imm_OpE_o,
+    input   DATA_BUS    InstructionD_i,
+    output  DATA_BUS    InstructionE_o,
+    input   logic       RegWriteD_i,
+    output  logic       RegWriteE_o,
+    input   logic       ALU_srcD_i,
+    output  logic       ALU_srcE_o,
+    input   logic       MemWriteD_i,
+    output  logic       MemWriteE_o,
+    input   logic       ResultSrcD_i,
+    output  logic       ResultSrcE_o,
+    input   logic       StoreNextPCD_i,
+    output  logic       StoreNextPCE_o,
+    input   logic       JumpImmTypeD_i,
+    output  logic       JumpImmTypeE_o,
+    input   logic       JumpResultTypeD_i,
+    output  logic       JumpResultTypeE_o,
+    input   logic       BranchTypeD_i,
+    output  logic       BranchTypeE_o,
+    input   logic       MemExtendD_i,
+    output  logic       MemExtendE_o,
+    input   alu_ctrl    ALU_ctrlD_i,
+    output  alu_ctrl    ALU_ctrlE_o,
+    input   byte_format ByteSelectD_i,
+    output  byte_format ByteSelectE_o,
+    input   DATA_BUS    OP1D_i,
+    output  DATA_BUS    OP1E_o,
+    input   DATA_BUS    RegRD2D_i,
+    output  DATA_BUS    RegRD2E_o,
+    input   ADDR_BUS    RdD_i,
+    output  ADDR_BUS    RdE_o  
 );
 
 always_ff @(negedge clk) begin
@@ -58,6 +60,7 @@ always_ff @(negedge clk) begin
     OP1E_o <= OP1D_i;
     RegRD2E_o <= RegRD2D_i;
     RdE_o <= RdD_i;
+    InstructionE_o <= InstructionD_i;
 end
 
 endmodule 

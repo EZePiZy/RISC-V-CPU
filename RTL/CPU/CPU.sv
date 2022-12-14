@@ -30,23 +30,23 @@ ADDR_BUS RdW;
 //------------------ Data buses
 
 //Fetch
-DATA_BUS PCF, instructionF, PCPlus4F,  Next_PCF;
+DATA_BUS PCF, InstructionF, PCPlus4F,  Next_PCF;
 //Program Counter{32} | Instruction{32} | Program Counter + 4 {32} | Next PC to load {32} |
 
 //Decode
-DATA_BUS PCD, instructionD, PCPlus4D, Imm_OpD;
+DATA_BUS PCD, InstructionD, PCPlus4D, Imm_OpD;
 //Program Counter{32} | Instruction{32} | Program Counter + 4 {32} | Sign Extended Immediate Op {32} |
 
 //Execute
-DATA_BUS PCE, PCPlus4E, Imm_OpE, ALU_outE, PCTargetE;
+DATA_BUS PCE, InstructionE, PCPlus4E, Imm_OpE, ALU_outE, PCTargetE;
 //Program Counter{32} | Program Counter + 4 {32} | Sign Extended Immediate Op {32} | Output of the ALU {32} | Either current Pc or Imm {32} |
 
 //Memory
-DATA_BUS ReadDataM, PCPlus4M, ALU_outM;
+DATA_BUS InstructionM, ReadDataM, PCPlus4M, ALU_outM;
 //Data Output From Data Memory {32} | Program Counter + 4 {32} | Output of the ALU {32} |
 
 //Write Back
-DATA_BUS ReadDataW, ResultW, PCPlus4W, ALU_outW;
+DATA_BUS InstructionW, ReadDataW, ResultW, PCPlus4W, ALU_outW;
 
 // ----------------control logic
 
@@ -112,15 +112,15 @@ PC pc(
 
 ROM rom(
   .addr(PCF),
-  .dout(instructionF)
+  .dout(InstructionF)
 );
 
 //--------------------------------------------------------------------------------Register Block
 
 FETCH_DECODE_REGISTER fetch_decode_register (
   .clk(clk),
-  .instructionF_i(instructionF),
-  .instructionD_o(instructionD),
+  .InstructionF_i(InstructionF),
+  .InstructionD_o(InstructionD),
   .PCF_i(PCF),
   .PCD_o(PCD),
   .PCPlus4F_i(PCPlus4F),
@@ -132,8 +132,8 @@ FETCH_DECODE_REGISTER fetch_decode_register (
 
 REGFILE regfile(
   .clk(clk),
-  .AD1(instructionD[19:15]),
-  .AD2(instructionD[24:20]),
+  .AD1(InstructionD[19:15]),
+  .AD2(InstructionD[24:20]),
   .AD3(RdW),
   .WE3(RegWriteW),
   .WD3(StoreNextPCW ? PCPlus4W : ResultW),  
@@ -143,7 +143,7 @@ REGFILE regfile(
 );
 
 CONTROL_UNIT control_unit(
-  .instr(instructionD),
+  .instr(InstructionD),
   .RegWrite(RegWriteD),
   .ALUctrl(ALU_ctrlD),
   .ALUsrc(ALU_srcD),
@@ -159,7 +159,7 @@ CONTROL_UNIT control_unit(
 );
 
 SIGN_EXTEND sign_extend(
-  .instr(instructionD),
+  .instr(InstructionD),
   .ImmSrc (Imm_SrcD),
   .ImmOp (Imm_OpD)
 );
@@ -200,8 +200,10 @@ DECODE_EXECUTE_REGISTER decode_execute_register (
   .OP1E_o(OP1E),
   .RegRD2D_i(RegRD2D),
   .RegRD2E_o(RegRD2E),
-  .RdD_i(instructionD[11:7]),
-  .RdE_o(RdE)
+  .RdD_i(InstructionD[11:7]),
+  .RdE_o(RdE),
+  .InstructionD_i(InstructionD),
+  .InstructionE_o(InstructionE)
 );
 
 //--------------------------------------------------------------------------------------- Execute Block
@@ -244,7 +246,9 @@ EXECUTE_MEMORY_REGISTER execute_memory_register (
   .ByteSelectE_i(ByteSelectE),
   .ByteSelectM_o(ByteSelectM),
   .WriteDataE_i(RegRD2E),
-  .WriteDataM_o(WriteDataM)
+  .WriteDataM_o(WriteDataM),
+  .InstructionE_i(InstructionE),
+  .InstructionM_o(InstructionM)
 );
 
 //-------------------------------------------------------------------------------------- Memory Block
@@ -276,7 +280,9 @@ MEMORY_WRITEBACK_REGISTER memory_writeback_register (
   .StoreNextPCM_i(StoreNextPCM),
   .StoreNextPCW_o(StoreNextPCW),
   .RdM_i(RdM),
-  .RdW_o(RdW)
+  .RdW_o(RdW),
+  .InstructionM_i(InstructionM),
+  .InstructionW_o(InstructionW)
 );
 
 //------------------------------------------------------------------------------------- Write Back Block

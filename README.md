@@ -52,6 +52,7 @@ first half cycle and read back in the second half of the cycle for use in a
 subsequent instruction.
 1. Keep same control unit signals as single-processor **. /!\ .** All the control signals MUST be pipelined so that they arrive in synchrony to the datapath **. /!\ .**
     1. Split up PC and ROM components 
+Additionally, to facilitate debugging, the delayed instruction is passed to all registers, so that one can easily ascertain which instruction is in which pipeline stage.
 ---
 ### Software: 
    1. By inspection, analyse the software program and insert `NOP` (`addi, zero, zer0, 0` &rarr; *do nothing*) when needed: 
