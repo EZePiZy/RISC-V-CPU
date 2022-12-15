@@ -67,8 +67,6 @@ display:    # function send PDF array value to a0 for display
 _loop3:                         # repeat
     li      a0, -1          # signal to tb that data is being displayed
     lbu     a0, base_pdf(a1)    #   a0 = mem[base_pdf+a1)
-    nop
-    nop
     addi    a1, a1, 1           #   incr 
     nop
     nop
