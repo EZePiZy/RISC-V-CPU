@@ -29,4 +29,3 @@
 1. Apply Naming Convention (Screaming Snake Case/Pascal Case/Snake Case)
 2. Add vbuddy.cfg and vbuddy.cpp to each dir
 3. Create hierarchical structure 
-4.  

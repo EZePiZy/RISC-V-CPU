@@ -10,16 +10,20 @@
   - [ **RISC-V Design - 2nd year EIE IAC coursework** ](#-risc-v-design---2nd-year-eie-iac-coursework-)
 - [Stretch Goal 1: Pipelined RV32I Design](#stretch-goal-1-pipelined-rv32i-design)
   - [**DESIRED BEHAVIOUR**](#desired-behaviour)
-  - [**IMPLEMENTATION**:](#implementation)
-    - [Hardware:](#hardware)
-    - [Software:](#software)
-  - [](#)
-  - [**ALLOCATION OF TASKS**:](#allocation-of-tasks)
+  - [**IMPLEMENTATION**](#implementation)
+    - [Hardware](#hardware)
+    - [Early Hardware Design Issues](#early-hardware-design-issues)
+    - [Addressing this](#addressing-this)
+    - [Issues with this implementation](#issues-with-this-implementation)
+    - [Software](#software)
+    - [Debugging](#debugging)
+    - [Software Design](#software-design)
+  - [**ALLOCATION OF TASKS**](#allocation-of-tasks)
   - [**Branch Protection Policy**](#branch-protection-policy)
   - [**Directory Format**](#directory-format)
 
 
-![schematic](./images/Pipeline_diagram.png)
+![schematic](./SCHEMATIC/HD_schematic_pipe.png)
 
 ## **DESIRED BEHAVIOUR**
 
@@ -38,7 +42,7 @@ faster.
 ---
 ## **IMPLEMENTATION**
 
-### Hardware: 
+### Hardware 
   1. Divide the microarchitecture in 5 stages: 
      1. Fetch
      2. Decode 
@@ -54,7 +58,7 @@ subsequent instruction.
 Additionally, to facilitate debugging, the delayed instruction is passed to all registers, so that one can easily ascertain which instruction is in which pipeline stage.
 
 
-### Early Hardware Design Issues:
+### Early Hardware Design Issues
 
 In the early stages of the implementation process, some potential issues were highlighted:
 
@@ -77,32 +81,48 @@ This modification required the addition of three new control signals: `BranchTyp
 
 The two Jump signals would set the `PCsrc` to high, as they are guaranteed to change the next `PC` value, and finally BranchType would be compared against `EQ` to check whether `PCsrc` should be high.
 
-### Issues with this implementation:
+### Issues with this implementation
 
 Although this implementation allows for the pipelined CPU to work and complete the PDF code, it makes it very difficult to implement the other Branch instructions as each branch instruction would require a seperate control signal.
 
 
 
 ---
-### Software: 
+### Software
    1. By inspection, analyse the software program and insert `NOP` (`addi, zero, zer0, 0` &rarr; *do nothing*) when needed: 
        *  If two S/I/R-Type instruction are one after the other and the destination register of the first instruction is used as a source the register for the seocnd instruction 
        *  When a Branch instruction occurs the fetched instructions after branch but before branch occurs must be **flushed** if the branch happens. 
 
 ---
 
-![schematic](./images/schematic_pipe_1.png) ![schematic](./images/schematic_pipe_2.png)
-![schematic](./images/schematic_pipe_complete.jpg)
+
 
 ### Debugging
 
 Firstly, as a precautionary measure, NOP was added five times between each instruction. This guaranteed that no pipeline issues could cause problems. However, the pdf program did not function. This could only be linked to an issue with the instruction execution itself.
 
-Testing each instruction in turn, we found there were issues with `jalr`. The issue was linked to the input of the `jumpType` MUX. The signal was being fed by a component in the Writeback stage, while the control signal was being driven by components in the Execute stage. The consequence was jumping to a different location than the label.
+Testing each instruction in turn, we found there were issues with `jalr`. The issue was linked to the input of the `jumpType` MUX (see illustration below). The signal was being fed by a component in the Writeback stage, while the control signal was being driven by components in the Execute stage. The consequence was jumping to a different location than the label.
 
 ![problem](./images/problem.jpg)
 
 After this fix, we read through the program, removing as many NOPs as possible. This made the program run much faster, and most importantly, we got the same output as the non pipelined version.
+
+---
+### Software Design
+To minimize the use of nop instructions, we developed a method to determine when they are necessary for the program to run correctly while maintaining a clean and hazard-free pipeline. The images below provide a full tracing of the program, showing and explaining why we used nop instructions to avoid hazards. Each stage and instruction is shown step by step.
+
+![schematic](./images/Nop1.png)
+![schematic](./images/Nop2.png)
+![schematic](./images/Nop3.png)
+
+* Key:
+  * F = Fetch stage 
+  * D = Decode stage 
+  * E = Execute stage 
+  * M = Memory stage 
+  * W = Writeback stage 
+
+To make the tracing more clear and concise, each subroutine begins at cycle 0. This allows us to use a thinner table while still being able to accurately trace the program. The numbers at the top of the table and the numbers on the left side of the table help us see the different stages of an instruction as it moves through time and when each stage is executed.
 
 ---
 ## **ALLOCATION OF TASKS**
