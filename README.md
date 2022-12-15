@@ -54,6 +54,34 @@ subsequent instruction.
     1. Split up PC and ROM components 
 Additionally, to facilitate debugging, the delayed instruction is passed to all registers, so that one can easily ascertain which instruction is in which pipeline stage.
 
+
+### Early Hardware Design Issues:
+
+During implementation of hardware a few issues were found in early stages when designing how the processor should be implemented:
+
+`PCsrc`, this control signal is used to select if the next `PC` value is designated from `PC` + 4, or is a Jump Opcode (this includes Branch instructions), and therefore could increase or decrease by more.
+
+The issue occurs from the single cycle cpu design, the Control Unit is made of a single block in which the `EQ` signal is given from the ALU, and in turn calculates if jumping should occur.
+
+The issue with this is within pipelining the instruction needs to to only calculate if jumping should occur during the Execute Block, but control signals come during the stage before within decode.
+
+### Addressing this:
+
+1. Delay the `func3` input within the decode block for a cycle to wait for the `EQ` signal from the `ALU`, to then decide if jumping should occur.
+2. Remove the `EQ` input signal and check if `PCsrc` should be high within the Execute block rather than Decode
+
+We dceide that we should go with the second option, this would simply the overall top sheet design as well as stop confusion within the decode block, with the mixing of clocked and un-clocked components. 
+
+To implement this new section it required the addition of adding three new control signals, {`BranchType`, `JumpResultType`, `JumpImmType`} these each would each be used in two different multiplexers to control `PC`.
+
+The two Jump signals would set the `PCsrc` to high, as they are guaranteed to change the next `PC` value, and finalyl BranchType would be compared against `EQ` to check whether `PCsrc` should be high.
+
+### Issues with this implementation:
+
+Although this implementation allows for the pipelined CPU to work and complete the PDF code, it makes it very difficult to implement the other Branch instructions. It would mean that for each branch instruction a seperate control signal would need to be added.
+
+
+
 ---
 ### Software: 
    1. By inspection, analyse the software program and insert `NOP` (`addi, zero, zer0, 0` &rarr; *do nothing*) when needed: 
