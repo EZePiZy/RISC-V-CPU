@@ -7,6 +7,7 @@ package types_pkg;
   parameter BYTE_SELECT_WIDTH = 2; //The size of the control signal to choose between data selection size
   /* verilator lint_off UNUSED */ // UNUSED IN INDIVIDUAL COMPONENT TESTBENCHES
   parameter RAM_ADDRESS_WIDTH = 28; //The address of a given location in data_memory this is an arbitrary value 
+  parameter SET_SIZE = 3;
 
   typedef logic [ADDRESS_WIDTH-1:0] ADDR_BUS;
   typedef logic [DATA_WIDTH-1:0] DATA_BUS;
@@ -24,4 +25,11 @@ package types_pkg;
 
   // mapping ALU operations
   typedef enum bit[ALU_WIDTH-1:0] {SUM_OP = 3'b000, SUB_OP = 3'b001, AND_OP = 3'b010, SLT_OP = 3'b101, SLL_OP = 3'b100, UIM_OP = 3'b111} alu_ctrl;
+
+  typedef struct packed {
+    logic V;                              //Valid Flag {1}
+    DATA_BUS Cache_Data;                  //Cache Stored Data {32}
+    logic [(DATA_WIDTH-SET_SIZE-2)-1:0] Tag;  //Address of word {30-SET_SIZE} Ignore the byte addressing
+  } CacheBlock; 
+
 endpackage

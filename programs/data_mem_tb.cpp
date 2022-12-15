@@ -4,7 +4,7 @@
 #include <iostream>
 #include <chrono>
 
-#define MAX_SIM_CYC 10000000
+#define MAX_SIM_CYC 100
 
 // #define VBUDDY
 #ifdef VBUDDY

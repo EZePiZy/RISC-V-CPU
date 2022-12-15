@@ -7,7 +7,6 @@ import types_pkg::*; //Import Bit Sizing
     input logic       SignExtend,
     input   logic     clk,//Input Clock
     input   logic     WE,//Write Enable
-    /* verilator lint_off UNUSED */
     input   DATA_BUS  A, //Input Address
     input   DATA_BUS  WD,//Write Data
     output  DATA_BUS  RD //Read Data
@@ -46,15 +45,20 @@ always_comb begin
     endcase
 end
 
-RAM ram (
-    .clk (clk),
-    .WE  (WE),
-    .A   (A),
-    .WD  (write),
-    .RD  (read)
+CACHE cache (
+    .clk(clk),  //Input Clock
+    .WE(WE),    //Write Enable
+    .A(A),      //Input Address
+    .RD(read),  //Read Data
+    .WD(write)  //Write Data
 );
 
 endmodule
+
+
+
+
+
 
 
 
