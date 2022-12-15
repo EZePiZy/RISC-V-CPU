@@ -260,6 +260,7 @@ EXECUTE_MEMORY_REGISTER execute_memory_register (
 DATA_MEMORY DATA_MEMORY(
   .clk(clk),
   .A(ALU_outM),
+  .DE(InstructionM[6:0] == 3 || InstructionM[6:0] == 35),
   .WE(MemWriteM),
   .WD(WriteDataM),
   .RD(ReadDataM),

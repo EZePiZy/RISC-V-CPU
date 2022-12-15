@@ -7,7 +7,7 @@ package types_pkg;
   parameter BYTE_SELECT_WIDTH = 2; //The size of the control signal to choose between data selection size
   /* verilator lint_off UNUSED */ // UNUSED IN INDIVIDUAL COMPONENT TESTBENCHES
   parameter RAM_ADDRESS_WIDTH = 28; //The address of a given location in data_memory this is an arbitrary value 
-  parameter SET_SIZE = 3;
+  parameter SET_SIZE = 10;
 
   typedef logic [ADDRESS_WIDTH-1:0] ADDR_BUS;
   typedef logic [DATA_WIDTH-1:0] DATA_BUS;
