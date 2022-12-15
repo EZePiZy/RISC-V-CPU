@@ -45,40 +45,41 @@ faster.
      3. Execute 
      4. Memory 
      5. Writeback
-  2. Insert registers between each five stages 
-      * <ins>Consequence</ins>: Create signals with the same purpose but for different instructions.
-  3. Make the registers **WriteBack** happen on the **FALL EDGE** &rarr; Data can be written in the
+  2. Insert registers between each stage 
+  3. Register write occurs on the falling edge; data can be written in the
 first half cycle and read back in the second half of the cycle for use in a
 subsequent instruction.
-1. Keep same control unit signals as single-processor **. /!\ .** All the control signals MUST be pipelined so that they arrive in synchrony to the datapath **. /!\ .**
+1. Keep same control unit signals as single-processor, but all the control signals MUST be pipelined so that they are as delayed as data signals.
     1. Split up PC and ROM components 
 Additionally, to facilitate debugging, the delayed instruction is passed to all registers, so that one can easily ascertain which instruction is in which pipeline stage.
 
 
 ### Early Hardware Design Issues:
 
-During implementation of hardware a few issues were found in early stages when designing how the processor should be implemented:
+In the early stages of the implementation process, some potential issues were highlighted:
 
-`PCsrc`, this control signal is used to select if the next `PC` value is designated from `PC` + 4, or is a Jump Opcode (this includes Branch instructions), and therefore could increase or decrease by more.
+THe `PCsrc` control signal is used to select if the next `PC` value is set to `PC + 4` (standard incrementation), or if it is a jump operation (this includes branch instructions).
 
-The issue occurs from the single cycle cpu design, the Control Unit is made of a single block in which the `EQ` signal is given from the ALU, and in turn calculates if jumping should occur.
+The issue arises from the single-cycle CPU design. The Control Unit is made of a single block in which the `EQ` flag is driven by the ALU, and in turn indicates if jumping with `bne`, for instance, should occur.
 
-The issue with this is within pipelining the instruction needs to to only calculate if jumping should occur during the Execute Block, but control signals come during the stage before within decode.
+The issue is, with pipelining, the decision whether to jump or not would take place during the decode stage, but the jump criterion is only evaluated during the execute stage.
 
-### Addressing this:
+### Addressing this
+
+There are two possible ways to resolve this issue:
 
 1. Delay the `func3` input within the decode block for a cycle to wait for the `EQ` signal from the `ALU`, to then decide if jumping should occur.
 2. Remove the `EQ` input signal and check if `PCsrc` should be high within the Execute block rather than Decode
 
-We dceide that we should go with the second option, this would simply the overall top sheet design as well as stop confusion within the decode block, with the mixing of clocked and un-clocked components. 
+We decided that we should go with the second option, as this would simply the overall top sheet design, as well as prevent confusion within the decode block as a result of the mixing of synchronous and asynchronous logic. Additionally, this the way P.Cheung addressed the issue in his schematics.
 
-To implement this new section it required the addition of adding three new control signals, {`BranchType`, `JumpResultType`, `JumpImmType`} these each would each be used in two different multiplexers to control `PC`.
+This modification required the addition of three new control signals: `BranchType`, `JumpResultType` and `JumpImmType`. These would be used in the two multiplexers controlling `PC`.
 
-The two Jump signals would set the `PCsrc` to high, as they are guaranteed to change the next `PC` value, and finalyl BranchType would be compared against `EQ` to check whether `PCsrc` should be high.
+The two Jump signals would set the `PCsrc` to high, as they are guaranteed to change the next `PC` value, and finally BranchType would be compared against `EQ` to check whether `PCsrc` should be high.
 
 ### Issues with this implementation:
 
-Although this implementation allows for the pipelined CPU to work and complete the PDF code, it makes it very difficult to implement the other Branch instructions. It would mean that for each branch instruction a seperate control signal would need to be added.
+Although this implementation allows for the pipelined CPU to work and complete the PDF code, it makes it very difficult to implement the other Branch instructions as each branch instruction would require a seperate control signal.
 
 
 
