@@ -6,7 +6,7 @@
 
 #define MAX_SIM_CYC 1000000
 
-#define VBUDDY
+// #define VBUDDY
 #ifdef VBUDDY
 #include "vbuddy.cpp"     // include vbuddy code
 #endif
@@ -75,13 +75,13 @@ int main(int argc, char **argv, char **env) {
     } 
   }
 
+  #ifdef VBUDDY 
   vbdHeader("PDF");
   for (int i = 0; i < 240; ++i){
     std::cout << i << ": " << vals[i] << std::endl;
     vbdPlot(vals[i], 0, 200);
   }
 
-  #ifdef VBUDDY 
   vbdClose();
   #endif
   tfp->close(); 

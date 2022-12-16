@@ -92,12 +92,21 @@ else # success
   echo "Running simulation"
   obj_dir/VCPU > out.txt
   
-  echo "Simulation completed"
+  cat out.txt
 
-  echo "Caculating hitrate!"
-  cd ../../assembler
-  python3 hitcal.py
-  cd ../RTL
+  if ! cat out.txt | grep -q "Error"; then
+    echo "Simulation completed"
 
-  rm CPU/out.txt
+    echo "Caculating hitrate!"
+    cd ../../assembler
+    python3 hitcal.py
+    cd ../RTL
+
+
+    rm CPU/out.txt
+  else
+    echo "Error occured!"
+    rm out.txt
+    cd ../
+  fi
 fi

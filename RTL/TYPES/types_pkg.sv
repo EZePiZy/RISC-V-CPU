@@ -5,7 +5,7 @@ package types_pkg;
   parameter OPCODE_WIDTH = 7; // number of bits to encode opcodes
   parameter ADDRESS_WIDTH = 5; //The address_width of a given register
   parameter BYTE_SELECT_WIDTH = 2; //The size of the control signal to choose between data selection size
-  parameter SET_SIZE = 10;
+  parameter SET_SIZE = 8;
 
   typedef logic [ADDRESS_WIDTH-1:0] ADDR_BUS;
   typedef logic [DATA_WIDTH-1:0] DATA_BUS;
