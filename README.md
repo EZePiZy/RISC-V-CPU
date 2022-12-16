@@ -195,8 +195,6 @@ RTL ━━━━━┳━ run.sh build to full CPU testbench, and when entering 
 and so on
 ```
 
-and so on...
-
 This allows individual components to be tested individually with their own testbenches. This allows continuous debugging of components. When a component is updated it must be updated in the component folder first, then tested and finally copied to the main CPU folder.
 
 
