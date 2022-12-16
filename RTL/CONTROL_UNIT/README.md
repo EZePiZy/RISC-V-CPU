@@ -321,7 +321,6 @@ Control Signal | Expected | Notes                 |
 `ByteSelect`   | `xx`     | No Byte Op            |
 `MemExtend`    | `x`      | No Memo Op            |
 
-
 ### First implementation
 A package was created to hold the type definitions common to the control logic blocks. This can be further extended to other modules in the CPU.
 To have proper compilation the package (`types_pkg.sv` in this case) must be placed before the other files. In turn the `--top-module` flag must be specified in order to get the correct file names and structure, for example:
