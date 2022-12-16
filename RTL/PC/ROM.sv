@@ -3,6 +3,7 @@ import types_pkg::*;
 (
     /* verilator lint_off UNUSED */
     input  DATA_BUS addr,
+    /* verilator lint_on UNUSED */
     output DATA_BUS dout
 );
 

@@ -7,6 +7,7 @@ import types_pkg::*; //Import Bit Sizing
     input   logic     WE,//Write Enable
     /* verilator lint_off UNUSED */
     input   DATA_BUS  A, //Input Address
+    /* verilator lint_on UNUSED */
     input   DATA_BUS  WD,//Write Data
     output  DATA_BUS  RD //Read Data
 );

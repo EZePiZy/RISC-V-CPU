@@ -6,7 +6,8 @@ package types_pkg;
   parameter ADDRESS_WIDTH = 5; //The address_width of a given register
   parameter BYTE_SELECT_WIDTH = 2; //The size of the control signal to choose between data selection size
   /* verilator lint_off UNUSED */ // UNUSED IN INDIVIDUAL COMPONENT TESTBENCHES
-  parameter RAM_ADDRESS_WIDTH = 28; //The address of a given location in data_memory this is an arbitrary value 
+  parameter RAM_ADDRESS_WIDTH = 28; //The address of a given location in data_memory this is an arbitrary value
+  /* verilator lint_on UNUSED */
 
   typedef logic [ADDRESS_WIDTH-1:0] ADDR_BUS;
   typedef logic [DATA_WIDTH-1:0] DATA_BUS;
