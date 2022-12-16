@@ -2,11 +2,11 @@
 ---
 ## <center> **RISC-V Design - 2nd year EIE IAC coursework** </center>
 ---
-# Stretch Goal 2: Cached RV32I Design
+# Stretch Goal 2: Cached RV32I Design - Joint Statement 
 
 - [**IAC RISC-V**](#iac-risc-v)
   - [ **RISC-V Design - 2nd year EIE IAC coursework** ](#-risc-v-design---2nd-year-eie-iac-coursework-)
-- [Stretch Goal 2: Cached RV32I Design](#stretch-goal-2-cached-rv32i-design)
+- [Stretch Goal 2: Cached RV32I Design - Joint Statement](#stretch-goal-2-cached-rv32i-design---joint-statement)
   - [**DESIRED BEHAVIOUR**](#desired-behaviour)
   - [**IMPLEMENTATION**](#implementation)
     - [Hardware:](#hardware)
