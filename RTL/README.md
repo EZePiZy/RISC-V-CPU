@@ -24,7 +24,7 @@
 ### PDF assembly: 
 The [program purpose](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/tree/develop#explanation-and-testing-of-our-selected-programs)  is the same as the one described in the single-cycle CPU. However `nop` have been added. [Click here](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/tree/pipeline#software-design) for a more detailed explanation. 
 
-To use the program: 
+To use the *run.sh*: 
 1. Have vbuddy.cfg in the CPU directory 
 2. `cd /RTL` 
 ```bash 
@@ -35,7 +35,7 @@ source ./run.sh pdf pdf_tb gaussian
 ### F1 assembly: 
 The [program purpose](https://github.com/EZePiZy/RISC-V-CPU/tree/develop#f1-assembly-basic) is the same as the one described in the single-cycle CPU. However `nop` have been added. [Click here](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/tree/pipeline#software-design) for a more detailed explanation. A modification was made to the F1_asm program to address an issue where the first light of the array was always blinking when using the `slli` instruction to make the lights move. To fix this, the program was changed to first write to a different register, a3, and then copy the content of a3 into a0.
 
-To use the program:
+To use *run.sh*:
 1. Have vbuddy.cfg in the CPU directory 
 2. `cd /RTL` 
 ```bash 
