@@ -1,10 +1,12 @@
-# <center>**IAC RISC-V**</center>
----
-## <center> **RISC-V Design - 2nd year EIE IAC coursework** </center>
----
+# **IAC RISC-V**
+## **Single-Cycle RISC-V Design - Joint Statement** 
 
+[Pipeline](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/tree/pipeline) on branch Pipeline
+[Cache](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/tree/cache) on branch Cache
+
+---
 - [**IAC RISC-V**](#iac-risc-v)
-  - [ **RISC-V Design - 2nd year EIE IAC coursework** ](#-risc-v-design---2nd-year-eie-iac-coursework-)
+  - [**Single-Cycle RISC-V Design - Joint Statement**](#single-cycle-risc-v-design---joint-statement)
     - [**Team members \& Single-cycle CPU tasks allocations**](#team-members--single-cycle-cpu-tasks-allocations)
     - [**High level description**](#high-level-description)
     - [**Links to README in RTL**](#links-to-readme-in-rtl)
