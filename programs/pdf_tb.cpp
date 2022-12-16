@@ -1,8 +1,11 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "VCPU.h"
+
+#include <fstream>
 #include <iostream>
 #include <chrono>
+#include <string>
 
 #define MAX_SIM_CYC 1000000
 
@@ -32,6 +35,18 @@ int main(int argc, char **argv, char **env) {
   vbdSetMode(0); 
   #endif
 
+  // CSV output
+
+  std::string filename = "out.csv";
+  std::fstream file_out;
+
+  file_out.open(filename, std::ios_base::out);
+
+  if (!file_out.is_open()){
+    std::cout << "csv file is not open" << std::endl;
+  } else {
+    file_out << "val, freq" << std::endl;
+  }
 
   // initialize simulation inputs
 
@@ -59,6 +74,7 @@ int main(int argc, char **argv, char **env) {
     if (readVal) {
       if (counter <= 255) {
         // std::cout << top->a0 << std::endl;
+        file_out << counter << ", " << int(top->a0) << std::endl;
         vals[counter] = top->a0;
         counter++;
         readVal = 0;

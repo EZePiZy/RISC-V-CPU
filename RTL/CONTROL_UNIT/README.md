@@ -1,6 +1,35 @@
 # Control Unit
 
-![control_unit](./images/microarchitecture.jpg)
+- [Control Unit](#control-unit)
+    - [Instruction types](#instruction-types)
+    - [Implemented instructions](#implemented-instructions)
+      - [`addi`](#addi)
+      - [`bne`](#bne)
+      - [`lw`](#lw)
+      - [`sw`](#sw)
+      - [`slli`](#slli)
+      - [`jal`](#jal)
+      - [`jalr`](#jalr)
+      - [`sb`](#sb)
+      - [`lbu`](#lbu)
+      - [`lui`](#lui)
+      - [`andi`](#andi)
+      - [`add`](#add)
+      - [`sub`](#sub)
+      - [`and`](#and)
+      - [`slt`](#slt)
+      - [`sll`](#sll)
+      - [Opcode and funct mapping](#opcode-and-funct-mapping)
+    - [First implementation](#first-implementation)
+      - [Testing](#testing)
+    - [Adding Data Memory Signals](#adding-data-memory-signals)
+      - [Testing](#testing-1)
+  - [Control Unit Refactor](#control-unit-refactor)
+    - [Hardware changes](#hardware-changes)
+    - [Testing](#testing-2)
+
+
+![control_unit](../../SCHEMATIC/cpu_schematic.png)
 
 ### Instruction types
 

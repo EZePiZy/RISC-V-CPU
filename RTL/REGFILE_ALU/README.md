@@ -1,5 +1,11 @@
 # `REGILE_ALU` Component
 
+- [`REGILE_ALU` Component](#regile_alu-component)
+    - [Component Description](#component-description)
+    - [Testing](#testing)
+  - [Problems Encountered](#problems-encountered)
+
+
 ![schem](./images/SCHEMATIC.png)
 <p style="text-align: center">Figure 1: Screenshot of schematic showing above components</p>
 
@@ -16,7 +22,7 @@ This component consists of `REGFILE`, which is a dual output synchronous RAM arr
 |:-------:|:-----------:|
 | `000`   | $A + B$     |
 | `001`   | $A - B$     |
-| `010`   | $A\ \&\ B$  |
+| `010`   | $A\ \And \ B$  |
 | `101`   | $A - B > 0$ |
 
 </div>

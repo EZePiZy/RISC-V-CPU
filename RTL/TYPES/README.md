@@ -1,0 +1,5 @@
+## Why we use types 
+
+By using types in SystemVerilog, we can improve the readability and maintainability of our code. By explicitly declaring the type of each variable, we can make it easier for other developers to understand the purpose and intended usage of that variable. This allows us to all follow a consistent convention when writing code, which can make it easier to debug code written by others and make our CPU more versatile. For example, if we want to change the size of a bus or implement a new functionality, we can simply modify the types package, as it is a global package. Using types can also help to improve the quality and reliability of our code, as well as make the development process more efficient and effective.
+
+For example, in the SIGN_EXTEND or ALU case statement, we have strings instead of binary numbers, which makes our code more readable and understandable.

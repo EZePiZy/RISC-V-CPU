@@ -6,6 +6,7 @@ import types_pkg::*; // import all data type definitions
   input  logic        EQ,
   /* verilator lint_off UNUSED */   // ignore unused parts of instruction
   input  DATA_BUS     instr,        // incoming instruction
+  /* verilator lint_on UNUSED */
   output logic        RegWrite,     // enable to write regs
   output alu_ctrl     ALUctrl,      // value to select operation in alu
   output logic        ALUsrc,       // mux to select immediate
