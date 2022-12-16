@@ -4,7 +4,7 @@
 #include <iostream>
 #include <chrono>
 
-#define MAX_SIM_CYC 2000
+#define MAX_SIM_CYC 3000
 
 #define VBUDDY
 #ifdef VBUDDY
@@ -28,35 +28,30 @@ int main(int argc, char **argv, char **env) {
 
   #ifdef VBUDDY
   if (vbdOpen()!=1) return(-1);
-  vbdHeader("RISC-V");
+  vbdHeader("F1 |-");
+  vbdSetMode(0); 
   #endif
 
-  vbdSetMode(0); 
 
   // initialize simulation inputs
 
   top->clk = 1;
   top->rst = 0;
-  top->write_in_EN = 0;
-  top->input_reg = 0;
-
 
   
   // run simulation for MAX_SIM_CYC clock cycles
   for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
-  
     // dump variables into VCD file and toggle clock
     for (tick=0; tick<2; tick++) {
       top->eval ();
       tfp->dump (2*simcyc+tick);
       top->clk = !top->clk;
     }
-    
-    std::cout << top->PC << std::endl;
-    vbdBar(top->a0);
-    
 
+    std::cout << top->a0 << std::endl;
+    
     #ifdef VBUDDY 
+    vbdBar(top->a0);
     vbdCycle(simcyc);
     if (Verilated::gotFinish() || (vbdGetkey()=='q'))
     {
