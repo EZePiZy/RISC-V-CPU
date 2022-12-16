@@ -9,8 +9,7 @@ Even better testing [website](https://venus.kvakil.me/)
   - [Implementation](#implementation)
       - [1. Executing on trigger](#1-executing-on-trigger)
       - [2. Turning led lights on one at a time](#2-turning-led-lights-on-one-at-a-time)
-      - [3. Random delay](#3-random-delay)
-      - [4. Testbench and VBuddy](#4-testbench-and-vbuddy)
+      - [3. Testbench and VBuddy](#3-testbench-and-vbuddy)
   - [Issues](#issues)
     - [Pseudo-random number generation:](#pseudo-random-number-generation)
     - [1 second delay:](#1-second-delay)
@@ -31,8 +30,7 @@ Even better testing [website](https://venus.kvakil.me/)
 
 1. Upon receving a trigger the routine is executed
 2. The `a0` drives the led bar on the *VBuddy* turning on each light every second
-3. Once all 8 lights are on a random amount of time elapses before they all turn off
-4. The testbench uses *VBuddy* methods to measure how long it takes the user to press the button after the lights turn off
+3. The testbench uses *VBuddy* methods to measure how long it takes the user to press the button after the lights turn off
 
 ## Implementation
 
@@ -50,18 +48,7 @@ Even better testing [website](https://venus.kvakil.me/)
 - Each iteration shift `a0` left by 1 and add 1
 - Call the `wait_second` subroutine which as the name implies loops indefinitely while the first bit of the `t6` register is not 1. The bit is selected with an `andi` instruction.
 
-#### 3. Random delay
-
-- Call random delay subroutine 
-- Generate random number using seed in memory
-  - Read seed from memory
-  - Use a software 8-bit *LFSR* to generate new random number 
-    - *Could be expanded to higher bits for more randomness*
-  - Save result in memory to use as seed for the following time
-- Use generated random number to loop over `NOPs` thereby adding a random amount of delay
-- Return to the program using `JALR` instruction
-
-#### 4. Testbench and VBuddy
+#### 3. Testbench and VBuddy
 
 - Using `<chrono>` library the amount of time elapsed is measured every cycle.
 - Once 1 second is reached the LSB of the `t6` register is flipped to `1` to signal to the program that 1 second has passed
