@@ -2,11 +2,11 @@
 ---
 ## <center> **RISC-V Design - 2nd year EIE IAC coursework** </center>
 ---
-## **Pipelined RV32I Design**
+## **Pipelined RV32I Design: Joint Statement**
 
 - [**IAC RISC-V**](#iac-risc-v)
   - [ **RISC-V Design - 2nd year EIE IAC coursework** ](#-risc-v-design---2nd-year-eie-iac-coursework-)
-  - [**Pipelined RV32I Design**](#pipelined-rv32i-design)
+  - [**Pipelined RV32I Design: Joint Statement**](#pipelined-rv32i-design-joint-statement)
   - [**High Level Description**](#high-level-description)
   - [**IMPLEMENTATION**](#implementation)
     - [**Hardware changes**](#hardware-changes)

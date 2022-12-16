@@ -1,3 +1,4 @@
+# Pipeline PDF program
 .text
 .equ base_pdf, 0x100
 .equ base_data, 0x10000
