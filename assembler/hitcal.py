@@ -10,7 +10,7 @@ with open("../RTL/CPU/out.txt", "r") as f:
       access += 1
     line = f.readline()
 
-if (hit+misse != 0):
+if (hit + miss != 0):
   print("In total there were", str(hit), "hits and", str(miss), "misses. Total memory accesses were", str(access) + ". For a hitrate of", str(round(hit/(miss+hit), 4) * 100) + "%.")
 else:
   print("This program made no data stores or loads")
