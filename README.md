@@ -15,7 +15,6 @@
     - [**Explanation of _run.sh_**](#explanation-of-runsh)
     - [**Branch Protection Policy**](#branch-protection-policy)
     - [**Directory Format**](#directory-format)
-    - [**Table of tasks**](#table-of-tasks)
 
 ---
 
@@ -120,6 +119,14 @@ Here is a breakdown of what the script does:
 
 The script also includes some cleanup commands to remove any previously generated files and directories.
 
+To use *run.sh*:
+  1. Add `vbudy.cfg` file in the CPU directory
+  2. See example below &rarr; run `pdf.s` program using `pdf_tb.cpp` as testbench and `gaussian.mem` as data memory file
+
+  ```bash
+  source ./run.sh pdf pdf_tb gaussian
+  ```
+
 
 ---
 ### **Branch Protection Policy**
@@ -184,35 +191,3 @@ This allows individual components to be tested individually with their own testb
 
 --- 
 
-### **Table of tasks**
-
-| Module / Team members 	| Luigi 	| Diego 	| Corey 	| Ezra 	|
-|-----------------------	|-------	|-------	|-------	|------	|
-| F1_asm_basics.s       	| M     	| C     	| C     	| C    	|
-| F1_asm_IO.s           	| M     	|       	|       	|      	|
-| pdf_tb.cpp            	| M     	| C     	|       	|      	|
-| pdf.s                 	| C     	| C     	| C     	| C    	|
-| F1_IO_tb.cpp          	| M     	|       	|       	|      	|
-| CONTROL_UNIT.sv       	| M     	| C     	| C     	| C    	|
-| CONTROL_UNIT_tb.cpp   	| M     	|       	|       	|      	|
-| CPU_tb.cpp            	| C     	| C     	| M     	| C    	|
-| CPU.sv                	| C     	| C     	| M     	| C    	|
-| DATA_MEMORY.sv        	| C     	| C     	| M     	| C    	|
-| RAM.sv                	|       	|       	| M     	|      	|
-| PC_ROM_tb.cpp         	|       	|       	|       	| M    	|
-| PC.sv                 	|       	| C     	|       	| M    	|
-| ROM.sv                	|       	|       	|       	| M    	|
-| ALU_tb.cpp            	|       	| M     	|       	|      	|
-| ALU.sv                	|       	| M     	|       	|      	|
-| REGFILE_tb.cpp        	|       	| M     	|       	|      	|
-| REGFILE.sv            	|       	| M     	|       	|      	|
-| REGFILE_ALU.sv        	|       	| M     	|       	|      	|
-| REGFILE_ALU_tb.cpp    	|       	| M     	|       	|      	|
-| SIGN_EXTEND_tb.cpp    	| M     	|       	|       	|      	|
-| SIGN_EXTEND.sv        	| M     	|       	|       	|      	|
-| types_pkg.sv          	| M     	| C     	| C     	| C    	|
-| run.sh                	| M     	|       	| M     	|      	|
-
-*KEY*: 
-  * M = Main contributor
-  * C = Contributed

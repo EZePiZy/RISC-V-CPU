@@ -15,7 +15,7 @@ if [ $# -eq 1 ]; then
   else
     echo "File does not exist in the programs folder!"
   fi
-elif [ $# -eq 2 ]; then # passing aasembly file and testbench
+elif [ $# -eq 2 ]; then # passing assembly file and testbench
   if [ -f ../programs/$1.s ]; then
     echo "Assembling $1.s from programs"
     cd ../assembler

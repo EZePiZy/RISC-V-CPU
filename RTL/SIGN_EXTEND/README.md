@@ -1,5 +1,10 @@
 ## Sign Extension Unit
 
+- [Sign Extension Unit](#sign-extension-unit)
+	- [I/O spec](#io-spec)
+	- [Testing](#testing)
+
+
 ![sign_extend](./images/SIGN_EXTEND.png)
 
 The immediate operand comes from different types of instructions and has varying size. The sign extend unit converts the immediate operand from the different instructions into a `32-bit` value and sign extends it.

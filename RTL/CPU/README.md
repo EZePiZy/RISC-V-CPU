@@ -1,5 +1,16 @@
 # Testing and Verification
 
+
+- [Testing and Verification](#testing-and-verification)
+  - [Testing Steps:](#testing-steps)
+    - [Syntax Checking](#syntax-checking)
+    - [Component Tests](#component-tests)
+    - [Top File Tests](#top-file-tests)
+- [Syntax Checking:](#syntax-checking-1)
+  - [Repo Tree Cleaning](#repo-tree-cleaning)
+    - [Steps for cleaning Tree:](#steps-for-cleaning-tree)
+
+
 ![CPU_Full](./images/MICROARCHITECTURE.jpg)
 
 

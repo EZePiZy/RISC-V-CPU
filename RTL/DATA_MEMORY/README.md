@@ -1,5 +1,16 @@
 # Data memory
 
+- [Data memory](#data-memory)
+- [Design of Data Memory:](#design-of-data-memory)
+  - [Which Control Signals?:](#which-control-signals)
+  - [What Size?:](#what-size)
+  - [How to test?:](#how-to-test)
+  - [Issues With Data Memory:](#issues-with-data-memory)
+  - [Design of Byte Addressing:](#design-of-byte-addressing)
+    - [Additional Logic:](#additional-logic)
+    - [Further Testing:](#further-testing)
+
+
 In order to implement the instruction `lw` Load word as well as `sw` Store Word, a data memory RAM component needs to be added.
 
 ![microarchitecture](./images/new_microarchitecture.png)
