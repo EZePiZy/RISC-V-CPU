@@ -14,12 +14,13 @@ Even better testing [website](https://venus.kvakil.me/)
     - [Pseudo-random number generation:](#pseudo-random-number-generation)
     - [1 second delay:](#1-second-delay)
     - [Input interference:](#input-interference)
+  - [Results](#results)
 - [PDF](#pdf)
         - [*How to run*](#how-to-run)
     - [Testbench](#testbench)
       - [Compute PDF](#compute-pdf)
       - [Display on *VBUDDY*](#display-on-vbuddy)
-    - [Results](#results)
+    - [Results](#results-1)
       - [gaussian.mem](#gaussianmem)
       - [noisy.mem](#noisymem)
       - [triangle.mem](#trianglemem)
@@ -74,6 +75,13 @@ To allow for a trigger signal from the encoder on the Vbuddy the second bit of t
 
 The register has to be exposed as an output for the testbench to be able to write to it without overwriting other values. This way the program can reset a given input bit to 0 signaling to the testbench that it's ready to receive another input. This then allows for up to 32 boolean inputs to the register. 
 
+## Results
+
+Running the program with the *VBuddy* confirms that it indeed works as intended.
+
+![waveform](./images/F1_trigger_waveform_annotated.png)
+
+Looking at the waveform, `input_reg` is the contents of the `x31` register which are being written to and from by both the testbench and the program. We can see that while the `input_reg` doesn't receive a trigger signal (red annotation) the program loops on itself and waits. Once the trigger input is received, `x31` is reset to `0` and the main program is executed. Here `a0` is shifted left and increased by 1 and then the `wait_second` subroutine is entered. Here the program again loops on itself waiting for bit `0` to switch to `HIGH`, this signal is coming from the testbench and indicates 1 second has elapsed. Once `a0` reaches `FF` the program goes back to waiting for a trigger signal and the whole thing repeats.
 
 # PDF
 
@@ -89,7 +97,7 @@ After pluggin *VBUDDY* in, use `run.sh` from the RTL directory and pass the asse
 source run.sh pdf pdf_tb triangle
 ```
 
-This will run the program and generate an `out.csv` with the pdf for a given `data.mem`
+This will run the program and generate an `out.csv` with the pdf for a given `data.mem` 
 
 ### Testbench
 
@@ -109,6 +117,10 @@ Once all values are computed display on *VBUDDY*
 - Use `vbdPlot()` to display the value
 
 ### Results
+
+Running the program on *VBUDDY* proves it is working and yields the following plots. 
+
+Here the generated values are stored in a `.csv` file and plotted on Excel as a proxy for the *VBUDDY* screen. 
 
 #### gaussian.mem
 
