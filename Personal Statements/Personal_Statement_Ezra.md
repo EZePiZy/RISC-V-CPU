@@ -73,6 +73,4 @@ Overall, these mistakes taught me the importance of thoroughly understanding the
 
 If I were to design a RISC-V CPU again, there are a few things I would do differently. First, I would spend more time researching and understanding the architecture and design principles of RISC-V CPUs. This would help me to make more informed design decisions and potentially identify any potential issues or optimization opportunities earlier on in the process.
 
-Another thing I would do differently is that I would make sure to thoroughly test and debug the CPU before considering it complete. This could involve writing a comprehensive suite of test cases and using simulation tools to verify the correct behavior of the CPU. Ensuring that the CPU is fully tested and debugged would help to reduce the risk of issues arising after the design is complete.
-
 If I had more time, I would also consider implementing additional features and optimizations in the CPU. This could include implementing support for additional instructions, improving the performance of the cache, or implementing techniques such as data forwarding or branch prediction to improve the efficiency of the pipeline. Overall, considering additional features and optimizations, would help me to design a more effective and efficient RISC-V CPU.
