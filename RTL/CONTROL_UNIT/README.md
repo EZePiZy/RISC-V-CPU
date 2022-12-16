@@ -321,15 +321,6 @@ Control Signal | Expected | Notes                 |
 `ByteSelect`   | `xx`     | No Byte Op            |
 `MemExtend`    | `x`      | No Memo Op            |
 
-#### Opcode and funct mapping
-
-Instruction | opcode    | funct3 | funct7 | Type
------------ | :-------: | :----: | :----: | :---: 
-*`addi`*    | `0010011` | `000`  | -      | I 
-*`lw`*      | `0000011` | `010`  | -      | I 
-*`bne`*     | `1100011` | `001`  | -      | B 
-
-**TODO add other instructions**
 
 ### First implementation
 A package was created to hold the type definitions common to the control logic blocks. This can be further extended to other modules in the CPU.
