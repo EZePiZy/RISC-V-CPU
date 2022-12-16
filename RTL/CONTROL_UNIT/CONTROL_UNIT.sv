@@ -3,7 +3,7 @@ module CONTROL_UNIT
 import types_pkg::*; // import all data type definitions
 
 (
-  /* verilator lint_off UNUSED */   // ignore unused parts of instruction
+  /* verilator lint_off UNUSED */
   input  DATA_BUS     instr,        // incoming instruction
   /* verilator lint_on UNUSED */
   output logic        RegWrite,     // enable to write regs
