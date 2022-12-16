@@ -27,7 +27,7 @@ This project can be divided in 3 sections:
 - Separated PC and ROM components into [2 individual components](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/commit/53eceaab51c727b237de978f5ad972fb098fb6c5) for debug and clarity purposes. 
 - Added logic in the [Control Unit](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/commit/ed135e1f9ad6f265f97075c073fed178ec5794ae) to implement new instructions needed for the reference (PDF) program
 - Implemented team [TYPES convention](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/commit/1b5942788100c4b43089a2200152622d6ad8e0cc) in the PC and ROM designs 
-- Fixed instruction memory file and fixed [control signals](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/commit/0e29bc6e60e460e7b21bd30639b4080c1bec708f) for the `J`instruction 
+- Fixed instruction memory file and fixed [control signals](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/commit/0e29bc6e60e460e7b21bd30639b4080c1bec708f) for the `J` instruction 
   
 ### 2. Pipeline 
 - Documented the README file and laid out the different [tasks and goals](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/commit/2dc10044c7539f888ff7780adc762b0ed36999af) our team had in order to complete the pipeline CPU

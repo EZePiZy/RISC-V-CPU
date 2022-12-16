@@ -1,8 +1,6 @@
-# Logbook: Lab 4
-## Part 1 : Program Counter and related adders.
+# PC and ROM
 
-- [Logbook: Lab 4](#logbook-lab-4)
-  - [Part 1 : Program Counter and related adders.](#part-1--program-counter-and-related-adders)
+- [PC and ROM](#pc-and-rom)
     - [What I did:](#what-i-did)
     - [Traces analysis:](#traces-analysis)
     - [Problems encountered:](#problems-encountered)

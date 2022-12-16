@@ -4,6 +4,29 @@ The program is tested using [this](https://www.cs.cornell.edu/courses/cs3410/201
 
 Even better testing [website](https://venus.kvakil.me/)
 
+- [F1 Assembly program](#f1-assembly-program)
+  - [Desired Behaviour](#desired-behaviour)
+  - [Implementation](#implementation)
+      - [1. Executing on trigger](#1-executing-on-trigger)
+      - [2. Turning led lights on one at a time](#2-turning-led-lights-on-one-at-a-time)
+      - [3. Random delay](#3-random-delay)
+      - [4. Testbench and VBuddy](#4-testbench-and-vbuddy)
+  - [Issues](#issues)
+    - [Pseudo-random number generation:](#pseudo-random-number-generation)
+    - [1 second delay:](#1-second-delay)
+    - [Input interference:](#input-interference)
+- [PDF](#pdf)
+        - [*How to run*](#how-to-run)
+    - [Testbench](#testbench)
+      - [Compute PDF](#compute-pdf)
+      - [Display on *VBUDDY*](#display-on-vbuddy)
+    - [Results](#results)
+      - [gaussian.mem](#gaussianmem)
+      - [noisy.mem](#noisymem)
+      - [triangle.mem](#trianglemem)
+      - [sine.mem](#sinemem)
+
+
 ## Desired Behaviour
 
 1. Upon receving a trigger the routine is executed
