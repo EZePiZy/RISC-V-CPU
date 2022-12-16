@@ -6,7 +6,7 @@
 
 #define MAX_SIM_CYC 1000000
 
-// #define VBUDDY
+#define VBUDDY
 #ifdef VBUDDY
 #include "vbuddy.cpp"     // include vbuddy code
 #endif
