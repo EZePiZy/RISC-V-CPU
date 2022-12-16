@@ -2,11 +2,11 @@
 ---
 ## <center> **RISC-V Design - 2nd year EIE IAC coursework** </center>
 ---
-## **Pipelined RV32I Design: Joint Statement**
+## **Pipelined RV32I Design - Joint Statement**
 
 - [**IAC RISC-V**](#iac-risc-v)
   - [ **RISC-V Design - 2nd year EIE IAC coursework** ](#-risc-v-design---2nd-year-eie-iac-coursework-)
-  - [**Pipelined RV32I Design: Joint Statement**](#pipelined-rv32i-design-joint-statement)
+  - [**Pipelined RV32I Design - Joint Statement**](#pipelined-rv32i-design---joint-statement)
   - [**High Level Description**](#high-level-description)
   - [**IMPLEMENTATION**](#implementation)
     - [**Hardware changes**](#hardware-changes)
@@ -17,6 +17,9 @@
     - [**Software**](#software)
       - [**Debugging**](#debugging)
       - [**Software Design**](#software-design)
+  - [**Results**](#results)
+    - [F1 assembly:](#f1-assembly)
+    - [PDF assembly:](#pdf-assembly)
 
 
 ![schematic](./SCHEMATIC/HD_schematic_pipe.png)
@@ -119,5 +122,15 @@ We developed a method to determine when nop instructions are necessary to avoid 
 
 To make the tracing more clear and concise, each subroutine begins at cycle 0. This allows us to use a thinner table while still being able to accurately trace the program. The numbers at the top of the table and the numbers on the left side of the table help us see the different stages of an instruction as it moves through time and when each stage is executed.
 
+## **Results**
+### F1 assembly: 
+The waveform illustrates the movement of instructions from one stage to another and demonstrates that the register a0 is responsible for keeping track of the lights. The program functions correctly in the pipeline version of the CPU. 
 
+![schematic](./images/result%20F1_pipeline_asm.png)
 
+### PDF assembly: 
+
+The first waveform shows the beginning and end of the Gaussian curve. It initially loads zero into every register, then in the second waveform, we can see the data being tranfered from each register into the display register a0. The program operates as intended in the pipeline version of the CPU.
+
+![schematic](./images/Pipeline-PDF-Waveform.png)
+![schematic](./images/End-Waveform-PDF-Pipeline.png)
