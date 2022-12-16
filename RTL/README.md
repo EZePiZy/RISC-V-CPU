@@ -1,5 +1,5 @@
 ### **Explanation on how to use _run.sh_**
-The _run.sh_ script is used to execute and compile an assembly program with 3 possible parameters: an assembly program, a testbench and a data memory file. For extra information about the script and how to use it [click here](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/tree/develop#readme)
+The _run.sh_ script is used to execute and compile an assembly program with 3 possible parameters: an assembly program, a testbench and a data memory file. For extra information about the script and how to use it [click here](https://github.com/EIE2-IAC-Labs/iac-riscv-cw-5/tree/develop#explanation-of-runsh)
 
 ---
 
