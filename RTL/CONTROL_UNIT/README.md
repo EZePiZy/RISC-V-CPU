@@ -29,7 +29,7 @@
     - [Testing](#testing-2)
 
 
-![control_unit](./images/microarchitecture.jpg)
+![control_unit](../../SCHEMATIC/cpu_schematic.png)
 
 ### Instruction types
 
