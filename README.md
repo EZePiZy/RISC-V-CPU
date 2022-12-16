@@ -13,6 +13,7 @@
     - [F1 assembly I/O:](#f1-assembly-io)
     - [PDF assembly:](#pdf-assembly)
     - [**Explanation of _run.sh_**](#explanation-of-runsh)
+      - [Using *run.sh*:](#using-runsh)
     - [**Branch Protection Policy**](#branch-protection-policy)
     - [**Directory Format**](#directory-format)
 
@@ -119,14 +120,22 @@ Here is a breakdown of what the script does:
 
 The script also includes some cleanup commands to remove any previously generated files and directories.
 
-To use *run.sh*:
+#### Using *run.sh*:
   1. Add `vbudy.cfg` file in the CPU directory
-  2. See example below &rarr; run `pdf.s` program using `pdf_tb.cpp` as testbench and `gaussian.mem` as data memory file
+  2. `cd` into the `/RTL` directory
+  3. *F1 lights:*
+      Run the F1 lights program with IO and using its' testbench
 
-  ```bash
-  source ./run.sh pdf pdf_tb gaussian
-  ```
+      ```bash
+      source ./run.sh F1_asm_IO F1_IO_tb
+      ```
+      *PDF:*
 
+      Run the `pdf.s` program with its' testbench and a memory file. Available memories are: `gaussian`, `triangle`, `sine` and `noisy`
+
+      ```bash
+      source ./run.sh pdf pdf_tb gaussian
+      ```
 
 ---
 ### **Branch Protection Policy**
