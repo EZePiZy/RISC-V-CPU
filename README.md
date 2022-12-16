@@ -174,3 +174,15 @@ and so on
 and so on...
 
 This allows individual components to be tested individually with their own testbenches. This allows continuous debugging of components. When a component is updated it must be updated in the component folder first, then tested and finally copied to the main CPU folder.
+
+
+## Result
+### PDF Program Running Waveforms
+#### Setup Section, Sets each value in registers to 0
+![Setup-Waveform](./images/Cache-Waveform.PNG)
+
+#### End of Waveform Outputing each register value to a0
+![End-of-Waveform](./images/End-Waveform-Cache.PNG)
+
+#### Vbuddy Displayed Output
+![Vbuddy-Waveform](./images/PDF-Waveform.PNG)
