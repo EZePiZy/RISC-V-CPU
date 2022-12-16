@@ -37,9 +37,12 @@ An additional test that can be to load the memory with pre-set values from veril
 When first implemented, Data Memory was having some very strange issues, what we noticed mainly was how certain values were not updating within the waveform. This could be seen with the `ALUResult`, not changing even with a set immediate value and the `SUM` set to high, this quickly allowed us to see that the `ALUsrc` wasnt being changed within the control block. Adding this ellivated a large amount of our issues, but one still persisted, the program would cycle every 32 cycles and repeat. following this we found a simple cause being that the `PC` was not set to a high value and as such would cycle only over 32 cycles.
 
 
+## Change of Memory To 8 Bit:
+
+We later decided to redesign the Data Memory component to be 8-bit. As a result, the logic had to be modified to concatenate the output of four different addresses together for a 32-bit load word instruction, or two addresses for a 16-bit load halfword instruction. This change also made it easier to load data into the memory, as it could follow the same convention as the data provided by Peter Chung.
+
 ## Design of Byte Addressing:
 
 The "RD" variable is being assigned a value that is either the sign-extended version of the byte being read or, if "SignExtend" is false, a version of the byte with 24 leading zeros concatenated to it. The value of the byte being read is obtained by shifting it right by 5 times the value of "A[1:0]" (which is a 2-bit field) and then masking off the lower 8 bits.
 
 The "WD" variable is being used to update the byte in memory. The new value of the byte is constructed by concatenating the high bits of the original byte (up to the position of the byte being written), the value of "WD[7:0]", and the low bits of the original byte (after the position of the byte being written).
-
