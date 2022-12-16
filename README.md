@@ -49,7 +49,7 @@ Initially, our cache was both reading and writing asynchronously. We though this
 
 ### Addressing this
 
-To resolve the above issues, we added a syncronous component to the cache. An asynchronous part remains, writing the output of the Data Memory to the output of the RAM, but asynchronously, we ae we are also writing to the cache.
+To resolve the above issues, we added a syncronous component to the cache. An asynchronous part remains, writing the output of the Data Memory to the output of the RAM, but asynchronously, we are also writing to the cache.
 
 ### Issues with this implementation:
 
@@ -88,6 +88,6 @@ The waveform illustrates the movement of instructions from one stage to another 
 
 Using the python script described above, it was possible to calculate the hitrate for the different programs, with different set sizes.
 
-One intersting observation that can be made is that, for smaller set sizes, the hitrate depends on the program, but as set size increases, the hitrates converges towards 99.95%, as the programming starts to matter less and less for the hitrate.
+One intersting observation that can be made is that, for smaller set sizes, the hitrate depends on the program, but as set size increases, the hitrates converges towards 95.95%, as the programming starts to matter less and less for the hitrate.
 
 ![hitrateGraph](./images/cacheperformance.png)
