@@ -22,7 +22,7 @@ This component consists of `REGFILE`, which is a dual output synchronous RAM arr
 |:-------:|:-----------:|
 | `000`   | $A + B$     |
 | `001`   | $A - B$     |
-| `010`   | $A\ \&\ B$  |
+| `010`   | $A\ \And \ B$  |
 | `101`   | $A - B > 0$ |
 
 </div>
